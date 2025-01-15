@@ -1,4 +1,4 @@
-# moden_robotics
+# modern robotics
 
 ## Requirement
 ```yaml
