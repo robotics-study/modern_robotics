@@ -1,11 +1,12 @@
-export interface GitMetadata {
-    id: string,
-    avatar_url: string,
-    url: string,
-    repos_url: string
+import {JSX} from "react";
+
+export interface ISupportedExample {
+    python?: string
 }
 
-declare module "*.json" {
-    const value: GitMetadata
-    export default value
+export interface IChapterData {
+    title: String,
+    chapter: number,
+    supportedExample: ISupportedExample | undefined
+    contents: () => JSX.Element | undefined
 }
