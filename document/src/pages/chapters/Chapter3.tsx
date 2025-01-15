@@ -12,6 +12,6 @@ export default {
     chapter: 3,
     contents: Chapter3,
     supportedExample: {
-        python: false
+        "c++": true
     }
 } as IChapterData

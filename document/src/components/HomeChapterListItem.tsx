@@ -19,7 +19,8 @@ const ExampleLinkProps = ({
     </label>
 }
 
-interface ChapterLayerProps extends IChapterData {}
+interface ChapterLayerProps extends IChapterData {
+}
 
 const HomeChapterListItem = ({
                                  title,
@@ -47,7 +48,7 @@ const HomeChapterListItem = ({
         {
             supportedExample ? <div className="flex justify-end pt-1.5">
                 {
-                    Object.keys(supportedExample).map((language, index) => {
+                    Object.entries(supportedExample).filter(([_, value]) => value).map(([language, _], index) => {
                         return <ExampleLinkProps key={index} language={language} chapter={chapter}></ExampleLinkProps>
                     })
                 }
