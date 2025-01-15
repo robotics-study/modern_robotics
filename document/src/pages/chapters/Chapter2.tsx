@@ -10,5 +10,8 @@ const Chapter2 = () => {
 export default {
     title: "Configuration Space",
     chapter: 2,
-    contents: Chapter2
+    contents: Chapter2,
+    supportedExample: {
+        python: true
+    }
 } as IChapterData

@@ -13,6 +13,9 @@ const ChapterContents = ({
             <span className="text-sm">Chapter.{chapter}</span>
             <span className="text-base font-semibold">{title}</span>
         </h2>
+        <div className="p-2">
+            <Contents/>
+        </div>
     </div>
 }
 

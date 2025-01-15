@@ -1,7 +1,7 @@
 import {JSX} from "react";
 
 export interface ISupportedExample {
-    python?: string
+    python?: boolean
 }
 
 export interface IChapterData {

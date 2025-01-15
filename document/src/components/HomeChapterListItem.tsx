@@ -1,6 +1,21 @@
 import {IChapterData} from "../../types/global";
 import React, {useCallback} from "react";
 
+interface ExampleLinkProps {
+    language: string
+}
+
+const ExampleLinkProps = ({
+                              language
+                          }: ExampleLinkProps) => {
+    return <label className="px-2 text-sm border rounded-full py-0.5 shadow">
+        <a target="_blank"
+           href={`https://github.com/robotics-study/modern_robotics/tree/main/${language}`}>{
+            language
+        } code</a>
+    </label>
+}
+
 interface ChapterLayerProps extends IChapterData {
     updateChapterParam(chapter?: number): void
 }
@@ -18,12 +33,23 @@ const HomeChapterListItem = ({
         }
     }, [Contents])
 
-    return <li className="flex w-full p-2">
-        <span className="grow font-semibold">Chapter {chapter}</span>
-        <button onClick={callback}>
-            <h2 className="font-medium">{title}
-            </h2>
-        </button>
+    return <li className="flex w-full flex-col p-2">
+        <div className="flex">
+            <span className="grow font-semibold">Chapter {chapter}</span>
+            <button onClick={callback}>
+                <h2 className="font-medium">{title}
+                </h2>
+            </button>
+        </div>
+        {
+            supportedExample ? <div className="flex justify-end pt-1.5">
+                {
+                    Object.keys(supportedExample).map((language, index) => {
+                        return <ExampleLinkProps key={index} language={language}></ExampleLinkProps>
+                    })
+                }
+            </div> : null
+        }
     </li>
 }
 
