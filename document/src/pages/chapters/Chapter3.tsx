@@ -8,7 +8,7 @@ const Chapter3 = () => {
     )
 }
 export default {
-    title: "Rigid-Body Motions",
+    title: "Rigid-Body Motions in the Plane",
     chapter: 3,
     contents: Chapter3,
     supportedExample: {
