@@ -1,5 +1,6 @@
 import {IChapterData} from "../../types/global";
 import React, {useCallback} from "react";
+import {useSearchParams} from "react-router-dom";
 
 interface ExampleLinkProps {
     chapter: number
@@ -18,20 +19,20 @@ const ExampleLinkProps = ({
     </label>
 }
 
-interface ChapterLayerProps extends IChapterData {
-    updateChapterParam(chapter?: number): void
-}
+interface ChapterLayerProps extends IChapterData {}
 
 const HomeChapterListItem = ({
                                  title,
                                  supportedExample,
                                  contents: Contents,
                                  chapter,
-                                 updateChapterParam
                              }: ChapterLayerProps) => {
+    const [searchParam, setSearchParams] = useSearchParams()
+
     const callback = useCallback(() => {
         if (Contents) {
-            updateChapterParam(chapter)
+            searchParam.set("chapter", chapter.toString())
+            setSearchParams(searchParam)
         }
     }, [Contents])
 

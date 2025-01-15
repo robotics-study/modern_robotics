@@ -1,32 +1,33 @@
-import {useMemo, useState} from "react";
+import {useMemo} from "react";
 import chapters from "./pages/chapters";
 import Header from "./components/Header";
 import Home from "./pages/home/Home";
 import ChapterContents from "./components/ChapterContents";
+import {useSearchParams, BrowserRouter, Routes, Route} from "react-router-dom";
 
-const App = () => {
-    const [chapter, setChapter] = useState<number>(parseInt(new URLSearchParams(window.location.search).get('chapter')));
-    const updateChapterParam = (chapter?: number) => {
-        const url = new URL(window.location.href);
-        if (chapter) {
-            url.searchParams.set('chapter', chapter.toString());
-        } else {
-            url.searchParams.delete('chapter')
-        }
-        window.history.pushState(null, '', url)
-        setChapter(chapter);
-    };
-
+const PageSelector = () => {
+    const [searchParam] = useSearchParams()
+    const chapter = useMemo(() => {
+        return parseInt(searchParam.get('chapter'))
+    }, [searchParam])
     const contents = useMemo(() => {
         const currentChapter = chapters.find((item) => item.default.chapter == chapter)
         return currentChapter ? <ChapterContents {...currentChapter.default}/> :
-            <Home updateChapterParam={updateChapterParam}/>
+            <Home/>
     }, [chapter]);
 
     return <div>
-        <Header updateChapterParam={updateChapterParam}></Header>
+        <Header></Header>
         {contents}
     </div>
+}
+
+const App = () => {
+    return <BrowserRouter>
+        <Routes>
+            <Route path={"/modern_robotics"} element={<PageSelector/>}></Route>
+        </Routes>
+    </BrowserRouter>
 }
 
 export default App

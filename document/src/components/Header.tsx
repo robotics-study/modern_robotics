@@ -1,14 +1,15 @@
 import {useCallback} from "react";
+import {useSearchParams} from "react-router-dom";
 
 interface HeaderProps {
-    updateChapterParam(): void
 }
 const Header = ({
-                    updateChapterParam
                 }: HeaderProps) => {
 
+    const [searchParams, setSearchParams] = useSearchParams()
     const callback = useCallback(() => {
-        updateChapterParam()
+        searchParams.delete('chapter')
+        setSearchParams(searchParams)
     }, [])
 
     return <h1

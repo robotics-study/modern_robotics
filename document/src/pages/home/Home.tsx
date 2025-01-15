@@ -1,13 +1,7 @@
 import chapters from "../chapters";
 import HomeChapterListItem from "../../components/HomeChapterListItem";
 
-interface HomeProps {
-    updateChapterParam(): void
-}
-
-const Home = ({
-                  updateChapterParam
-              }: HomeProps) => {
+const Home = () => {
 
     return <ul className="divide-y">
         {
@@ -16,7 +10,7 @@ const Home = ({
                                   ...props
                               }
                           }, index) => {
-                return <HomeChapterListItem key={index} {...props} updateChapterParam={updateChapterParam}/>
+                return <HomeChapterListItem key={index} {...props}/>
             })
         }
     </ul>
