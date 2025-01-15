@@ -39,9 +39,9 @@ const HomeChapterListItem = ({
 
     return <li className="flex w-full flex-col p-2">
         <div className="flex">
-            <span className="grow font-semibold">Chapter {chapter}</span>
+            <span className="grow font-semibold break-keep whitespace-nowrap">Chapter {chapter}</span>
             <button onClick={callback}>
-                <h2 className="font-medium">{title}
+                <h2 className="font-medium flex flex-wrap justify-end">{title}
                 </h2>
             </button>
         </div>
