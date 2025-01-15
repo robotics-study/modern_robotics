@@ -28,7 +28,7 @@ jobs:
 
       - name: Build the project
         run: |
-          yarn build  # 빌드 명령어 (프로젝트에 맞게 수정)
+          yarn run build  # 빌드 명령어 (프로젝트에 맞게 수정)
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
