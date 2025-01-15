@@ -23,16 +23,17 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd document
-          yarn install  # 의존성 설치
+          yarn install
+        working-directory: ./document
 
       - name: Build the project
         run: |
-          yarn run build  # 빌드 명령어 (프로젝트에 맞게 수정)
+          yarn run build
+        working-directory: ./document
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub 자동 토큰 사용
-          publish_dir: ./dist  # 배포할 디렉토리 (빌드 후 결과물 위치)
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./document/dist
           publish_branch: doc
