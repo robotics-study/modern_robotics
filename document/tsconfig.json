@@ -10,6 +10,12 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts",  "**/*.json"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    "**/*.json",
+    "../../../Library/Caches/JetBrains/WebStorm2023.3/javascript/typings/node/18.19.68/node_modules/@types/node/globals.d.ts"
+  ],
   "exclude": ["node_modules"]
 }
