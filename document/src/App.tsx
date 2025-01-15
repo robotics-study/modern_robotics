@@ -18,7 +18,6 @@ const App = () => {
     };
 
     const contents = useMemo(() => {
-        console.log(chapter)
         const currentChapter = chapters.find((item) => item.default.chapter == chapter)
         return currentChapter ? <ChapterContents {...currentChapter.default}/> :
             <Home updateChapterParam={updateChapterParam}/>
