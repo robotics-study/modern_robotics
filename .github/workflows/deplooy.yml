@@ -8,6 +8,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -37,3 +39,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./document/dist
           publish_branch: doc
+
