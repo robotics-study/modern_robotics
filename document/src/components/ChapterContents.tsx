@@ -1,4 +1,5 @@
 import {IChapterData} from "../../types/global";
+import 'katex/dist/katex.min.css';
 
 interface ChapterContentsProps extends IChapterData {
 }
