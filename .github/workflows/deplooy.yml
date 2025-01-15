@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시될 때마다 실행됩니다.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Node.js 버전 설정
+
+      - name: Install yarn
+        run: |
+          npm install --global yarn
+
+      - name: Install dependencies
+        run: |
+          cd document
+          yarn install  # 의존성 설치
+
+      - name: Build the project
+        run: |
+          yarn build  # 빌드 명령어 (프로젝트에 맞게 수정)
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub 자동 토큰 사용
+          publish_dir: ./dist  # 배포할 디렉토리 (빌드 후 결과물 위치)
+          publish_branch: doc
