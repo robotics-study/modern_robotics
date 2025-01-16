@@ -20,10 +20,12 @@
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "axios": "^1.7.9",
+    "konva": "^9.3.18",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-katex": "^3.0.1",
+    "react-konva": "^18.2.10",
     "react-router-dom": "^6.28.1",
     "typescript": "^5.7.2"
   },
