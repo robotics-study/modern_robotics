@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "jsx": "react-jsx",
-    "strict": false,
-    "moduleResolution": "Node",
+    "target": "es5",
+    "lib": ["dom", "esnext"],
+    "allowJs": true,
+    "jsx": "react-jsx",  // React JSX 사용 시 "react-jsx"로 설정
+    "strict": true,      // 타입 검사 강화를 위한 strict 모드 설정
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": [
