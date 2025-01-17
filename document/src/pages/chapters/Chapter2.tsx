@@ -31,21 +31,9 @@ const Chapter2 = () => {
                 </p>
                 <CoordinateExample className="bg-white border rounded-lg h-48"/>
             </div>
-            <BlockMath math='\int_{a}^{b} x^2 dx'/>
-            <BlockMatrix math={`
-                \\cos(\\theta) & -\\sin(\\theta) \\\\ 
-                \\sin(\\theta) & \\cos(\\theta)
-                `
-            }/>
-            <div className="text-xs">
-                <InlineMatrix math={`
-                \\cos(\\theta) & -\\sin(\\theta) \\\\ 
-                \\sin(\\theta) & \\cos(\\theta)
-                `
-                }/>
-            </div>
-            <p className="text-lg">
-                <InlineMath math='\int_{a^2}^{b^3} 2x\sqrt{x^2} \frac{\delta{x}}{\delta{t}}'/>
+            <p className="justify-center flex gap-5">
+                <InlineMath math='x = r \sdot \cos\omega'/>
+                <InlineMath math='y = r \sdot \sin\omega'/>
             </p>
         </>
     )
