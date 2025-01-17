@@ -14,7 +14,7 @@ const ChapterContents = ({
             <span className="text-sm break-keep whitespace-nowrap">Chapter.{chapter}</span>
             <span className="text-base font-semibold flex flex-wrap justify-end">{title}</span>
         </h2>
-        <div className="p-2">
+        <div className="p-2 tracking-wide">
             <Contents/>
         </div>
     </div>
