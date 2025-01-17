@@ -37,7 +37,6 @@ const CoordinateExample = ({
             width={WIDTH}
             height={HEIGHT}
             draggable
-            scale
             offsetY={-100}
             offsetX={100}>
             <Line

@@ -13,15 +13,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@babylonjs/core": "^7.33.0",
+    "@babylonjs/core": "^7.44.0",
+    "@babylonjs/gui": "^7.44.0",
     "@babylonjs/loaders": "^7.33.0",
     "@babylonjs/materials": "^7.33.0",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "axios": "^1.7.9",
+    "cannon": "^0.6.2",
     "konva": "^9.3.18",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-babylonjs": "^3.2.2",
     "react-dom": "^18.2.0",
     "react-katex": "^3.0.1",
     "react-konva": "^18.2.10",
@@ -29,6 +32,7 @@
     "typescript": "^5.7.2"
   },
   "devDependencies": {
+    "@types/cannon": "^0.1.13",
     "@types/react-katex": "^3.0.4",
     "@types/webpack-env": "^1.18.5",
     "autoprefixer": "^10.4.20",
