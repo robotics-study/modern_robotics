@@ -2,6 +2,7 @@ import {IChapterData} from "../../../types/global";
 import {BlockMath, InlineMath} from "react-katex";
 import {BlockMatrix, InlineMatrix} from "../../components/math/Matrix";
 import CoordinateExample from "../../components/pages/chapter2/CoordinateExample";
+import Physics3DCanvas from "../../components/Physics3DCanvas";
 
 const Chapter2 = () => {
     return (
@@ -30,6 +31,10 @@ const Chapter2 = () => {
                     Refer the `coordinate` example displayed below.
                 </p>
                 <CoordinateExample className="bg-white border rounded-lg h-48"/>
+                <div className="flex gap-5 justify-around">
+                    <Physics3DCanvas className="aspect-square h-48 rounded-lg" axisFloor/>
+                    <Physics3DCanvas className="aspect-square h-48 rounded-lg" axisFloor/>
+                </div>
             </div>
             <p className="justify-center flex gap-5">
                 <InlineMath math='x = r \sdot \cos\omega'/>
