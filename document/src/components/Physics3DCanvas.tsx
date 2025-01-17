@@ -45,7 +45,7 @@ const Test = () => {
             name={"test"}
             scaling={new BABYLON.Vector3(3, 3, 3)}
             rootUrl={""}
-            sceneFilename={process.env.NODE_ENV == "production" ? "/universal_joint.glb" : "/modern_robotics/universal_joint.glb"}
+            sceneFilename={process.env.NODE_ENV == "production" ? "/modern_robotics/universal_joint.glb" : "/universal_joint.glb"}
             position={new BABYLON.Vector3(0, 0, 0)}
         />
     </Suspense>
