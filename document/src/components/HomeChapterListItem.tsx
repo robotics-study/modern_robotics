@@ -38,13 +38,11 @@ const HomeChapterListItem = ({
     }, [Contents])
 
     return <li className="flex w-full flex-col p-2">
-        <div className="flex">
-            <span className="grow font-semibold break-keep whitespace-nowrap">Chapter {chapter}</span>
-            <button onClick={callback}>
-                <h2 className="font-medium flex flex-wrap justify-end">{title}
-                </h2>
-            </button>
-        </div>
+        <button className="flex" onClick={callback}>
+            <span className="font-semibold break-keep whitespace-nowrap">Chapter {chapter}</span>
+            <h2 className="font-medium flex flex-wrap justify-end grow">{title}
+            </h2>
+        </button>
         {
             supportedExample ? <div className="flex justify-end pt-1.5">
                 {
