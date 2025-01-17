@@ -17,7 +17,7 @@
   resolved "https://registry.yarnpkg.com/@babylonjs/gui/-/gui-7.44.0.tgz#0dc31ac8246f0571c77210b2387483994b940fdc"
   integrity sha512-pmvVBkKqWjdy37Z35iyPfr1fDjslYu3rG46UH4rAwAYbh09dAaZy7x+8MJNmO/IlMECYGHVt7R03rSIL+BD+qQ==
 
-"@babylonjs/loaders@^7.33.0":
+"@babylonjs/loaders@^7.44.0":
   version "7.44.0"
   resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-7.44.0.tgz#b38fcdcee60a6bd8ccb47c47a1fe17a0388504cb"
   integrity sha512-iA7jF7Oz2YXx0aprYjoHFkum16RMx8Apddp5eRgXK7eMjF1nn3wXnPaMbycyf8DSfxtZ2BKcBYUNp6ugtUlZ4A==
@@ -491,6 +491,24 @@ axios@^1.7.9:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
+
+babylonjs-gltf2interface@^7.44.0:
+  version "7.44.0"
+  resolved "https://registry.yarnpkg.com/babylonjs-gltf2interface/-/babylonjs-gltf2interface-7.44.0.tgz#05938655e08a530faf5b9e37da32643d86de25c4"
+  integrity sha512-slxShORX1vQzE1YcMNEdqhW4eWyZcAXiAgP12eDa7lkqBYY5EHytyemeiTCDnkYAe5Jf1vRxZaaMikiAX7+RWw==
+
+babylonjs-loaders@^7.44.0:
+  version "7.44.0"
+  resolved "https://registry.yarnpkg.com/babylonjs-loaders/-/babylonjs-loaders-7.44.0.tgz#b01be69e5a036ec3b85296d2d44fef58b6ff1d2a"
+  integrity sha512-IkQ/a26izZIb8EIQhoigyNXEVZskR/HXehdezfRko9LiKYn2iDNxS/0ivnCTbv6phBtIZKKJWaITYYrAQyWs4g==
+  dependencies:
+    babylonjs "^7.44.0"
+    babylonjs-gltf2interface "^7.44.0"
+
+babylonjs@^7.44.0:
+  version "7.44.0"
+  resolved "https://registry.yarnpkg.com/babylonjs/-/babylonjs-7.44.0.tgz#d0b83cb91f051b934d83916aad6ce18ee61c6627"
+  integrity sha512-PzQfaSCtR3uQ88r7pDfAQ+7cdJ2MJkzvR+mz6le/vCNikm1zDtsQfecRv/4cqG6UFlPV9gXG3gxhm8FoAtal9w==
 
 balanced-match@^1.0.0:
   version "1.0.2"

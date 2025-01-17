@@ -1,10 +1,11 @@
-import React, {createContext, useEffect, useRef} from "react";
+import React, {createContext, Suspense, useEffect, useRef} from "react";
 import * as CANNON from "cannon";
-import {Engine, Scene} from "react-babylonjs";
+import {Engine, Model, Scene} from "react-babylonjs";
 import * as BABYLON from "@babylonjs/core";
 
 import cn from "../libs/cn";
 import {GridMaterial} from "@babylonjs/materials";
+import "@babylonjs/loaders"
 
 interface Physics3DCanvasContext {
     world: CANNON.World
@@ -35,10 +36,25 @@ const Ground = ({
     >
     </ground>
 }
+
+const Test = () => {
+
+
+    return <Suspense>
+        <Model
+            name={"test"}
+            scaling={new BABYLON.Vector3(3, 3, 3)}
+            rootUrl={""}
+            sceneFilename={"/universal_joint.glb"}
+            position={new BABYLON.Vector3(0, 0, 0)}
+        />
+    </Suspense>
+}
 const Content = ({
                      children,
                      className,
-                     axisFloor,
+                     ground,
+                     axis,
                      initialView
                  }: Physics3DCanvasProps) => {
     const world = useRef<CANNON.World>()
@@ -62,7 +78,6 @@ const Content = ({
                         scene.enablePhysics(new BABYLON.Vector3(0, -9.82, 0), new BABYLON.CannonJSPlugin());
                     }}
                 >
-                    <Ground name="upperGround"/>
                     <arcRotateCamera
                         noPreventDefault={false}
                         name="camera1"
@@ -78,7 +93,10 @@ const Content = ({
                         direction={new BABYLON.Vector3(-1, 1, -1)}
                     />
                     {
-                        axisFloor ?
+                        ground ? <Ground name="ground"/> : null
+                    }
+                    {
+                        axis ?
                             <>
                                 <cylinder
                                     name={"x-axis"}
@@ -124,14 +142,7 @@ const Content = ({
                             </>
                             : null
                     }
-                    <box
-                        name="rigid-body"
-                        width={2}
-                        height={4}
-                        size={2}
-                        position={new BABYLON.Vector3(0, 2, 0)}
-                    >
-                    </box>
+                    <Test></Test>
                     {children}
                 </Scene>
             </Engine>
@@ -141,7 +152,8 @@ const Content = ({
 
 export interface Physics3DCanvasProps extends React.PropsWithChildren {
     className?: string
-    axisFloor?: boolean
+    ground?: boolean
+    axis?: boolean
     initialView?: {
         at: {
             x: number,
@@ -159,10 +171,11 @@ export interface Physics3DCanvasProps extends React.PropsWithChildren {
 const Physics3DCanvas = ({
                              children,
                              className,
-                             axisFloor,
+                             ground,
+                             axis,
                              initialView
                          }: Physics3DCanvasProps) => {
-    return <Content className={className} axisFloor={axisFloor} initialView={initialView}>
+    return <Content className={className} ground={ground} initialView={initialView} axis={axis}>
         {children}
     </Content>
 
