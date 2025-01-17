@@ -31,9 +31,9 @@ const Chapter2 = () => {
                     Refer the `coordinate` example displayed below.
                 </p>
                 <CoordinateExample className="bg-white border rounded-lg h-48"/>
-                <div className="flex gap-5 justify-around">
-                    <Physics3DCanvas className="aspect-square h-48 rounded-lg" axisFloor/>
-                    <Physics3DCanvas className="aspect-square h-48 rounded-lg" axisFloor/>
+                <div className="flex flex-wrap gap-5 justify-around">
+                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axisFloor/>
+                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axisFloor/>
                 </div>
             </div>
             <p className="justify-center flex gap-5">
