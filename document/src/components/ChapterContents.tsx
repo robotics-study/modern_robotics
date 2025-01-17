@@ -35,7 +35,7 @@ const ChapterContents = ({
                 chapters.find(item => item.default.chapter == chapter - 1 && item.default.contents) || chapter == 2
                     ? <button
                         onClick={() => changeCallback(chapter - 1)}
-                        className="w-28 border rounded-lg p-2 h-fit text-xs font-bold bg-gray-700 text-gray-200"
+                        className="w-28 border rounded-lg p-2 h-fit text-xs font-bold bg-gray-700 text-gray-200 break-keep whitespace-nowrap"
                     >
                         <span>{
                             chapter == 2 ? "Home" : "Prev Chapter"
@@ -46,7 +46,7 @@ const ChapterContents = ({
                 chapters.find(item => item.default.chapter == chapter + 1 && item.default.contents)
                     ? <button
                         onClick={() => changeCallback(chapter + 1)}
-                        className="w-28 border rounded-lg p-2 h-fit text-xs font-bold bg-gray-700 text-gray-200"
+                        className="w-28 border rounded-lg p-2 h-fit text-xs font-bold bg-gray-700 text-gray-200 break-keep whitespace-nowrap"
                     >
                         <span>Next Chapter</span>
                     </button> : <div></div>
