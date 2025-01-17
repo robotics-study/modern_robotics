@@ -5,7 +5,7 @@ import CoordinateExample from "../../components/pages/chapter2/CoordinateExample
 
 const Chapter2 = () => {
     return (
-        <div className="tracking-wide">
+        <>
             <p className="text-lg border-b text-orange-700">
                 <strong>Intro</strong>
             </p>
@@ -47,7 +47,7 @@ const Chapter2 = () => {
             <p className="text-lg">
                 <InlineMath math='\int_{a^2}^{b^3} 2x\sqrt{x^2} \frac{\delta{x}}{\delta{t}}'/>
             </p>
-        </div>
+        </>
     )
 }
 export default {
