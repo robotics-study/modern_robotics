@@ -1,10 +1,12 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 
 
-export default defineConfig({
-  base: '/modern_robotics',
-  server: {
-    host: true,
-    port: 3000
-  }
+export default defineConfig(({mode}) => {
+    return {
+        base: mode === 'production' ? '/modern_robotics' : '/',
+        server: {
+            host: true,
+            port: 3000
+        }
+    }
 });

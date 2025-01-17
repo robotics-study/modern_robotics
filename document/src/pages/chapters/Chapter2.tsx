@@ -1,6 +1,5 @@
 import {IChapterData} from "../../../types/global";
-import {BlockMath, InlineMath} from "react-katex";
-import {BlockMatrix, InlineMatrix} from "../../components/math/Matrix";
+import {InlineMath} from "react-katex";
 import CoordinateExample from "../../components/pages/chapter2/CoordinateExample";
 import Physics3DCanvas from "../../components/Physics3DCanvas";
 
@@ -32,8 +31,8 @@ const Chapter2 = () => {
                 </p>
                 <CoordinateExample className="bg-white border rounded-lg h-48"/>
                 <div className="flex flex-wrap gap-5 justify-around">
-                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axisFloor/>
-                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axisFloor/>
+                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axis/>
+                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axis/>
                 </div>
             </div>
             <p className="justify-center flex gap-5">
