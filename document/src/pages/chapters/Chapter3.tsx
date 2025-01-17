@@ -1,11 +1,13 @@
 import {IChapterData} from "../../../types/global";
+import {BlockMath} from "react-katex";
 
 const Chapter3 = () => {
     return (
-    <div>
+        <div>
             Rigid-Body Motion.
-            
-            <p>Definition : The special orthogonal group SO(3), also known as the group of rotation matrices, is the set of all 3 x 3 real matrices R that satisfy the followings
+
+            <p>Definition : The special orthogonal group SO(3), also known as the group of rotation matrices, is the set
+                of all 3 x 3 real matrices R that satisfy the followings
             </p>
             <BlockMath math='\R^TR=I and det R = 1'/>
             <p>Properties of rotation matrices : inverse, clousre, associative, not commutative

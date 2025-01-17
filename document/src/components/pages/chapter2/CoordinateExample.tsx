@@ -1,5 +1,5 @@
 import CoordinateSystem from "../../CoordinateCanvas";
-import {Group, Line, Rect, Text, Transformer} from 'react-konva';
+import {Group, Line, Rect, Text, Transformer, Label} from 'react-konva';
 import {useEffect, useMemo, useRef} from "react";
 import Konva from "konva";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
@@ -57,22 +57,43 @@ const CoordinateExample = ({
                     lineRef.current!.points([origin.x, origin.y, x, y])
                 }}
             >
-                <Text
-                    ref={positionTextRef}
-                    text={`[x : 5.00] [y: 5.00]`}
-                    x={-35}
+                <Group
+                    x={0}
                     y={40}
-                    fontSize={12}
-                    fontStyle="bold"
-                />
-                <Text
-                    ref={angleTextRef}
-                    text={`[th: 90.00 deg]`}
-                    x={-25}
-                    y={60}
-                    fontSize={12}
-                    fontStyle="bold"
-                />
+                >
+                    <Rect
+                        offsetX={75}
+                        width={150}
+                        height={40}
+                        x={0}
+                        fill="white"
+                        cornerRadius={10}
+                        stroke="black"
+                        strokeWidth={1}
+                    />
+                    <Text
+                        ref={positionTextRef}
+                        text={`[x : 5.00] [y: 5.00]`}
+                        x={0}
+                        y={8}
+                        width={150}
+                        offsetX={77}
+                        fontSize={12}
+                        fontStyle="bold"
+                        align="center"
+                    />
+                    <Text
+                        ref={angleTextRef}
+                        offsetX={77}
+                        text={`[th: 90.00 deg]`}
+                        x={0}
+                        y={22}
+                        width={150}
+                        fontSize={12}
+                        fontStyle="bold"
+                        align="center"
+                    />
+                </Group>
                 <Rect
                     ref={objectRef}
                     width={30}
