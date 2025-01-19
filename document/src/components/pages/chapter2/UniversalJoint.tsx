@@ -22,7 +22,11 @@ const UniversalJoint = () => {
             <LoadedModel
                 path={"universal/core.stl"}
                 rotation={new Vector3(0, 0, Math.PI / 2)}
+<<<<<<< Updated upstream
                 position={new Vector3(0.4, 0.75, -0.35)}
+=======
+                position={new Vector3(0.4, 0.712, -0.35)}
+>>>>>>> Stashed changes
             />
             <LoadedModel
                 path={"universal/link.stl"}
