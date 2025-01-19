@@ -1,7 +1,8 @@
 import {IChapterData} from "../../../types/global";
 import {InlineMath} from "react-katex";
 import CoordinateExample from "../../components/pages/chapter2/CoordinateExample";
-import Physics3DCanvas from "../../components/Physics3DCanvas";
+import Physics3DCanvas from "../../components/3d/Physics3DCanvas";
+import UniversalJoint from "../../components/pages/chapter2/UniversalJoint";
 
 const Chapter2 = () => {
     return (
@@ -29,16 +30,21 @@ const Chapter2 = () => {
                     <InlineMath math='(\theta)'/>.
                     Refer the `coordinate` example displayed below.
                 </p>
+                <p className="justify-center flex gap-5">
+                    <InlineMath math='x = r \sdot \cos\omega'/>
+                    <InlineMath math='y = r \sdot \sin\omega'/>
+                </p>
                 <CoordinateExample className="bg-white border rounded-lg h-48"/>
+
+            </div>
+            <p className="text-lg border-b text-orange-700">
+                <strong>Degree of Freedom (DOF)</strong>
+            </p>
+            <div>
                 <div className="flex flex-wrap gap-5 justify-around">
-                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axis/>
-                    <Physics3DCanvas className="aspect-square w-56 rounded-lg" axis/>
+                    <UniversalJoint/>
                 </div>
             </div>
-            <p className="justify-center flex gap-5">
-                <InlineMath math='x = r \sdot \cos\omega'/>
-                <InlineMath math='y = r \sdot \sin\omega'/>
-            </p>
         </>
     )
 }
