@@ -1,6 +1,6 @@
-import React, {createContext, Suspense, useEffect, useRef} from "react";
+import React, {createContext, Suspense, useEffect, useMemo, useRef} from "react";
 import * as CANNON from "cannon";
-import {Engine, Model, Scene} from "react-babylonjs";
+import {Engine, Model, Scene, useScene, useSceneLoader} from "react-babylonjs";
 import * as BABYLON from "@babylonjs/core";
 
 import cn from "../libs/cn";
@@ -38,17 +38,23 @@ const Ground = ({
 }
 
 const Test = () => {
+    const scene = useScene()
+    useEffect(() => {
+        if (scene) {
+            BABYLON.SceneLoader.ImportMeshAsync(
+                "",
+                "",
+                process.env.NODE_ENV == "production" ? "/modern_robotics/universal_joint.glb" : "/universal_joint.glb",
+                scene
+            ).then(res => {
+                res.meshes[0].scaling.x = 3
+                res.meshes[0].scaling.y = 3
+                res.meshes[0].scaling.z = 3
+            })
 
-
-    return <Suspense>
-        <Model
-            name={"test"}
-            scaling={new BABYLON.Vector3(3, 3, 3)}
-            rootUrl={""}
-            sceneFilename={process.env.NODE_ENV == "production" ? "/modern_robotics/universal_joint.glb" : "/universal_joint.glb"}
-            position={new BABYLON.Vector3(0, 0, 0)}
-        />
-    </Suspense>
+        }
+    }, []);
+    return <></>
 }
 const Content = ({
                      children,
@@ -85,7 +91,7 @@ const Content = ({
                         alpha={0}
                         beta={0}
                         radius={10}
-                        position={new BABYLON.Vector3(initialView?.at?.x ?? 50, initialView?.at?.y ?? 50, initialView?.at?.z ?? 30)}
+                        position={new BABYLON.Vector3(initialView?.at?.x ?? 5, initialView?.at?.y ?? 5, initialView?.at?.z ?? 3)}
                     />
                     <hemisphericLight
                         name="sun"

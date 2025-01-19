@@ -22,7 +22,7 @@
   resolved "https://registry.yarnpkg.com/@babylonjs/loaders/-/loaders-7.44.0.tgz#b38fcdcee60a6bd8ccb47c47a1fe17a0388504cb"
   integrity sha512-iA7jF7Oz2YXx0aprYjoHFkum16RMx8Apddp5eRgXK7eMjF1nn3wXnPaMbycyf8DSfxtZ2BKcBYUNp6ugtUlZ4A==
 
-"@babylonjs/materials@^7.33.0":
+"@babylonjs/materials@^7.44.0":
   version "7.44.0"
   resolved "https://registry.yarnpkg.com/@babylonjs/materials/-/materials-7.44.0.tgz#f50abbc1caaea91e1e5f848932543ffe4fac1306"
   integrity sha512-pVrO9WJzywKYm8muMrY3WEZTFAZ3fUsgsV6XkBD658zA2JSA4epXjUD706xQ/7dw2rxGHrEoPApGSHzPNuXdkg==
