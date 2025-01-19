@@ -1,7 +1,13 @@
 import React, {createContext, Suspense, useEffect, useMemo, useRef} from "react";
 import * as CANNON from "cannon";
 import {Engine, Model, Scene, useScene, useSceneLoader} from "react-babylonjs";
-import * as BABYLON from "@babylonjs/core";
+import {
+    Vector3,
+    SceneLoader,
+    Color3,
+    CannonJSPlugin,
+    Scene as BabylonScene
+} from "@babylonjs/core";
 
 import cn from "../libs/cn";
 import {GridMaterial} from "@babylonjs/materials";
@@ -30,7 +36,7 @@ const Ground = ({
             gridMaterial.gridRatio = 1;
             gridMaterial.majorUnitFrequency = 5;
             gridMaterial.minorUnitVisibility = 0.5;
-            gridMaterial.lineColor = new BABYLON.Color3(0, 0.4, 0.4)
+            gridMaterial.lineColor = new Color3(0, 0.4, 0.4)
             instance.material = gridMaterial
         }}
     >
@@ -41,7 +47,7 @@ const Test = () => {
     const scene = useScene()
     useEffect(() => {
         if (scene) {
-            BABYLON.SceneLoader.ImportMeshAsync(
+            SceneLoader.ImportMeshAsync(
                 "",
                 "",
                 process.env.NODE_ENV == "production" ? "/modern_robotics/universal_joint.glb" : "/universal_joint.glb",
@@ -64,7 +70,7 @@ const Content = ({
                      initialView
                  }: Physics3DCanvasProps) => {
     const world = useRef<CANNON.World>()
-    const sceneRef = useRef<BABYLON.Scene>();
+    const sceneRef = useRef<BabylonScene>();
 
     useEffect(() => {
         if (!window.CANNON) {
@@ -81,22 +87,22 @@ const Content = ({
                 <Scene
                     onCreated={(scene) => {
                         sceneRef.current = scene
-                        scene.enablePhysics(new BABYLON.Vector3(0, -9.82, 0), new BABYLON.CannonJSPlugin());
+                        scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin());
                     }}
                 >
                     <arcRotateCamera
                         noPreventDefault={false}
                         name="camera1"
-                        target={new BABYLON.Vector3(initialView?.to?.x ?? 0, initialView?.to?.y ?? 0, initialView?.to?.z ?? 0)}
+                        target={new Vector3(initialView?.to?.x ?? 0, initialView?.to?.y ?? 0, initialView?.to?.z ?? 0)}
                         alpha={0}
                         beta={0}
                         radius={10}
-                        position={new BABYLON.Vector3(initialView?.at?.x ?? 5, initialView?.at?.y ?? 5, initialView?.at?.z ?? 3)}
+                        position={new Vector3(initialView?.at?.x ?? 5, initialView?.at?.y ?? 5, initialView?.at?.z ?? 3)}
                     />
                     <hemisphericLight
                         name="sun"
                         intensity={1}
-                        direction={new BABYLON.Vector3(-1, 1, -1)}
+                        direction={new Vector3(-1, 1, -1)}
                     />
                     {
                         ground ? <Ground name="ground"/> : null
@@ -108,41 +114,36 @@ const Content = ({
                                     name={"x-axis"}
                                     height={100}
                                     diameter={0.15}
-                                    rotation={new BABYLON.Vector3(Math.PI / 2, 0, 0)}
-                                    position={new BABYLON.Vector3(0, 0, 0)}
+                                    rotation={new Vector3(Math.PI / 2, 0, 0)}
+                                    position={new Vector3(0, 0, 0)}
                                 >
                                     <standardMaterial
                                         name="x-axis-mat"
-                                        diffuseColor={BABYLON.Color3.Red()}
+                                        diffuseColor={Color3.Red()}
                                     />
                                 </cylinder>
                                 <cylinder
                                     name={"y-axis"}
                                     height={100}
                                     diameter={0.15}
-                                    rotation={new BABYLON.Vector3(0, 0, Math.PI / 2)}
-                                    position={new BABYLON.Vector3(0, 0, 0)}
-                                    onCreated={instance => {
-                                        const zMaterial = new BABYLON.StandardMaterial("yMaterial", instance.getScene());
-                                        zMaterial.diffuseColor = BABYLON.Color3.Green()
-                                        instance.material = zMaterial
-                                    }}
+                                    rotation={new Vector3(0, 0, Math.PI / 2)}
+                                    position={new Vector3(0, 0, 0)}
                                 >
                                     <standardMaterial
                                         name="y-axis-mat"
-                                        diffuseColor={BABYLON.Color3.Green()}
+                                        diffuseColor={Color3.Green()}
                                     />
                                 </cylinder>
                                 <cylinder
                                     name={"z-axis"}
                                     height={100}
                                     diameter={0.15}
-                                    rotation={new BABYLON.Vector3(0, 0, 0)}
-                                    position={new BABYLON.Vector3(0, 0, 0)}
+                                    rotation={new Vector3(0, 0, 0)}
+                                    position={new Vector3(0, 0, 0)}
                                 >
                                     <standardMaterial
                                         name="z-axis-mat"
-                                        diffuseColor={BABYLON.Color3.Blue()}
+                                        diffuseColor={Color3.Blue()}
                                     />
                                 </cylinder>
                             </>
