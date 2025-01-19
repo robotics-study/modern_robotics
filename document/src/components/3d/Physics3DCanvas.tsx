@@ -1,17 +1,10 @@
-import React, {createContext, Suspense, useEffect, useMemo, useRef} from "react";
+import React, {createContext, useEffect, useRef} from "react";
 import * as CANNON from "cannon";
-import {Engine, Model, Scene, useScene, useSceneLoader} from "react-babylonjs";
-import {
-    Vector3,
-    SceneLoader,
-    Color3,
-    CannonJSPlugin,
-    Scene as BabylonScene
-} from "@babylonjs/core";
+import {Engine, Scene} from "react-babylonjs";
+import {CannonJSPlugin, Color3, Color4, Scene as BabylonScene, Vector3} from "@babylonjs/core";
 
-import cn from "../libs/cn";
+import cn from "../../libs/cn";
 import {GridMaterial} from "@babylonjs/materials";
-import "@babylonjs/loaders"
 
 interface Physics3DCanvasContext {
     world: CANNON.World
@@ -21,11 +14,17 @@ export const CannonContext = createContext<Physics3DCanvasContext | undefined>(u
 
 const Ground = ({
                     name,
+                    yzPlane,
+                    zxPlain,
+                    opacity
                 }: {
     name: string,
+    yzPlane?: boolean
+    zxPlain?: boolean
+    opacity?: number
 }) => {
     return <ground
-        layerMask={-1}
+        rotation={zxPlain ? new Vector3(Math.PI / 2, 0, 0) : (yzPlane ? new Vector3(0, 0, Math.PI / 2) : Vector3.Zero())}
         name={name}
         width={100}
         height={100}
@@ -36,45 +35,33 @@ const Ground = ({
             gridMaterial.gridRatio = 1;
             gridMaterial.majorUnitFrequency = 5;
             gridMaterial.minorUnitVisibility = 0.5;
-            gridMaterial.lineColor = new Color3(0, 0.4, 0.4)
+            gridMaterial.lineColor = zxPlain ? new Color3(0.4, 0, 0.4) : (yzPlane ? new Color3(0.4, 0.4, 0) : new Color3(0, 0.4, 0.4))
+            gridMaterial.mainColor = new Color3(0, 0, 0)
+            gridMaterial.backFaceCulling = false
+            gridMaterial.opacity = opacity ?? 0.5
             instance.material = gridMaterial
         }}
     >
+        <texture
+            hasAlpha
+        ></texture>
     </ground>
-}
-
-const Test = () => {
-    const scene = useScene()
-    useEffect(() => {
-        if (scene) {
-            SceneLoader.ImportMeshAsync(
-                "",
-                "",
-                process.env.NODE_ENV == "production" ? "/modern_robotics/universal_joint.glb" : "/universal_joint.glb",
-                scene
-            ).then(res => {
-                res.meshes[0].scaling.x = 3
-                res.meshes[0].scaling.y = 3
-                res.meshes[0].scaling.z = 3
-            })
-
-        }
-    }, []);
-    return <></>
 }
 const Content = ({
                      children,
                      className,
                      ground,
                      axis,
+                     physics,
                      initialView
                  }: Physics3DCanvasProps) => {
     const world = useRef<CANNON.World>()
     const sceneRef = useRef<BabylonScene>();
 
     useEffect(() => {
-        if (!window.CANNON) {
+        if (!window.CANNON && physics) {
             window.CANNON = CANNON
+            sceneRef.current?.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin());
         }
     }, []);
     return <CannonContext.Provider value={world.current ? {
@@ -85,9 +72,9 @@ const Content = ({
         >
             <Engine antialias>
                 <Scene
+                    clearColor={new Color4(0.02, 0.02, 0.02, 0.93)}
                     onCreated={(scene) => {
                         sceneRef.current = scene
-                        scene.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin());
                     }}
                 >
                     <arcRotateCamera
@@ -105,7 +92,16 @@ const Content = ({
                         direction={new Vector3(-1, 1, -1)}
                     />
                     {
-                        ground ? <Ground name="ground"/> : null
+                        ground ? <>
+                            {(typeof ground == "object" && 'xy' in ground && ground.xy) ?
+                                <Ground name="xyGround" opacity={ground.xy.opacity}/> :
+                                <Ground name="xyGround"
+                                        opacity={typeof ground == "object" ? ground.opacity : undefined}/>}
+                            {(typeof ground == "object" && 'yz' in ground && ground.yz) ?
+                                <Ground name="yzGround" yzPlane opacity={ground.yz.opacity}/> : null}
+                            {(typeof ground == "object" && 'xz' in ground && ground.xz) ?
+                                <Ground name="xzGround" zxPlain opacity={ground.xz.opacity}/> : null}
+                        </> : null
                     }
                     {
                         axis ?
@@ -149,7 +145,6 @@ const Content = ({
                             </>
                             : null
                     }
-                    <Test></Test>
                     {children}
                 </Scene>
             </Engine>
@@ -159,15 +154,27 @@ const Content = ({
 
 export interface Physics3DCanvasProps extends React.PropsWithChildren {
     className?: string
-    ground?: boolean
+    ground?: {
+        xy?: {
+            opacity?: number
+        } | boolean,
+        yz?: {
+            opacity?: number
+        } | boolean,
+        xz?: {
+            opacity?: number
+        } | boolean,
+        opacity?: number
+    } | boolean,
     axis?: boolean
+    physics?: boolean,
     initialView?: {
-        at: {
+        at?: {
             x: number,
             y: number,
             z: number
         },
-        to: {
+        to?: {
             x: number,
             y: number,
             z: number
@@ -180,9 +187,10 @@ const Physics3DCanvas = ({
                              className,
                              ground,
                              axis,
+                             physics,
                              initialView
                          }: Physics3DCanvasProps) => {
-    return <Content className={className} ground={ground} initialView={initialView} axis={axis}>
+    return <Content className={className} ground={ground} initialView={initialView} axis={axis} physics={physics}>
         {children}
     </Content>
 
