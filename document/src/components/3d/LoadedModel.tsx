@@ -3,10 +3,7 @@ import {MutableRefObject, useEffect, forwardRef} from "react";
 import {AbstractMesh, Color3, SceneLoader, StandardMaterial, Vector3, Animation} from "@babylonjs/core";
 import "@babylonjs/loaders"
 import "babylonjs-loaders"
-
-function resolvePath(path: string) {
-    return process.env.NODE_ENV == "production" ? `/modern_robotics/${path}` : `/${path}`
-}
+import {resolvePath} from "../../libs/url";
 
 type AnimationFun = (mesh: AbstractMesh) => Animation[]
 
@@ -42,7 +39,7 @@ const LoadedModel = ({
             ).then(res => {
                 const [mesh] = res.meshes
                 mesh.setPivotPoint(pivotPoint ?? new Vector3(0, 0, 0))
-                mesh.scaling = scale ??  Vector3.One()
+                mesh.scaling = scale ?? Vector3.One()
                 mesh.position = position ?? Vector3.Zero()
                 mesh.rotation = rotation ?? Vector3.Zero()
                 const material = new StandardMaterial("mash-color", mesh.getScene())

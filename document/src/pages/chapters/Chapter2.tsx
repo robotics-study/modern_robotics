@@ -17,7 +17,7 @@ const Chapter2 = () => {
                     <strong>Actuators</strong> (motors) provide forces or torques that move the robot's links.
 
                 </p>
-                All robots are treated as <strong>rigid bodies</strong> to be address by simple equations. We would
+                All robots are treated as <strong>rigid bodies</strong> to be addressed by simple equations. We would
                 not consider stresses or fluctuations.
                 <p>
                 </p>
