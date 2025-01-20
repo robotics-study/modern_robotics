@@ -3,6 +3,9 @@ import {InlineMath} from "react-katex";
 import CoordinateExample from "../../components/pages/chapter2/CoordinateExample";
 import Physics3DCanvas from "../../components/3d/Physics3DCanvas";
 import UniversalJoint from "../../components/pages/chapter2/UniversalJoint";
+import RevoluteJoint from "../../components/pages/chapter2/RevoluteJoint";
+import PrismaticJoint from "../../components/pages/chapter2/PrismaticJoint";
+import HelicalJoint from "../../components/pages/chapter2/HelicalJoint";
 
 const Chapter2 = () => {
     return (
@@ -42,6 +45,9 @@ const Chapter2 = () => {
             </p>
             <div>
                 <div className="flex flex-wrap gap-5 justify-around">
+                    <RevoluteJoint/>
+                    <PrismaticJoint/>
+                    <HelicalJoint/>
                     <UniversalJoint/>
                 </div>
             </div>
