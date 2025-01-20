@@ -44,7 +44,7 @@ const Chapter2 = () => {
                 <strong>Degree of Freedom (DOF)</strong>
             </p>
             <div>
-                <div className="flex flex-wrap gap-5 justify-around">
+                <div className="flex flex-wrap justify-around">
                     <RevoluteJoint/>
                     <PrismaticJoint/>
                     <HelicalJoint/>

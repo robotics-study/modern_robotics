@@ -13,6 +13,7 @@ interface LoadedModelProps {
     scale?: Vector3,
     rotation?: Vector3,
     pivotPoint?: Vector3,
+    color?: Color3,
     animations?: Animation[] | AnimationFun,
     autoStartAnimation?: boolean,
     onLoad?: (mesh: AbstractMesh) => void
@@ -24,6 +25,7 @@ const LoadedModel = ({
                          position,
                          rotation,
                          pivotPoint,
+                         color,
                          animations,
                          autoStartAnimation,
                          onLoad
@@ -43,7 +45,7 @@ const LoadedModel = ({
                 mesh.position = position ?? Vector3.Zero()
                 mesh.rotation = rotation ?? Vector3.Zero()
                 const material = new StandardMaterial("mash-color", mesh.getScene())
-                material.diffuseColor = new Color3(0, 0.5, 0.5)
+                material.diffuseColor = color ?? Color3.Gray()
                 mesh.material = material
                 if (animations) {
                     if (animations instanceof Array) {

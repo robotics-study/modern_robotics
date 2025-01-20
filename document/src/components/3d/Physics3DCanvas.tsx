@@ -72,6 +72,8 @@ const Content = ({
                         target={new Vector3(initialView?.to?.x ?? 0, initialView?.to?.y ?? 0, initialView?.to?.z ?? 0)}
                         alpha={0}
                         beta={0}
+                        lowerRadiusLimit={2}
+                        upperRadiusLimit={50}
                         radius={initialView?.radius ?? 10}
                         position={new Vector3(initialView?.at?.x ?? 5, initialView?.at?.y ?? 5, initialView?.at?.z ?? 3)}
                     />

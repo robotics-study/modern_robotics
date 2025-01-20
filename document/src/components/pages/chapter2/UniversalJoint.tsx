@@ -1,12 +1,12 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
 import LoadedModel from "../../3d/LoadedModel";
-import {Animation, IAnimationKey, Vector3, MeshBuilder, Color4} from "@babylonjs/core";
+import {Animation, Color3, IAnimationKey, Vector3} from "@babylonjs/core";
 
 const UniversalJoint = () => {
 
-    return <div className="flex flex-col items-center justify-center py-3 gap-1">
+    return <div className="flex flex-col items-center justify-center p-3 w-1/2 md:w-1/4 gap-1">
         <Physics3DCanvas
-            className="aspect-square w-60 rounded-lg"
+            className="aspect-square w-full rounded-lg"
             initialView={{
                 at: {
                     x: 5,
@@ -26,6 +26,7 @@ const UniversalJoint = () => {
             />
             <LoadedModel
                 path={"universal/link.stl"}
+                color={new Color3(0.5, 0, 0.5)}
                 scale={new Vector3(0.4, 0.4, 0.4)}
                 rotation={new Vector3(0, Math.PI / 2, 0)}
                 position={new Vector3(0.75, -1.75, -1.75)}
@@ -67,6 +68,7 @@ const UniversalJoint = () => {
                 rotation={new Vector3(Math.PI, Math.PI / 2, Math.PI / 2)}
                 position={new Vector3(0.75, -1.75, -1.75)}
                 pivotPoint={new Vector3(-0.75, 1.75, 1.75)}
+                color={new Color3(0, 0.5, 0.5)}
                 autoStartAnimation
                 animations={(mesh) => {
                     const animation = new Animation(

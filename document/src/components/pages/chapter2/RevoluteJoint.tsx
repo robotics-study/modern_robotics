@@ -65,9 +65,9 @@ const RevoluteLink = ({
     </box>
 }
 const RevoluteJoint = () => {
-    return <div className="flex flex-col items-center justify-center py-3 gap-1">
+    return <div className="flex flex-col items-center justify-center p-3 w-1/2 md:w-1/4 gap-1">
         <Physics3DCanvas
-            className="aspect-square w-60 rounded-lg"
+            className="aspect-square w-full rounded-lg"
             initialView={{
                 at: {
                     x: 0,
