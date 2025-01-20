@@ -1,16 +1,10 @@
-import React, {createContext, useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import * as CANNON from "cannon";
 import {Engine, Scene} from "react-babylonjs";
 import {CannonJSPlugin, Color3, Color4, Scene as BabylonScene, Vector3} from "@babylonjs/core";
 
 import cn from "../../libs/cn";
 import {GridMaterial} from "@babylonjs/materials";
-
-interface Physics3DCanvasContext {
-    world: CANNON.World
-}
-
-export const CannonContext = createContext<Physics3DCanvasContext | undefined>(undefined)
 
 const Ground = ({
                     name,
@@ -42,9 +36,6 @@ const Ground = ({
             instance.material = gridMaterial
         }}
     >
-        <texture
-            hasAlpha
-        ></texture>
     </ground>
 }
 const Content = ({
@@ -55,7 +46,6 @@ const Content = ({
                      physics,
                      initialView
                  }: Physics3DCanvasProps) => {
-    const world = useRef<CANNON.World>()
     const sceneRef = useRef<BabylonScene>();
 
     useEffect(() => {
@@ -64,9 +54,7 @@ const Content = ({
             sceneRef.current?.enablePhysics(new Vector3(0, -9.82, 0), new CannonJSPlugin());
         }
     }, []);
-    return <CannonContext.Provider value={world.current ? {
-        world: world.current!,
-    } : undefined}>
+    return <>
         <div
             className={cn(className, "overflow-hidden")}
         >
@@ -78,12 +66,13 @@ const Content = ({
                     }}
                 >
                     <arcRotateCamera
+                        ignoreParentScaling={true}
                         noPreventDefault={false}
                         name="camera1"
                         target={new Vector3(initialView?.to?.x ?? 0, initialView?.to?.y ?? 0, initialView?.to?.z ?? 0)}
                         alpha={0}
                         beta={0}
-                        radius={10}
+                        radius={initialView?.radius ?? 10}
                         position={new Vector3(initialView?.at?.x ?? 5, initialView?.at?.y ?? 5, initialView?.at?.z ?? 3)}
                     />
                     <hemisphericLight
@@ -149,7 +138,7 @@ const Content = ({
                 </Scene>
             </Engine>
         </div>
-    </CannonContext.Provider>
+    </>
 }
 
 export interface Physics3DCanvasProps extends React.PropsWithChildren {
@@ -169,6 +158,7 @@ export interface Physics3DCanvasProps extends React.PropsWithChildren {
     axis?: boolean
     physics?: boolean,
     initialView?: {
+        radius?: number,
         at?: {
             x: number,
             y: number,
