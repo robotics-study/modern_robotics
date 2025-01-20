@@ -1,7 +1,7 @@
 import {IChapterData} from "../../../types/global";
 import {BlockMath, InlineMath} from "react-katex";
 
-const Chapter3 = () => {
+const Chapter4 = () => {
     return (
         <>
             <p className="text-lg border-b text-orange-700">
@@ -59,10 +59,10 @@ const Chapter3 = () => {
     )
 }
 export default {
-    title: "Rigid-Body Motions in the Plane",
-    chapter: 3,
-    contents: Chapter3,
+    title: "Forward Kinematics",
+    chapter: 4,
+    contents: Chapter4,
     supportedExample: {
-        "c++": true
+        "python": true
     }
 } as IChapterData
