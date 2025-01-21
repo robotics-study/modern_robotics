@@ -33,7 +33,8 @@ const Chapter3 = () => {
                 <p><strong>Definition</strong> : [fig1]
                 </p>
                 <BlockMath math='\R^TR=I \ and\  \text{det} R = 1'/>
-                <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating frame as seen from the fixed frame. Denote by w the angular velocity of the rotating frame . Then
+                <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating
+                    frame as seen from the fixed frame. Denote by w the angular velocity of the rotating frame . Then
                 </p>
             </div>
             <p className="text-lg border-b text-orange-700">
@@ -46,7 +47,8 @@ const Chapter3 = () => {
                     then serves as the three-parameter exponential coordinate representation of the rotation
                 </p>
                 <BlockMath math='\R^TR=I \ and\  \text{det} R = 1'/>
-                <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating frame as seen from the fixed frame. Denote by w the angular velocity of the rotating frame . Then
+                <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating
+                    frame as seen from the fixed frame. Denote by w the angular velocity of the rotating frame . Then
                 </p>
             </div>
             <p className="text-lg border-b text-orange-700">
@@ -55,6 +57,18 @@ const Chapter3 = () => {
             <p className="text-lg border-b text-orange-700">
                 <strong>Homogeneous Transformation.</strong>
             </p>
+            <img
+                className="w-1/2"
+                src={"/public/img_example.png"}
+                alt={"예시 이미지"}
+                loading="lazy"
+            />
+            <img
+                className="w-1/3"
+                src={"https://img.freepik.com/free-vector/vintage-robot-toy-white-background_1308-77501.jpg?semt=ais_incoming"}
+                alt={"예시 이미지"}
+                loading="lazy"
+            />
         </>
     )
 }
