@@ -102,7 +102,7 @@ const HelicalLink = ({
         }}
     >
         <standardMaterial
-            name={`test`}
+            name={`${direction}_helical_joint_mat`}
             diffuseColor={color}
         ></standardMaterial>
     </box>
