@@ -35,8 +35,7 @@ jobs:
 
       - name: Move assets to `asset` folder
         run: |
-          mkdir -p ./dist/assets
-          find ./dist/public -type f ! -name "*.ico" -exec mv {} ./dist/assets/ \;
+          find ./public -type f ! -name "*.ico" -exec mv {} ./dist/assets/ \;
         working-directory: ./document
 
       - name: Deploy to GitHub Pages
