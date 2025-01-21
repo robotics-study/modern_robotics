@@ -1,5 +1,6 @@
 import {IChapterData} from "../../../types/global";
 import {BlockMath, InlineMath} from "react-katex";
+import {resolvePath} from "../../libs/url";
 
 const Chapter3 = () => {
     return (
@@ -59,7 +60,7 @@ const Chapter3 = () => {
             </p>
             <img
                 className="w-1/2"
-                src={"./img_example.png"}
+                src={resolvePath("img_example.png")}
                 alt={"예시 이미지"}
                 loading="lazy"
             />

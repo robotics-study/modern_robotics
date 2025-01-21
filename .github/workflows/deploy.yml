@@ -28,15 +28,16 @@ jobs:
           yarn install
         working-directory: ./document
 
+      - name: Move assets to `assets` folder
+        run: |
+          rsync -av --exclude="*.ico" --exclude="*.html" --exclude="*.js" --remove-source-files ./public/ ./public/assets/
+        working-directory: ./document
+
       - name: Build the project
         run: |
           yarn run build
         working-directory: ./document
 
-      - name: Move assets to `asset` folder
-        run: |
-          rsync -av --exclude="*.ico" --exclude="*.html" --exclude="*.js" --remove-source-files ./dist/ ./dist/assets/
-        working-directory: ./document
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
