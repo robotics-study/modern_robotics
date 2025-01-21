@@ -33,6 +33,10 @@ jobs:
           yarn run build
         working-directory: ./document
 
+      - name: Move assets to `asset` folder
+        run: |
+          find ./document/dist/public -type f ! -name "*.ico" -exec mv {} ./document/dist/asset/ \;
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
