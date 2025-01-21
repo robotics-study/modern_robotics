@@ -59,7 +59,7 @@ const Chapter3 = () => {
             </p>
             <img
                 className="w-1/2"
-                src={"/img_example.png"}
+                src={"./img_example.png"}
                 alt={"예시 이미지"}
                 loading="lazy"
             />
