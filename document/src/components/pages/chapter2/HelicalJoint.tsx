@@ -8,13 +8,13 @@ const Skew = () => {
 
     return <cylinder
         name="skew"
-        height={10}
-        diameter={0.5}
+        height={15}
+        diameter={0.7}
         tessellation={64}
     >
         <standardMaterial
             name="skew_mat"
-            diffuseColor={new Color3(0.3, 0.3, 0.6)}
+            diffuseColor={new Color3(0.7, 0.3, 0.3)}
         >
         </standardMaterial>
     </cylinder>
@@ -112,7 +112,7 @@ const HelicalJoint = () => {
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
-                radius: 20,
+                radius: 25,
                 at: {
                     x: 0,
                     y: 5,

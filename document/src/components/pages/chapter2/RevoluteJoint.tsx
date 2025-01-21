@@ -69,6 +69,7 @@ const RevoluteJoint = () => {
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
+                radius: 25,
                 at: {
                     x: 0,
                     y: 5,

@@ -34,7 +34,7 @@ const PrismaticLink = ({
                 value: initialPoint
             }, {
                 frame: 60,
-                value: initialPoint.add(new Vector3(direction * 1.75, 0, 0))
+                value: initialPoint.add(new Vector3(direction * 2.75, 0, 0))
             }, {
                 frame: 120,
                 value: initialPoint
@@ -66,7 +66,7 @@ const PrismaticJoint = () => {
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
-                radius: 20,
+                radius: 25,
                 at: {
                     x: -3,
                     y: 1,
