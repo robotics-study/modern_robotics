@@ -28,11 +28,6 @@ jobs:
           yarn install
         working-directory: ./document
 
-      - name: Move assets to `assets` folder
-        run: |
-          rsync -av --exclude="*.ico" --exclude="*.html" --exclude="*.js" --remove-source-files ./public/ ./public/assets/
-        working-directory: ./document
-
       - name: Build the project
         run: |
           yarn run build
