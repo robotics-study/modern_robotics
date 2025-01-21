@@ -30,7 +30,7 @@ const ChapterContents = ({
         <div className="p-2 tracking-wide">
             <Contents/>
         </div>
-        <div className="flex fixed bottom-12 h-0 w-full bg-transparent px-5 justify-between">
+        <div className="flex sticky bottom-0 h-12 w-full bg-transparent px-5 justify-between">
             {
                 chapters.find(item => item.default.chapter == chapter - 1 && item.default.contents) || chapter == 2
                     ? <button
