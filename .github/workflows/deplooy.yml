@@ -35,7 +35,7 @@ jobs:
 
       - name: Move assets to `asset` folder
         run: |
-          rsync -av --exclude="*.ico" ./public/ ./document/dist/asset/
+          rsync -av --exclude="*.ico" ./public/ ./document/dist/assets/
         working-directory: ./document
 
       - name: Deploy to GitHub Pages
