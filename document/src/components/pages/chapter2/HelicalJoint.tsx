@@ -14,7 +14,6 @@ const Skew = () => {
         onCreated={(instance) => {
             const customMesh = new Mesh("screw_spine", instance.getScene());
 
-            //Set arrays for positions and indices
             const positions = [];
             const indices = [];
 
