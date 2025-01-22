@@ -6,6 +6,8 @@ import UniversalJoint from "../../components/pages/chapter2/UniversalJoint";
 import RevoluteJoint from "../../components/pages/chapter2/RevoluteJoint";
 import PrismaticJoint from "../../components/pages/chapter2/PrismaticJoint";
 import HelicalJoint from "../../components/pages/chapter2/HelicalJoint";
+import CylindricalJoint from "../../components/pages/chapter2/CylindricalJoint";
+import SphericalJoint from "../../components/pages/chapter2/SphericalJoint";
 
 const Chapter2 = () => {
     return (
@@ -48,7 +50,9 @@ const Chapter2 = () => {
                     <RevoluteJoint/>
                     <PrismaticJoint/>
                     <HelicalJoint/>
+                    <CylindricalJoint/>
                     <UniversalJoint/>
+                    <SphericalJoint/>
                 </div>
             </div>
         </>

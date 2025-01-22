@@ -1,5 +1,5 @@
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import {Group, Line, Rect, Text, Transformer, Label} from 'react-konva';
+import {Group, Line, Rect, Text, Transformer} from 'react-konva';
 import {useEffect, useMemo, useRef} from "react";
 import Konva from "konva";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
