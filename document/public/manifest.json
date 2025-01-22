@@ -1,0 +1,9 @@
+{
+  "name": "Modern Robotics by Kevin Frank",
+  "short_name": "Modern Robotics",
+  "description": "A website showcasing key concepts and examples from Kevin Frank's 'Modern Robotics'. Learn about robotics and related examples.",
+  "start_url": "/modern_robotics",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
