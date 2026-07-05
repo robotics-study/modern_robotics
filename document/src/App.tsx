@@ -1,5 +1,6 @@
-import {Suspense, useCallback, useMemo, useState} from "react";
+import {Suspense, useCallback, useEffect, useMemo, useState} from "react";
 import chapters from "./pages/chapters";
+import {applyPageMeta, chapterMeta} from "./libs/seo";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import Toc from "./components/Toc";
@@ -20,6 +21,11 @@ const PageSelector = () => {
         () => chapters.find((item) => item.chapter === chapter && item.contents),
         [chapter],
     )
+
+    // 챕터 전환마다 제목·메타를 현재 뷰에 맞춘다 (SPA 이므로 크롤러/프리뷰용 갱신).
+    useEffect(() => {
+        applyPageMeta(chapterMeta(current))
+    }, [current])
 
     return (
         <>

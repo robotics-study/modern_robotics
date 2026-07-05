@@ -1,5 +1,5 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
-import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
+import {Animation, Color3, IAnimationKey, Vector3} from "@babylonjs/core";
 import {useCallback} from "react";
 import {useScene} from "react-babylonjs";
 
@@ -27,7 +27,7 @@ const SphericalLink = ({
                            animationOffsets
                        }: SphericalLinkProps) => {
     const scene = useScene()
-    const generateMeshAnimation = useCallback((instance: Mesh) => {
+    const generateMeshAnimation = useCallback(() => {
         const animationRotation = new Animation(
             "Rotation",
             "rotation",
@@ -50,7 +50,7 @@ const SphericalLink = ({
         rotation={rotation}
         onCreated={instance => {
             instance.setPivotPoint(pivotPosition)
-            instance.animations = generateMeshAnimation(instance)
+            instance.animations = generateMeshAnimation()
             scene?.beginAnimation(instance, 0, instance.animations[0].getKeys().at(-1)!.frame, true)
         }}
     >
