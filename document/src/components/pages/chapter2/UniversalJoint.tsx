@@ -1,10 +1,11 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
+import CanvasFigure from "../../CanvasFigure";
 import LoadedModel from "../../3d/LoadedModel";
 import {Animation, Color3, IAnimationKey, Vector3} from "@babylonjs/core";
 
 const UniversalJoint = () => {
 
-    return <div className="flex flex-col items-center justify-center p-3 w-1/2 md:w-1/4 gap-1">
+    return <CanvasFigure label="universal joint" className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
@@ -101,8 +102,7 @@ const UniversalJoint = () => {
                 }}
             />
         </Physics3DCanvas>
-        <span className="text-xs text-muted">universal joint</span>
-    </div>
+    </CanvasFigure>
 }
 
 

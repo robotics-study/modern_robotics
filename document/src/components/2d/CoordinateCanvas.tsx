@@ -2,6 +2,7 @@ import {ReactNode} from 'react';
 import {Stage, Layer, Line, Text} from 'react-konva';
 import {StageProps} from "react-konva/ReactKonvaCore";
 import cn from "../../libs/cn";
+import {useCanvasColors} from "../../libs/useTheme";
 
 // width/height 는 좌표계 렌더에 필수다(originX = width/2 등). Konva StageProps 에서는
 // optional 이라 여기서 required 로 좁힌다 — 호출부는 항상 픽셀 크기를 넘긴다.
@@ -22,6 +23,7 @@ const CoordinateSystem = ({
                               tickLength = 10,
                               ...props
                           }: CoordinateSystemProps) => {
+    const colors = useCanvasColors();
     const originX = width / 2;
     const originY = height / 2;
     const tickInterval = 1 / resolution; // 눈금 간격
@@ -49,7 +51,7 @@ const CoordinateSystem = ({
                     <Line
                         key={`tick-${i}`}
                         points={[x, originY - tickLength / 2, x, originY + tickLength / 2]}
-                        stroke="black"
+                        stroke={colors.text}
                     />
                 );
                 if (i !== 0) {
@@ -60,7 +62,7 @@ const CoordinateSystem = ({
                             x={x + 5}
                             y={originY + 5}
                             fontSize={tickCount}
-                            fill="black"
+                            fill={colors.text}
                         />
                     );
                 }
@@ -70,7 +72,7 @@ const CoordinateSystem = ({
                     <Line
                         key={`tick-${i}`}
                         points={[originX - tickLength / 2, y, originX + tickLength / 2, y]}
-                        stroke="black"
+                        stroke={colors.text}
                     />
                 );
                 if (i !== 0) {
@@ -81,7 +83,7 @@ const CoordinateSystem = ({
                             x={originX + tickCount}
                             y={y - 5}
                             fontSize={tickCount}
-                            fill="black"
+                            fill={colors.text}
                         />
                     );
                 }
@@ -98,9 +100,9 @@ const CoordinateSystem = ({
             {...props}>
             <Layer>
                 {/* x축 */}
-                <Line points={xAxis.flatMap((p) => [p.x, p.y])} stroke="black"/>
+                <Line points={xAxis.flatMap((p) => [p.x, p.y])} stroke={colors.text}/>
                 {/* y축 */}
-                <Line points={yAxis.flatMap((p) => [p.x, p.y])} stroke="black"/>
+                <Line points={yAxis.flatMap((p) => [p.x, p.y])} stroke={colors.text}/>
 
                 {/* x축 눈금 */}
                 {renderTicks('x', Math.floor(width / tickInterval))}

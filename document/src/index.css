@@ -773,7 +773,7 @@ h3:hover .anchor {
     overflow: hidden;
     box-shadow: var(--shadow);
     margin-bottom: 52px;
-    background: #0b1020;
+    background: var(--surface);
 }
 
 .hero-3d canvas {
@@ -788,7 +788,7 @@ h3:hover .anchor {
     align-items: center;
     gap: 8px;
     font-size: .8rem;
-    color: rgba(230, 235, 245, .85);
+    color: var(--muted);
 }
 
 .hero-3d .hero-cap .dot {
@@ -941,6 +941,117 @@ a.mini-chip:hover {
 
 .site-footer a {
     color: var(--muted);
+}
+
+/* ---------- canvas figures (zoom → modal) ---------- */
+.canvas-zoom-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    color: var(--muted);
+    cursor: zoom-in;
+    opacity: 0;
+    transition: opacity .16s, color .16s, border-color .16s;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+}
+
+.group:hover .canvas-zoom-btn,
+.canvas-zoom-btn:focus-visible {
+    opacity: 1;
+}
+
+.canvas-zoom-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* 터치 기기는 hover 가 없으므로 버튼을 항상 노출한다. */
+@media (hover: none) {
+    .canvas-zoom-btn {
+        opacity: 1;
+    }
+}
+
+.canvas-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: color-mix(in srgb, #05070f 62%, transparent);
+    backdrop-filter: blur(3px);
+    animation: canvas-modal-fade .16s ease;
+}
+
+.canvas-modal {
+    display: flex;
+    flex-direction: column;
+    max-width: min(92vw, 640px);
+    max-height: 90vh;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.canvas-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 12px 12px 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.canvas-modal-title {
+    font-weight: 600;
+    font-size: .92rem;
+    text-transform: capitalize;
+    color: var(--text);
+}
+
+.canvas-modal-close {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.canvas-modal-close:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.canvas-modal-body {
+    padding: 18px;
+    overflow: auto;
+    display: grid;
+    place-items: center;
+}
+
+@keyframes canvas-modal-fade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* mobile */

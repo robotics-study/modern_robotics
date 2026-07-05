@@ -3,121 +3,135 @@ import {Group, Line, Rect, Text, Transformer} from 'react-konva';
 import {useEffect, useMemo, useRef} from "react";
 import Konva from "konva";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
+import {useCanvasColors} from "../../../libs/useTheme";
+import CanvasFigure from "../../CanvasFigure";
 
 interface CoordinateExampleProps {
     className: string
 }
 
-const WIDTH = 300
-const HEIGHT = 300
 const RESOLUTION = 0.05
 
-const CoordinateExample = ({
-                               className
-                           }: CoordinateExampleProps) => {
+interface CoordinateStageProps {
+    width: number
+    height: number
+    className?: string
+}
+
+// 드래그 가능한 좌표계 씬. 인라인 썸네일과 모달 확대본이 서로 다른 픽셀 크기로 두 번 렌더된다.
+const CoordinateStage = ({width, height, className}: CoordinateStageProps) => {
+    const colors = useCanvasColors()
     const objectRef = useRef<Konva.Rect | null>(null)
     const transformerRef = useRef<Konva.Transformer | null>(null);
     const lineRef = useRef<Konva.Line | null>(null);
     const positionTextRef = useRef<Konva.Text | null>(null);
     const angleTextRef = useRef<Konva.Text | null>(null);
-    const position = useMemo(() => globalToMap(WIDTH, HEIGHT, 5, 5), [])
-    const origin = useMemo(() => {
-        return globalToMap(WIDTH, HEIGHT, 0, 0)
-    }, [])
+    const position = useMemo(() => globalToMap(width, height, 5, 5), [width, height])
+    const origin = useMemo(() => globalToMap(width, height, 0, 0), [width, height])
     useEffect(() => {
         if (objectRef.current && transformerRef.current) {
             transformerRef.current!.nodes([objectRef.current!!])
             transformerRef.current!.getLayer()!.batchDraw()
         }
     }, []);
-    return <div className="flex flex-col items-center justify-center py-3 gap-1">
-        <CoordinateSystem
-            resolution={RESOLUTION}
-            className={className}
-            width={WIDTH}
-            height={HEIGHT}
+    return <CoordinateSystem
+        resolution={RESOLUTION}
+        className={className}
+        width={width}
+        height={height}
+        draggable
+        offsetY={-100}
+        offsetX={100}>
+        <Line
+            ref={lineRef}
+            points={[origin.x, origin.y, position.x, position.y]}
+            stroke={colors.accent}
+        />
+        <Group
+            x={position.x}
+            y={position.y}
             draggable
-            offsetY={-100}
-            offsetX={100}>
-            <Line
-                ref={lineRef}
-                points={[origin.x, origin.y, position.x, position.y]}
-                stroke="blue"
-            />
+            onDragMove={evt => {
+                const x = evt.target!.x()
+                const y = evt.target!.y()
+                const mp = mapToGlobal(width, height, x, y)
+                positionTextRef.current!.text(`[x : ${mp.x.toFixed(2)}] [y: ${mp.y.toFixed(2)}]`)
+                lineRef.current!.points([origin.x, origin.y, x, y])
+            }}
+        >
             <Group
-                x={position.x}
-                y={position.y}
-                draggable
-                onDragMove={evt => {
-                    const x = evt.target!.x()
-                    const y = evt.target!.y()
-                    const mp = mapToGlobal(WIDTH, HEIGHT, x, y)
-                    positionTextRef.current!.text(`[x : ${mp.x.toFixed(2)}] [y: ${mp.y.toFixed(2)}]`)
-                    lineRef.current!.points([origin.x, origin.y, x, y])
-                }}
+                x={0}
+                y={40}
             >
-                <Group
-                    x={0}
-                    y={40}
-                >
-                    <Rect
-                        offsetX={75}
-                        width={150}
-                        height={40}
-                        x={0}
-                        fill="white"
-                        cornerRadius={10}
-                        stroke="black"
-                        strokeWidth={1}
-                    />
-                    <Text
-                        ref={positionTextRef}
-                        text={`[x : 5.00] [y: 5.00]`}
-                        x={0}
-                        y={8}
-                        width={150}
-                        offsetX={77}
-                        fontSize={12}
-                        fontStyle="bold"
-                        align="center"
-                    />
-                    <Text
-                        ref={angleTextRef}
-                        offsetX={77}
-                        text={`[th: 90.00 deg]`}
-                        x={0}
-                        y={22}
-                        width={150}
-                        fontSize={12}
-                        fontStyle="bold"
-                        align="center"
-                    />
-                </Group>
                 <Rect
-                    ref={objectRef}
-                    width={30}
-                    height={60}
+                    offsetX={75}
+                    width={150}
+                    height={40}
                     x={0}
-                    y={0}
-                    offsetX={15}
-                    offsetY={30}
-                    fill="red"
+                    fill={colors.surface}
+                    cornerRadius={10}
+                    stroke={colors.border}
+                    strokeWidth={1}
+                />
+                <Text
+                    ref={positionTextRef}
+                    text={`[x : 5.00] [y: 5.00]`}
+                    x={0}
+                    y={8}
+                    width={150}
+                    offsetX={77}
+                    fontSize={12}
+                    fontStyle="bold"
+                    fill={colors.text}
+                    align="center"
+                />
+                <Text
+                    ref={angleTextRef}
+                    offsetX={77}
+                    text={`[th: 90.00 deg]`}
+                    x={0}
+                    y={22}
+                    width={150}
+                    fontSize={12}
+                    fontStyle="bold"
+                    fill={colors.text}
+                    align="center"
                 />
             </Group>
-            <Transformer
-                ref={transformerRef}
-                rotateEnabled
-                onTransform={evt => {
-                    const th = 90 - evt.target.getAbsoluteRotation()
-                    angleTextRef.current!.text(`[th : ${th.toFixed(2)} deg]`)
-                }}
-                resizeEnabled={false}
-            >
-            </Transformer>
+            <Rect
+                ref={objectRef}
+                width={30}
+                height={60}
+                x={0}
+                y={0}
+                offsetX={15}
+                offsetY={30}
+                fill={colors.accent}
+            />
+        </Group>
+        <Transformer
+            ref={transformerRef}
+            rotateEnabled
+            onTransform={evt => {
+                const th = 90 - evt.target.getAbsoluteRotation()
+                angleTextRef.current!.text(`[th : ${th.toFixed(2)} deg]`)
+            }}
+            resizeEnabled={false}
+        >
+        </Transformer>
+    </CoordinateSystem>
+}
 
-        </CoordinateSystem>
-        <span className="text-xs text-muted">coordinate</span>
-    </div>
+const CoordinateExample = ({className}: CoordinateExampleProps) => {
+    return <CanvasFigure
+        label="coordinate"
+        tight
+        bodyClassName="w-fit"
+        modal={<CoordinateStage width={520} height={520}
+                                className="bg-surface border border-border rounded-lg"/>}
+    >
+        <CoordinateStage width={300} height={300} className={className}/>
+    </CanvasFigure>
 }
 
 export default CoordinateExample
