@@ -3,8 +3,8 @@ import {resolvePath} from "../../libs/url";
 
 const Chapter3 = () => {
     return (
-        <div className="mr-prose">
-            <h3 className="mr-section">Rigid-Body Motion</h3>
+        <>
+            <h2>Rigid-Body Motion</h2>
             <p><strong>Definition</strong> : The special orthogonal group <InlineMath math='SO(3)'/>, also known as
                 the group of rotation matrices, is the set
                 of all 3 x 3 real matrices <InlineMath math='R'/> that satisfy the followings
@@ -21,7 +21,7 @@ const Chapter3 = () => {
             </p>
             <BlockMath math='R[\omega]R^T = [R\omega]'/>
 
-            <h3 className="mr-section">Angular velocities</h3>
+            <h2>Angular velocities</h2>
             <p><strong>Definition</strong> :</p>
             <img
                 className="w-1/2 mx-auto rounded-lg border border-border"
@@ -61,7 +61,7 @@ const Chapter3 = () => {
                 rotating frame. Then
             </p>
 
-            <h3 className="mr-section">Exponential Coordinate Representation of Rotation</h3>
+            <h2>Exponential Coordinate Representation of Rotation</h2>
             <p><strong>Definition</strong> : The exponential coordinates parametrize
                 a rotation matrix in terms of a rotation axis (represented by a unit vector <InlineMath
                     math='\hat{\omega}'/>)
@@ -71,15 +71,15 @@ const Chapter3 = () => {
             </p>
             <BlockMath math='R = e^{[\hat{\omega}]\theta}'/>
 
-            <h3 className="mr-section">Rigid-Body Motions and Twists</h3>
+            <h2>Rigid-Body Motions and Twists</h2>
             <p><strong>Twist</strong> : the spatial velocity of a rigid body, stacking angular and linear velocity
                 expressed in the body frame.
             </p>
             <BlockMath math='\mathcal{V}_b = \begin{bmatrix} \omega_b \\ v_b \end{bmatrix} \in \mathbb{R}^6'/>
 
-            <h3 className="mr-section">Homogeneous Transformation</h3>
+            <h2>Homogeneous Transformation</h2>
             <p className="text-muted text-sm">🚧 Work in progress.</p>
-        </div>
+        </>
     )
 }
 

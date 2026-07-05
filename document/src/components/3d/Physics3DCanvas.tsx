@@ -85,13 +85,16 @@ const Content = ({
                     {
                         ground ? <>
                             {(typeof ground == "object" && 'xy' in ground && ground.xy) ?
-                                <Ground name="xyGround" opacity={ground.xy.opacity}/> :
+                                <Ground name="xyGround"
+                                        opacity={typeof ground.xy === "object" ? ground.xy.opacity : undefined}/> :
                                 <Ground name="xyGround"
                                         opacity={typeof ground == "object" ? ground.opacity : undefined}/>}
                             {(typeof ground == "object" && 'yz' in ground && ground.yz) ?
-                                <Ground name="yzGround" yzPlane opacity={ground.yz.opacity}/> : null}
+                                <Ground name="yzGround" yzPlane
+                                        opacity={typeof ground.yz === "object" ? ground.yz.opacity : undefined}/> : null}
                             {(typeof ground == "object" && 'xz' in ground && ground.xz) ?
-                                <Ground name="xzGround" zxPlain opacity={ground.xz.opacity}/> : null}
+                                <Ground name="xzGround" zxPlain
+                                        opacity={typeof ground.xz === "object" ? ground.xz.opacity : undefined}/> : null}
                         </> : null
                     }
                     {

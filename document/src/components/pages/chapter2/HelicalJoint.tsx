@@ -41,7 +41,7 @@ const Skew = () => {
             }
 
             //Empty array to contain calculated values
-            const normals = [];
+            const normals: number[] = [];
 
             const vertexData = new VertexData();
             VertexData.ComputeNormals(positions, indices, normals);

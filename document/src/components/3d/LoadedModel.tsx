@@ -1,5 +1,5 @@
 import {useEngine, useScene} from "react-babylonjs";
-import {MutableRefObject, useEffect, forwardRef} from "react";
+import {ForwardedRef, useEffect, forwardRef} from "react";
 import {AbstractMesh, Color3, SceneLoader, StandardMaterial, Vector3, Animation} from "@babylonjs/core";
 import "@babylonjs/loaders"
 import "babylonjs-loaders"
@@ -29,7 +29,7 @@ const LoadedModel = ({
                          animations,
                          autoStartAnimation,
                          onLoad
-                     }: LoadedModelProps, ref?: MutableRefObject<AbstractMesh>) => {
+                     }: LoadedModelProps, ref?: ForwardedRef<AbstractMesh>) => {
     const scene = useScene()
     useEffect(() => {
         if (scene) {
@@ -63,7 +63,9 @@ const LoadedModel = ({
                     })
                     scene?.beginAnimation(mesh, 0, maxFrame, true)
                 }
-                if (ref) {
+                if (typeof ref === "function") {
+                    ref(mesh)
+                } else if (ref) {
                     ref.current = mesh
                 }
                 if (onLoad) {

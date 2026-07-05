@@ -1,55 +1,61 @@
 import {IChapterData} from "../../types/global";
 import 'katex/dist/katex.min.css';
-import {useSearchParams} from "react-router-dom";
 import chapters from "../pages/chapters";
-import {useCallback} from "react";
+import {useChapterNav} from "../libs/nav";
 
-const ChapterContents = ({
-                             title,
-                             chapter,
-                             contents: Contents,
-                         }: IChapterData) => {
-    const [searchParam, setSearchParam] = useSearchParams()
-    const goToChapter = useCallback((data: number) => {
-        const next = new URLSearchParams(searchParam)
-        if (data <= 1) {
-            next.delete("chapter")
-        } else {
-            next.set("chapter", data.toString())
-        }
-        setSearchParam(next)
-        window.scrollTo({top: 0})
-    }, [searchParam, setSearchParam])
+const REPO = "https://github.com/robotics-study/modern_robotics"
 
-    const hasPrev = chapter === 2 || !!chapters.find(item => item.chapter === chapter - 1 && item.contents)
-    const hasNext = !!chapters.find(item => item.chapter === chapter + 1 && item.contents)
+// supportedExample(python/c++...) → 소스코드 chip 링크. nav_study 의 .code-links 와 동일한 룩.
+const codeLinkFor = (chapter: number, language: string) =>
+    `${REPO}/tree/main/sample_code/chapter${chapter}/${language}`
+
+const ChapterContents = ({title, chapter, contents: Contents, supportedExample}: IChapterData) => {
+    const {go} = useChapterNav()
+
+    const prev = chapters.find((c) => c.chapter === chapter - 1 && c.contents)
+    const next = chapters.find((c) => c.chapter === chapter + 1 && c.contents)
+    // Ch.2 의 이전은 홈(Preview 는 미집필)
+    const prevTarget = prev ?? (chapter === 2 ? {chapter: 1, title: "Overview"} : undefined)
+
+    const codeLinks = supportedExample
+        ? Object.entries(supportedExample).filter(([, v]) => v).map(([lang]) => lang)
+        : []
 
     return (
-        <div className="flex-1 w-full">
-            <div className="max-w-4xl mx-auto w-full px-5 sm:px-6 pt-8 pb-3">
-                <div className="flex items-baseline gap-3">
-                    <span className="mr-grad-text text-3xl font-bold leading-none tabular-nums">Ch.{chapter}</span>
-                    <h1 className="text-2xl font-bold tracking-tight break-keep">{title}</h1>
-                </div>
-            </div>
+        <main className="content">
+            <article className="content-inner">
+                <p className="eyebrow">Chapter {chapter}</p>
+                <h1>{title}</h1>
 
-            <div className="max-w-4xl mx-auto w-full px-5 sm:px-6 pb-8">
+                {codeLinks.length > 0 && (
+                    <div className="code-links">
+                        <span className="cl-label">Sample code</span>
+                        {codeLinks.map((lang) => (
+                            <a key={lang} href={codeLinkFor(chapter, lang)} target="_blank" rel="noopener noreferrer">
+                                {lang}
+                            </a>
+                        ))}
+                    </div>
+                )}
+
                 {Contents ? <Contents/> : null}
-            </div>
 
-            <nav className="max-w-4xl mx-auto w-full px-5 sm:px-6 pb-10 flex justify-between gap-3">
-                {hasPrev
-                    ? <button className="mr-btn" onClick={() => goToChapter(chapter - 1)}>
-                        <span aria-hidden="true">←</span>{chapter === 2 ? "Home" : `Chapter ${chapter - 1}`}
-                    </button>
-                    : <span/>}
-                {hasNext
-                    ? <button className="mr-btn" onClick={() => goToChapter(chapter + 1)}>
-                        Chapter {chapter + 1}<span aria-hidden="true">→</span>
-                    </button>
-                    : <span/>}
-            </nav>
-        </div>
+                <nav className="pager">
+                    {prevTarget
+                        ? <a onClick={() => go(prevTarget.chapter === 1 ? null : prevTarget.chapter)}>
+                            <div className="dir">← Prev</div>
+                            <div className="ttl">{prevTarget.chapter === 1 ? "Home" : prevTarget.title}</div>
+                        </a>
+                        : <span/>}
+                    {next
+                        ? <a className="next" onClick={() => go(next.chapter)}>
+                            <div className="dir">Next →</div>
+                            <div className="ttl">{next.title}</div>
+                        </a>
+                        : <span/>}
+                </nav>
+            </article>
+        </main>
     )
 }
 

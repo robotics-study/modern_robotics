@@ -1,14 +1,14 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
 import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
-import {useCallback} from "react";
-import {BabylonNode, useScene} from "react-babylonjs";
+import {ReactNode, useCallback} from "react";
+import {useScene} from "react-babylonjs";
 
 interface CylindricalLinkProps {
     name: string,
     color: Color3,
     position: Vector3,
     pivotPosition: Vector3,
-    children?: BabylonNode<any>,
+    children?: ReactNode,
     animationOffsets?: {
         y: number,
         r: number
@@ -37,7 +37,7 @@ const CylindricalLink = ({
                 frame: index * 60,
                 value: item.r + instance.rotation.y
             }
-        })
+        }) ?? []
 
         const animationLinear = new Animation(
             "Position",
@@ -51,7 +51,7 @@ const CylindricalLink = ({
                 frame: index * 60,
                 value: position.add(new Vector3(0, item.y, 0))
             }
-        })
+        }) ?? []
         animationRotation.setKeys(animationRotationKeys ?? [])
         animationLinear.setKeys(animationLinearKeys ?? [])
         return [animationRotation, animationLinear]

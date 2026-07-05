@@ -10,9 +10,8 @@ import SphericalJoint from "../../components/pages/chapter2/SphericalJoint";
 const Chapter2 = () => {
     return (
         <>
-            <div className="mr-prose">
-                <h3 className="mr-section">Intro</h3>
-                <p>
+            <h2>Intro</h2>
+            <p>
                     <strong>A Robot</strong> is composed of <strong>Links</strong> (a set of connected bodies)
                     and <strong>Joints</strong> (which connect more than two links).
                     <strong> Actuators</strong> (motors) provide forces or torques that move the robot's links.
@@ -34,10 +33,9 @@ const Chapter2 = () => {
                     <InlineMath math='x = r \cdot \cos\theta'/>
                     <InlineMath math='y = r \cdot \sin\theta'/>
                 </p>
-                <CoordinateExample className="bg-white border border-border rounded-lg h-48"/>
-            </div>
+            <CoordinateExample className="bg-white border border-border rounded-lg h-48"/>
 
-            <h3 className="mr-section">Degree of Freedom (DOF)</h3>
+            <h2>Degree of Freedom (DOF)</h2>
             <div className="flex flex-wrap justify-around">
                 <RevoluteJoint/>
                 <PrismaticJoint/>
