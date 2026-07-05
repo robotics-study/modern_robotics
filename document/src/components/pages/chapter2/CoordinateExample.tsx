@@ -116,7 +116,7 @@ const CoordinateExample = ({
             </Transformer>
 
         </CoordinateSystem>
-        <span className="text-xs text-gray-400">coordinate</span>
+        <span className="text-xs text-muted">coordinate</span>
     </div>
 }
 

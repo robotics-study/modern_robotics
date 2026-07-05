@@ -176,7 +176,7 @@ const CylindricalJoint = () => {
                 </cylinder>
             </CylindricalLink>
         </Physics3DCanvas>
-        <span className="text-xs text-gray-400">cylindrical joint</span>
+        <span className="text-xs text-muted">cylindrical joint</span>
     </div>
 }
 

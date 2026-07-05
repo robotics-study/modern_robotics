@@ -93,7 +93,7 @@ const PrismaticJoint = () => {
                 direction={1}
             />
         </Physics3DCanvas>
-        <span className="text-xs text-gray-400">prismatic joint</span>
+        <span className="text-xs text-muted">prismatic joint</span>
     </div>
 }
 

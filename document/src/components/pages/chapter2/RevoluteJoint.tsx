@@ -94,7 +94,7 @@ const RevoluteJoint = () => {
                 direction={-1}
             />
         </Physics3DCanvas>
-        <span className="text-xs text-gray-400">revolute joint</span>
+        <span className="text-xs text-muted">revolute joint</span>
     </div>
 }
 

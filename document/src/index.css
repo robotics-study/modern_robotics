@@ -1,3 +1,162 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ===========================================================================
+   Design tokens — nav_study 와 동일한 톤 (indigo→cyan, deep-navy dark).
+   색은 전부 CSS 변수라 테마 전환 시 Tailwind 시맨틱 클래스가 자동으로 따라온다.
+   =========================================================================== */
+:root {
+    --accent: #6366f1;
+    --accent-2: #06b6d4;
+    --accent-grad: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+    --bg: #ffffff;
+    --surface: #f8fafc;
+    --surface-2: #f1f5f9;
+    --text: #0f172a;
+    --muted: #5b6b82;
+    --border: #e2e8f0;
+    --shadow: 0 1px 3px rgba(15, 23, 42, .08), 0 8px 24px rgba(15, 23, 42, .05);
+    --radius: 14px;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", sans-serif;
+}
+
+:root[data-theme="dark"] {
+    --accent: #818cf8;
+    --accent-2: #22d3ee;
+    --accent-grad: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
+    --bg: #0b1020;
+    --surface: #121a2f;
+    --surface-2: #172142;
+    --text: #e6ebf5;
+    --muted: #94a3b8;
+    --border: #24304a;
+    --shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 12px 30px rgba(0, 0, 0, .35);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --accent: #818cf8;
+        --accent-2: #22d3ee;
+        --accent-grad: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
+        --bg: #0b1020;
+        --surface: #121a2f;
+        --surface-2: #172142;
+        --text: #e6ebf5;
+        --muted: #94a3b8;
+        --border: #24304a;
+        --shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 12px 30px rgba(0, 0, 0, .35);
+    }
+}
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        line-height: 1.68;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+}
+
+@layer components {
+    /* 스티키 상단 바 — 블러 배경 + 하단 경계선 */
+    .mr-topbar {
+        @apply sticky top-0 z-50 flex items-center gap-3 h-14 px-4 sm:px-6 border-b border-border;
+        background: color-mix(in srgb, var(--bg) 82%, transparent);
+        backdrop-filter: saturate(180%) blur(12px);
+    }
+
+    /* 그라디언트 워드마크/텍스트 */
+    .mr-grad-text {
+        background: var(--accent-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* 섹션 제목 — 하단 경계선 + accent 앞 막대 */
+    .mr-section {
+        @apply flex items-center gap-2.5 text-lg font-bold tracking-tight mt-9 mb-3 pb-1.5 border-b border-border;
+    }
+
+    .mr-section::before {
+        content: "";
+        width: 4px;
+        height: 1.05em;
+        border-radius: 999px;
+        background: var(--accent-grad);
+        flex: none;
+    }
+
+    .mr-section:first-child {
+        @apply mt-0;
+    }
+
+    /* 본문 가독성 컨테이너 */
+    .mr-prose {
+        @apply max-w-3xl mx-auto leading-relaxed;
+    }
+
+    .mr-prose p {
+        @apply my-3;
+    }
+
+    .mr-prose strong {
+        @apply font-semibold;
+    }
+
+    /* 카드 (홈 챕터 그리드) */
+    .mr-card {
+        @apply block rounded-[14px] border border-border p-5 transition-transform;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+    }
+
+    .mr-card:hover {
+        @apply -translate-y-1;
+        border-color: var(--accent);
+    }
+
+    /* pill chip (예제 코드 링크) */
+    .mr-chip {
+        @apply inline-flex items-center rounded-full border border-border px-3 py-1 text-xs font-semibold transition-colors;
+        background: var(--surface);
+        color: var(--muted);
+    }
+
+    a.mr-chip:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    /* 버튼 (prev/next pager, 아이콘 버튼) */
+    .mr-btn {
+        @apply inline-flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-semibold transition-all;
+        background: var(--surface);
+        color: var(--text);
+    }
+
+    .mr-btn:hover {
+        border-color: var(--accent);
+        box-shadow: var(--shadow);
+    }
+
+    .mr-iconbtn {
+        @apply grid place-items-center w-9 h-9 rounded-[10px] border border-border transition-colors;
+        background: var(--surface);
+        color: var(--muted);
+    }
+
+    .mr-iconbtn:hover {
+        color: var(--text);
+        border-color: var(--accent);
+    }
+}

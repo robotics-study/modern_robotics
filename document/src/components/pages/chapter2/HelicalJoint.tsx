@@ -215,7 +215,7 @@ const HelicalJoint = () => {
                 direction={-1}
             />
         </Physics3DCanvas>
-        <span className="text-xs text-gray-400">helical joint</span>
+        <span className="text-xs text-muted">helical joint</span>
     </div>
 }
 
