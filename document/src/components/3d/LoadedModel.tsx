@@ -1,4 +1,4 @@
-import {useEngine, useScene} from "react-babylonjs";
+import {useScene} from "react-babylonjs";
 import {ForwardedRef, useEffect, forwardRef} from "react";
 import {AbstractMesh, Color3, SceneLoader, StandardMaterial, Vector3, Animation} from "@babylonjs/core";
 import "@babylonjs/loaders"

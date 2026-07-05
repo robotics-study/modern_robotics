@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import {ReactNode} from 'react';
 import {Stage, Layer, Line, Text} from 'react-konva';
 import {StageProps} from "react-konva/ReactKonvaCore";
 import cn from "../../libs/cn";
