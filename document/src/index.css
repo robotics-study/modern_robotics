@@ -19,6 +19,13 @@
     --border: #e2e8f0;
     --code-bg: #f6f8fa;
     --code-text: #1f2937;
+    /* XML/xacro syntax highlight tokens (light) */
+    --tok-comment: #6a737d;
+    --tok-tag: #116329;
+    --tok-attr: #6f42c1;
+    --tok-string: #0a3069;
+    --tok-expr: #953800;
+    --tok-punct: #57606a;
     --shadow: 0 1px 3px rgba(15, 23, 42, .08), 0 8px 24px rgba(15, 23, 42, .05);
     --radius: 14px;
     --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo, Consolas, monospace;
@@ -42,6 +49,13 @@
     --border: #24304a;
     --code-bg: #0e1526;
     --code-text: #dbe4f3;
+    /* XML/xacro syntax highlight tokens (dark) */
+    --tok-comment: #8b949e;
+    --tok-tag: #7ee787;
+    --tok-attr: #d2a8ff;
+    --tok-string: #a5d6ff;
+    --tok-expr: #ffa657;
+    --tok-punct: #8b949e;
     --shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 12px 30px rgba(0, 0, 0, .35);
 }
 
@@ -58,6 +72,12 @@
         --border: #24304a;
         --code-bg: #0e1526;
         --code-text: #dbe4f3;
+        --tok-comment: #8b949e;
+        --tok-tag: #7ee787;
+        --tok-attr: #d2a8ff;
+        --tok-string: #a5d6ff;
+        --tok-expr: #ffa657;
+        --tok-punct: #8b949e;
         --shadow: 0 1px 3px rgba(0, 0, 0, .4), 0 12px 30px rgba(0, 0, 0, .35);
     }
 }

@@ -50,8 +50,8 @@ The web app presents each chapter as a page: prose + KaTeX-rendered equations, i
 | - | ---------------------- | -------------------------------------------------------------------------------------------- | ----------- |
 | 1 | Preview                | Landing / table of contents                                                                  | —           |
 | 2 | Configuration Space    | Degrees of freedom; revolute · prismatic · helical · cylindrical · universal · spherical joints (animated 3D); 2D coordinate example | Python      |
-| 3 | Rigid-Body Motions     | `SO(3)`, skew-symmetric `so(3)`, angular & linear velocity, exponential coordinates, twists  | C++         |
-| 4 | Forward Kinematics     | 🚧 Work in progress                                                                          | Python      |
+| 3 | Rigid-Body Motions     | `SO(3)`, skew-symmetric `so(3)`, angular & linear velocity, exponential coordinates, twists — with a rotating body frame, an interactive `e^[ω̂]θ` axis-angle slider, an `SE(3)` frame, and a screw-motion helix (animated 3D) | C++         |
+| 4 | Forward Kinematics     | Open-chain FK, product of exponentials, URDF — with an interactive 3R planar chain (Konva sliders → live end-effector pose) and an animated serial-chain robot (URDF link/joint tree) | Python      |
 
 > Chapters are addressed by query param, e.g. `…/modern_robotics/?chapter=2`.
 
@@ -112,13 +112,14 @@ modern_robotics/
 │       ├── components/
 │       │   ├── Header.tsx        # topbar: brand, breadcrumb, theme toggle
 │       │   ├── ChapterContents.tsx
-│       │   ├── 3d/               # Babylon canvas & model loaders
+│       │   ├── 3d/               # Babylon canvas, model loaders, AxisTriad (body-frame axes)
 │       │   ├── 2d/               # Konva coordinate canvas
 │       │   ├── math/             # KaTeX wrappers
-│       │   └── pages/chapter2/   # joint demos
+│       │   ├── CanvasFigure.tsx  # figure wrapper: caption + click-to-expand modal
+│       │   └── pages/chapter{2,3,4}/  # per-chapter interactive/animated visualizations
 │       └── pages/
 │           ├── home/             # chapter card grid
-│           └── chapters/         # Chapter{2,3,4}.tsx + lazy-loaded index
+│           └── chapters/         # Chapter{1,2,3,4}.tsx + lazy-loaded index
 └── sample_code/
     ├── chapter2/python/
     └── chapter3/
@@ -143,6 +144,22 @@ Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds `documen
 2. Make changes under `document/` (and `sample_code/` if adding examples).
 3. Verify with `yarn build` and a quick `yarn preview` pass.
 4. Open a PR against `robotics-study/modern_robotics` `main`.
+
+### Authoring chapters
+
+Every chapter should **teach visually, not just in prose** — each major concept gets an
+interactive or animated figure, the way Chapter 2 does. When adding or expanding a chapter:
+
+- Add a visualization per key concept: a **Babylon.js** 3D scene (`components/3d/`) for
+  spatial ideas, or a **Konva** 2D scene (`components/2d/`) for planar ones. Prefer
+  interactivity (drag / sliders) where the concept has parameters; otherwise a looping
+  animation.
+- Wrap each figure in `CanvasFigure` (caption + click-to-expand modal) and reuse the shared
+  building blocks (`Physics3DCanvas`, `AxisTriad`, `CoordinateCanvas`) rather than
+  re-implementing scaffolding.
+- Read theme colors from `useCanvasColors()` / the scene palette so figures work in light and
+  dark mode; canvases can't read CSS variables directly.
+- Keep per-chapter figures under `components/pages/chapter<N>/`.
 
 ## License
 

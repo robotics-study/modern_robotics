@@ -1,5 +1,9 @@
 import {BlockMath, InlineMath} from "../../components/math/Tex";
 import {resolvePath} from "../../libs/url";
+import RotatingFrame from "../../components/pages/chapter3/RotatingFrame";
+import ExponentialRotation from "../../components/pages/chapter3/ExponentialRotation";
+import HomogeneousTransform from "../../components/pages/chapter3/HomogeneousTransform";
+import ScrewMotion from "../../components/pages/chapter3/ScrewMotion";
 
 const Chapter3 = () => {
     return (
@@ -29,6 +33,13 @@ const Chapter3 = () => {
                 alt="Angular velocity of a rotating frame"
                 loading="lazy"
             />
+            <p>
+                The body frame <InlineMath math='\{b\}'/> spins relative to the fixed frame{" "}
+                <InlineMath math='\{s\}'/> at angular velocity <InlineMath math='\omega'/> — a direction{" "}
+                <InlineMath math='\hat{\omega}'/> (here the vertical axis) and a rate{" "}
+                <InlineMath math='\dot{\theta}'/>. Drag to orbit and watch the moving axes.
+            </p>
+            <RotatingFrame/>
             <p><strong>Angular velocity</strong> :</p>
             <BlockMath math='\omega = \hat{\omega}\dot{\theta}'/>
             <p><strong>Linear velocity</strong> :</p>
@@ -70,6 +81,13 @@ const Chapter3 = () => {
                 serves as the three-parameter exponential coordinate representation of the rotation.
             </p>
             <BlockMath math='R = e^{[\hat{\omega}]\theta}'/>
+            <p>
+                Drag the slider to sweep the angle <InlineMath math='\theta'/> about a fixed axis{" "}
+                <InlineMath math='\hat{\omega}'/> (orange). The body frame traces the one-parameter family of
+                rotations <InlineMath math='e^{[\hat{\omega}]\theta}'/>; at <InlineMath math='\theta = 0'/> it
+                coincides with the fixed frame.
+            </p>
+            <ExponentialRotation/>
 
             <h2>Homogeneous Transformation</h2>
             <p><strong>Definition</strong> : The special Euclidean group <InlineMath math='SE(3)'/>, also known as
@@ -83,6 +101,12 @@ const Chapter3 = () => {
                 <InlineMath math='p'/> its origin, packaged into one matrix so a single object represents both
                 position and orientation. An element is sometimes written <InlineMath math='T = (R, p)'/>.
             </p>
+            <p>
+                Below, the body frame sits at position <InlineMath math='p'/> (violet vector from the origin)
+                with orientation <InlineMath math='R'/> — a single <InlineMath math='T'/> capturing both. Drag to
+                orbit.
+            </p>
+            <HomogeneousTransform/>
             <p><strong>Inverse</strong> : the inverse of a transformation is itself a transformation,</p>
             <BlockMath math={`T^{-1} = \\begin{bmatrix} R^T & -R^T p \\\\ 0 & 1 \\end{bmatrix}`}/>
             <p><strong>Properties</strong> : closure, associative, not commutative, and identity{" "}
@@ -109,6 +133,12 @@ const Chapter3 = () => {
                 twist is the scaled screw axis <InlineMath math='\mathcal{V} = \mathcal{S}\dot{\theta}'/>, the
                 geometric picture behind the exponential coordinates of rigid-body motion.
             </p>
+            <p>
+                A screw axis combines rotation about a line with translation along it. The body frame below turns
+                about the vertical axis while advancing along it, tracing the helix (orange) that a constant twist
+                produces.
+            </p>
+            <ScrewMotion/>
         </>
     )
 }

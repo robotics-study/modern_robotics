@@ -1,4 +1,6 @@
 import {BlockMath, InlineMath} from "../../components/math/Tex";
+import PlanarChain3R from "../../components/pages/chapter4/PlanarChain3R";
+import UrdfRobot from "../../components/pages/chapter4/UrdfRobot";
 
 const Chapter4 = () => {
     return (
@@ -19,6 +21,12 @@ const Chapter4 = () => {
                 y = L_1\\sin\\theta_1 + L_2\\sin(\\theta_1+\\theta_2) + L_3\\sin(\\theta_1+\\theta_2+\\theta_3) \\\\[4pt]
                 \\phi = \\theta_1 + \\theta_2 + \\theta_3
                 \\end{gathered}`}/>
+            <p>
+                Drag the three joint sliders and watch the end-effector <InlineMath math='(x, y)'/> and
+                orientation <InlineMath math='\phi'/> follow directly from the joint values — this is exactly what
+                forward kinematics computes.
+            </p>
+            <PlanarChain3R/>
             <p>
                 A more systematic route attaches a frame to each link and multiplies the successive homogeneous
                 transformations, <InlineMath math='T_{04} = T_{01} T_{12} T_{23} T_{34}'/>. Two standard
@@ -83,6 +91,12 @@ const Chapter4 = () => {
                 axes and the home configuration <InlineMath math='M'/> — and the inertial data that later chapters
                 use for dynamics.
             </p>
+            <p>
+                The robot below is exactly such a tree: three <strong>links</strong> (colored bars) joined by
+                three <strong>joints</strong> (orange), each joint rotating its subtree — the same nested
+                parent-child structure a URDF encodes.
+            </p>
+            <UrdfRobot/>
         </>
     )
 }
