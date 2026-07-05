@@ -34,10 +34,13 @@ const Chapter3 = () => {
                 loading="lazy"
             />
             <p>
-                The body frame <InlineMath math='\{b\}'/> spins relative to the fixed frame{" "}
-                <InlineMath math='\{s\}'/> at angular velocity <InlineMath math='\omega'/> — a direction{" "}
-                <InlineMath math='\hat{\omega}'/> (here the vertical axis) and a rate{" "}
-                <InlineMath math='\dot{\theta}'/>. Drag to orbit and watch the moving axes.
+                Angular velocity <InlineMath math='\omega'/> (orange) is a vector: its direction is the rotation
+                axis and its length the rate <InlineMath math='\dot{\theta}'/>. Every point of the body then moves
+                with velocity <InlineMath math='v = \omega \times r'/> — always <strong>tangent</strong> to the
+                circle it traces (cyan arrows at the axis tips). A point lying on the axis itself, like the{" "}
+                <InlineMath math='\hat{y}'/> tip along <InlineMath math='\omega'/>, has{" "}
+                <InlineMath math='\omega \times r = 0'/> and stays put — which is why the linear velocities below
+                are <InlineMath math='\dot{\hat{x}} = \omega \times \hat{x}'/> and so on.
             </p>
             <RotatingFrame/>
             <p><strong>Angular velocity</strong> :</p>
@@ -102,9 +105,9 @@ const Chapter3 = () => {
                 position and orientation. An element is sometimes written <InlineMath math='T = (R, p)'/>.
             </p>
             <p>
-                Below, the body frame sits at position <InlineMath math='p'/> (violet vector from the origin)
-                with orientation <InlineMath math='R'/> — a single <InlineMath math='T'/> capturing both. Drag to
-                orbit.
+                Below, the body frame moves as a rigid body: at every instant it has a position{" "}
+                <InlineMath math='p'/> (violet vector from the origin) and an orientation <InlineMath math='R'/> —
+                a single <InlineMath math='T'/> capturing both. Drag to orbit.
             </p>
             <HomogeneousTransform/>
             <p><strong>Inverse</strong> : the inverse of a transformation is itself a transformation,</p>
