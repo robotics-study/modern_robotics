@@ -1,9 +1,9 @@
 {
-  "name": "Modern Robotics by Kevin Frank",
+  "name": "Modern Robotics · Study",
   "short_name": "Modern Robotics",
-  "description": "A website showcasing key concepts and examples from Kevin Frank's 'Modern Robotics'. Learn about robotics and related examples.",
+  "description": "Interactive study notes for Kevin M. Lynch & Frank C. Park's 'Modern Robotics' — configuration space, rigid-body motions, and forward kinematics with 3D joint visualizations.",
   "start_url": "/modern_robotics",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000"
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020"
 }
