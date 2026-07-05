@@ -34,7 +34,7 @@ const Chapter2 = () => {
                 <InlineMath math='y = r \sin\theta'/>
             </p>
             <p>Drag the point below to see position and orientation change together.</p>
-            <CoordinateExample className="bg-white border border-border rounded-lg h-48"/>
+            <CoordinateExample className="bg-surface border border-border rounded-lg h-48"/>
 
             <h2>Degrees of Freedom of a Robot</h2>
             <p>

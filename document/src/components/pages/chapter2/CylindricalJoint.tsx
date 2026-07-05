@@ -1,4 +1,5 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
+import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
 import {ReactNode, useCallback} from "react";
 import {useScene} from "react-babylonjs";
@@ -91,7 +92,7 @@ const CylindricalLink = ({
     </mesh>
 }
 const CylindricalJoint = () => {
-    return <div className="flex flex-col items-center justify-center p-3 w-1/2 md:w-1/4 gap-1">
+    return <CanvasFigure label="cylindrical joint" className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
@@ -176,8 +177,7 @@ const CylindricalJoint = () => {
                 </cylinder>
             </CylindricalLink>
         </Physics3DCanvas>
-        <span className="text-xs text-muted">cylindrical joint</span>
-    </div>
+    </CanvasFigure>
 }
 
 export default CylindricalJoint

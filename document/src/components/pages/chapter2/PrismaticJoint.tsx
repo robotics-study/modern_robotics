@@ -1,4 +1,5 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
+import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
 import {useCallback} from "react";
 import {useScene} from "react-babylonjs";
@@ -62,7 +63,7 @@ const PrismaticLink = ({
     </box>
 }
 const PrismaticJoint = () => {
-    return <div className="flex flex-col items-center justify-center p-3 w-1/2 md:w-1/4 gap-1">
+    return <CanvasFigure label="prismatic joint" className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
@@ -93,8 +94,7 @@ const PrismaticJoint = () => {
                 direction={1}
             />
         </Physics3DCanvas>
-        <span className="text-xs text-muted">prismatic joint</span>
-    </div>
+    </CanvasFigure>
 }
 
 export default PrismaticJoint
