@@ -4,7 +4,7 @@ import {Animation, Color3, IAnimationKey, TransformNode, Vector3} from "@babylon
 import {useScene} from "react-babylonjs";
 import {ReactNode} from "react";
 import {InlineMath} from "../../math/Tex";
-import XmlCode from "../../XmlCode";
+import CodeFigure from "../../CodeFigure";
 
 // URDF 가 기술하는 것: link(질량·형상) 들이 joint(타입·축·부모/자식) 로 이어진 트리.
 // 여기선 base → joint → link 를 3단 중첩 부모관계로 세우고 관절을 회전시켜 정방향 기구학을 보인다.
@@ -148,9 +148,9 @@ const UrdfRobot = () => {
                     </Physics3DCanvas>
                 </CanvasFigure>
             </div>
-            <div className="lg:w-1/2 min-w-0 flex flex-col items-center gap-1 p-3">
-                <XmlCode code={XACRO} className="w-full !my-0 max-h-[440px] overflow-auto text-xs"/>
-                <span className="text-xs text-muted">arm3.urdf.xacro</span>
+            <div className="lg:w-1/2 min-w-0 flex">
+                <CodeFigure code={XACRO} label="arm3.urdf.xacro" className="w-full"
+                            codeClassName="max-h-[440px] overflow-auto text-xs"/>
             </div>
         </div>
         <dl className="mt-3 text-sm text-muted border border-border rounded-lg p-4 space-y-1.5">
