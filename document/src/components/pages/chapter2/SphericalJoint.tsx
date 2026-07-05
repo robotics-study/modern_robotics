@@ -40,7 +40,7 @@ const SphericalLink = ({
                 frame: index * 60,
                 value: rotation.add(new Vector3(item.x, item.y, item.z))
             }
-        })
+        }) ?? []
         animationRotation.setKeys(animationRotationKeys ?? [])
         return [animationRotation]
     }, [])
@@ -51,7 +51,7 @@ const SphericalLink = ({
         onCreated={instance => {
             instance.setPivotPoint(pivotPosition)
             instance.animations = generateMeshAnimation(instance)
-            scene?.beginAnimation(instance, 0, instance.animations[0].getKeys().at(-1).frame, true)
+            scene?.beginAnimation(instance, 0, instance.animations[0].getKeys().at(-1)!.frame, true)
         }}
     >
         <box

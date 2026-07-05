@@ -3,7 +3,11 @@ import {Stage, Layer, Line, Text} from 'react-konva';
 import {StageProps} from "react-konva/ReactKonvaCore";
 import cn from "../../libs/cn";
 
-interface CoordinateSystemProps extends StageProps {
+// width/height 는 좌표계 렌더에 필수다(originX = width/2 등). Konva StageProps 에서는
+// optional 이라 여기서 required 로 좁힌다 — 호출부는 항상 픽셀 크기를 넘긴다.
+interface CoordinateSystemProps extends Omit<StageProps, "width" | "height"> {
+    width: number
+    height: number
     children?: ReactNode
     resolution?: number
     tickLength?: number
