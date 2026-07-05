@@ -4,3 +4,7 @@
 **/build
 **/dist
 **/__pycache__
+
+# Playwright MCP output + root-level verification screenshots
+.playwright-mcp
+/*.png
