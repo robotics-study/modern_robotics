@@ -107,6 +107,20 @@
     border-bottom: 1px solid var(--border);
 }
 
+.brandcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.crumb-sep {
+    color: color-mix(in srgb, var(--muted) 45%, transparent);
+    font-size: 1rem;
+    font-weight: 400;
+    user-select: none;
+}
+
 .brand {
     display: flex;
     align-items: center;
@@ -132,6 +146,7 @@
 
 .brand .wm {
     letter-spacing: -.01em;
+    white-space: nowrap;
 }
 
 .brand .wm-dim {
@@ -962,6 +977,24 @@ a.mini-chip:hover {
 
     .topnav,
     .search {
+        display: none;
+    }
+
+    /* 메뉴 버튼까지 얹히는 모바일 폭에서 브레드크럼이 두 줄로 접히지 않도록 간격을 조인다. */
+    .topbar {
+        gap: 12px;
+        padding: 0 14px;
+    }
+
+    .brandcrumb {
+        gap: 8px;
+    }
+}
+
+/* 아주 좁은 폭에서는 허브 워드마크/구분자를 접고 로고만 허브 링크로 남긴다. */
+@media (max-width: 430px) {
+    .hub .wm,
+    .crumb-sep {
         display: none;
     }
 

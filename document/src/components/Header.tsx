@@ -4,6 +4,9 @@ import {useChapterNav} from "../libs/nav";
 
 const REPO = "https://github.com/robotics-study/modern_robotics"
 const TEXTBOOK = "https://hades.mech.northwestern.edu/index.php/Modern_Robotics"
+// 상위 학습 아카이브(robotics-study.github.io). 이 앱은 그 하위 프로젝트라 브랜드만으로는
+// 허브로 되돌아갈 방법이 없어, 브레드크럼 부모 링크로 탈출로를 제공한다.
+const HUB = "https://robotics-study.github.io/"
 
 const ExtIcon = () => (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -27,10 +30,16 @@ const Header = ({onMenu, showMenu}: { onMenu: () => void; showMenu: boolean }) =
                 </button>
             )}
 
-            <button className="brand" onClick={() => go(null)} aria-label="Home">
-                <BrandLogo gradId="mrBrandLogo"/>
-                <span className="wm">modern<span className="wm-dim"> robotics</span></span>
-            </button>
+            <div className="brandcrumb">
+                <a className="brand hub" href={HUB} aria-label="robotics-study home">
+                    <BrandLogo gradId="mrBrandLogo"/>
+                    <span className="wm">robotics<span className="wm-dim"> study</span></span>
+                </a>
+                <span className="crumb-sep" aria-hidden="true">/</span>
+                <button className="brand" onClick={() => go(null)} aria-label="Home">
+                    <span className="wm">modern<span className="wm-dim"> robotics</span></span>
+                </button>
+            </div>
 
             <nav className="topnav">
                 <a onClick={() => go(null)}>Overview</a>
