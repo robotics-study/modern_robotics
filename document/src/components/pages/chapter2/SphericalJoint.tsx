@@ -104,7 +104,6 @@ const SphericalJoint = () => {
             <SphericalLink
                 name={"under"}
                 sphereSize={5}
-                sphereArc={Math.PI}
                 rotation={Vector3.Zero()}
                 position={new Vector3(0, 0, 0)}
                 pivotPosition={new Vector3(0, 0, 0)}
@@ -227,7 +226,7 @@ const SphericalJoint = () => {
             >
             </SphericalLink>
         </Physics3DCanvas>
-        <span className="text-xs text-gray-400">spherical joint</span>
+        <span className="text-xs text-muted">spherical joint</span>
     </div>
 }
 

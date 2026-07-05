@@ -101,7 +101,7 @@ const UniversalJoint = () => {
                 }}
             />
         </Physics3DCanvas>
-        <span className="text-xs text-gray-400">universal joint</span>
+        <span className="text-xs text-muted">universal joint</span>
     </div>
 }
 

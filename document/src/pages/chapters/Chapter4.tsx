@@ -1,68 +1,50 @@
-import {IChapterData} from "../../../types/global";
-import {BlockMath, InlineMath} from "react-katex";
+import {BlockMath, InlineMath} from "../../components/math/Tex";
 
 const Chapter4 = () => {
     return (
-        <>
-            <p className="text-lg border-b text-orange-700">
-                <strong>Rigid-Body Motion.</strong>
+        <div className="mr-prose">
+            <h3 className="mr-section">Rigid-Body Motion</h3>
+            <p><strong>Definition</strong> : The special orthogonal group <InlineMath math='SO(3)'/>, also known as
+                the group of rotation matrices, is the set
+                of all 3 x 3 real matrices <InlineMath math='R'/> that satisfy the followings
             </p>
-            <div className="p-2">
-                <p><strong>Definition</strong> : The special orthogonal group <InlineMath math='SO(3)'/>, also known as
-                    the group of rotation
-                    matrices, is the
-                    set
-                    of all 3 x 3 real matrices <InlineMath math='R'/> that satisfy the followings
-                </p>
-                <BlockMath math='\R^TR=I \ and\  \text{det} R = 1'/>
-                <p><strong> Properties of rotation matrices</strong> : inverse, clousre, associative, not commutative
-                </p>
-                <p><strong>Skew-symmetric matrices Definition</strong> : The set of all <InlineMath
-                    math='3 \times 3'/> real skew-symmetric matrices
-                    is called <InlineMath math='SO(3)'/>.
-                </p>
-                <p><strong>Proposition</strong> : Given any <InlineMath math='\omega \in \R^3'/> and <InlineMath
-                    math='\R \in SO(3)'/> The following always holds:
-                </p>
-                <BlockMath math='\R[\omega]R^T = [R\omega]'/>
-            </div>
-            <p className="text-lg border-b text-orange-700">
-                <strong>Angular velocities.</strong>
+            <BlockMath math='R^TR=I \ \text{and}\ \det R = 1'/>
+            <p><strong> Properties of rotation matrices</strong> : inverse, closure, associative, not commutative
             </p>
-            <div className="p-2">
-                <p><strong>Definition</strong> : [fig1]
-                </p>
-                <BlockMath math='\R^TR=I \ and\  \text{det} R = 1'/>
-                <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating frame as seen from the fixed frame. Denote by w the angular velocity of the rotating frame . Then
-                </p>
-            </div>
-            <p className="text-lg border-b text-orange-700">
-                <strong>Exponential Coordinate Representation of Rotation.</strong>
+            <p><strong>Skew-symmetric matrices Definition</strong> : The set of all <InlineMath
+                math='3 \times 3'/> real skew-symmetric matrices
+                is called <InlineMath math='\mathfrak{so}(3)'/>.
             </p>
-            <div className="p-2">
-                <p><strong>Definition</strong> : The exponential coordinates parametrize
-                    a rotation matrix in terms of a rotation axis (represented by a unit vector ˆω)
-                    and an angle of rotation θ about that axis; the vector <InlineMath math='ωθ ∈ \mathbb{R}^3'/>
-                    then serves as the three-parameter exponential coordinate representation of the rotation
-                </p>
-                <BlockMath math='\R^TR=I \ and\  \text{det} R = 1'/>
-                <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating frame as seen from the fixed frame. Denote by w the angular velocity of the rotating frame . Then
-                </p>
-            </div>
-            <p className="text-lg border-b text-orange-700">
-                <strong>Rigid-Body Motions and Twists.</strong>
+            <p><strong>Proposition</strong> : Given any <InlineMath math='\omega \in \mathbb{R}^3'/> and <InlineMath
+                math='R \in SO(3)'/> the following always holds:
             </p>
-            <p className="text-lg border-b text-orange-700">
-                <strong>Homogeneous Transformation.</strong>
+            <BlockMath math='R[\omega]R^T = [R\omega]'/>
+
+            <h3 className="mr-section">Angular velocities</h3>
+            <p><strong>Definition</strong> : [fig1]</p>
+            <BlockMath math='[\omega_s] = \dot{R} R^{-1}'/>
+            <p><strong> Properties</strong> : Let <InlineMath math='R(t)'/> denote the orientation of the rotating
+                frame as seen from the fixed frame. Denote by <InlineMath math='\omega'/> the angular velocity of the
+                rotating frame. Then
             </p>
-        </>
+
+            <h3 className="mr-section">Exponential Coordinate Representation of Rotation</h3>
+            <p><strong>Definition</strong> : The exponential coordinates parametrize
+                a rotation matrix in terms of a rotation axis (represented by a unit vector <InlineMath
+                    math='\hat{\omega}'/>)
+                and an angle of rotation <InlineMath math='\theta'/> about that axis; the vector <InlineMath
+                    math='\hat{\omega}\theta \in \mathbb{R}^3'/> then
+                serves as the three-parameter exponential coordinate representation of the rotation.
+            </p>
+            <BlockMath math='R = e^{[\hat{\omega}]\theta}'/>
+
+            <h3 className="mr-section">Rigid-Body Motions and Twists</h3>
+            <p className="text-muted text-sm">🚧 Work in progress.</p>
+
+            <h3 className="mr-section">Homogeneous Transformation</h3>
+            <p className="text-muted text-sm">🚧 Work in progress.</p>
+        </div>
     )
 }
-export default {
-    title: "Forward Kinematics",
-    chapter: 4,
-    contents: Chapter4,
-    supportedExample: {
-        "python": true
-    }
-} as IChapterData
+
+export default Chapter4
