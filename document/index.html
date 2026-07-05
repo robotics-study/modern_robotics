@@ -17,16 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- 페인트 전에 테마를 확정해 FOUC 방지 (저장값 없으면 CSS 의 prefers-color-scheme 따름) -->
-    <script>
-        (function () {
-            try {
-                var t = localStorage.getItem('mr-theme');
-                if (t) document.documentElement.setAttribute('data-theme', t);
-            } catch (e) {
-            }
-        })();
-    </script>
+    <!-- 테마는 시스템 설정(prefers-color-scheme)을 그대로 따른다 — 토글/저장 없음. -->
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DT82RSKK0Z"></script>
     <script>
@@ -40,8 +31,8 @@
         gtag('config', 'G-DT82RSKK0Z');
     </script>
 </head>
-<body class="w-dvw h-dvh">
-<div id="root" class="w-full h-full min-w-[300px] flex flex-col overflow-y-auto relative"></div>
+<body>
+<div id="root" class="min-h-screen min-w-[300px] flex flex-col"></div>
 <script type="module" src="/src/index.tsx"></script>
 </body>
 </html>
