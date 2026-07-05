@@ -14,8 +14,8 @@ const ChapterContents = ({title, chapter, contents: Contents, supportedExample}:
 
     const prev = chapters.find((c) => c.chapter === chapter - 1 && c.contents)
     const next = chapters.find((c) => c.chapter === chapter + 1 && c.contents)
-    // Ch.2 의 이전은 홈(Preview 는 미집필)
-    const prevTarget = prev ?? (chapter === 2 ? {chapter: 1, title: "Overview"} : undefined)
+    // 첫 집필 챕터(Ch.1 Preview)의 이전은 홈(랜딩) — chapter 0 을 홈 sentinel 로 쓴다.
+    const prevTarget = prev ?? (chapter === 1 ? {chapter: 0, title: "Home"} : undefined)
 
     const codeLinks = supportedExample
         ? Object.entries(supportedExample).filter(([, v]) => v).map(([lang]) => lang)
@@ -42,9 +42,9 @@ const ChapterContents = ({title, chapter, contents: Contents, supportedExample}:
 
                 <nav className="pager">
                     {prevTarget
-                        ? <a onClick={() => go(prevTarget.chapter === 1 ? null : prevTarget.chapter)}>
+                        ? <a onClick={() => go(prevTarget.chapter || null)}>
                             <div className="dir">← Prev</div>
-                            <div className="ttl">{prevTarget.chapter === 1 ? "Home" : prevTarget.title}</div>
+                            <div className="ttl">{prevTarget.title}</div>
                         </a>
                         : <span/>}
                     {next
