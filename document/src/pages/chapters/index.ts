@@ -52,9 +52,29 @@ const data: IChapterData[] = [
             "Universal Robot Description Format (URDF)",
         ],
     },
-    // 아직 집필 전인 후속 챕터 — 사이드바/랜딩에서 dim 처리로 로드맵을 보여준다.
-    {chapter: 5, title: "Velocity Kinematics and Statics"},
-    {chapter: 6, title: "Inverse Kinematics"},
+    {
+        chapter: 5,
+        title: "Velocity Kinematics and Statics",
+        contents: lazy(() => import("./Chapter5")),
+        sections: [
+            "Manipulator Jacobian",
+            "Space and Body Jacobian",
+            "Statics of Open Chains",
+            "Singularities",
+            "Manipulability and Force Ellipsoids",
+        ],
+    },
+    {
+        chapter: 6,
+        title: "Inverse Kinematics",
+        contents: lazy(() => import("./Chapter6")),
+        sections: [
+            "Inverse Kinematics",
+            "Analytic Inverse Kinematics",
+            "Numerical Inverse Kinematics",
+            "Inverse Velocity Kinematics",
+        ],
+    },
 ]
 
 export default data.sort((a, b) => a.chapter - b.chapter)
