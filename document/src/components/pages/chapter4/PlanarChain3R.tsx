@@ -3,6 +3,7 @@ import {Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
+import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
 
 // 3R 평면 개방연쇄의 정방향 기구학. 슬라이더로 관절각 θ1,θ2,θ3 를 돌리면 링크를 순차 누적해
@@ -25,17 +26,7 @@ const PlanarChainScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
     const [theta, setTheta] = useState<[number, number, number]>([0.6, 0.7, 0.5]);
 
-    const {world, phi} = useMemo(() => {
-        let x = 0, y = 0, a = 0;
-        const world = [{x, y}];
-        for (let i = 0; i < LINKS.length; i++) {
-            a += theta[i];
-            x += LINKS[i] * Math.cos(a);
-            y += LINKS[i] * Math.sin(a);
-            world.push({x, y});
-        }
-        return {world, phi: a};
-    }, [theta]);
+    const {points: world, phi} = useMemo(() => planarFk(theta, LINKS), [theta]);
 
     const px = world.map((p) => globalToMap(width, height, p.x, p.y, RESOLUTION));
     const ee = world[world.length - 1];
