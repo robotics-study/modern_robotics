@@ -5,39 +5,51 @@ on:
     branches:
       - main  # main 브랜치에 푸시될 때마다 실행됩니다.
 
+# Pages 배포에 필요한 최소 권한 (OIDC 토큰 포함)
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 배포는 동시에 하나만 — 진행 중 배포는 유지하고 대기 중인 것만 최신으로 교체해 경합을 없앤다.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'  # Node.js 버전 설정
-
-      - name: Install yarn
-        run: |
-          npm install --global yarn
+          node-version: '18'
+          cache: yarn
+          cache-dependency-path: document/yarn.lock
 
       - name: Install dependencies
-        run: |
-          yarn install
+        run: yarn install --frozen-lockfile
         working-directory: ./document
 
       - name: Build the project
-        run: |
-          yarn run build
+        run: yarn run build
         working-directory: ./document
 
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./document/dist
-          publish_branch: doc
+          path: ./document/dist
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
