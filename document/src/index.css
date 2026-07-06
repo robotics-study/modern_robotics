@@ -1000,6 +1000,55 @@ a.mini-chip:hover {
     }
 }
 
+/* ---------- code figures (copy + zoom) ---------- */
+.code-fig-tools {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 6px;
+    z-index: 2;
+}
+
+.code-fig-btn {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--surface) 85%, transparent);
+    color: var(--muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .16s, color .16s, border-color .16s;
+    backdrop-filter: blur(4px);
+}
+
+.group:hover .code-fig-btn,
+.code-fig-btn:focus-visible {
+    opacity: 1;
+}
+
+.code-fig-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* 복사 완료 확인: 테마별 초록(구문 하이라이트 태그색 재사용). */
+.code-fig-btn.is-copied {
+    color: var(--tok-tag);
+    border-color: var(--tok-tag);
+    opacity: 1;
+}
+
+/* 터치 기기는 hover 가 없으므로 버튼을 항상 노출한다. */
+@media (hover: none) {
+    .code-fig-btn {
+        opacity: 1;
+    }
+}
+
 .canvas-modal-backdrop {
     position: fixed;
     inset: 0;
