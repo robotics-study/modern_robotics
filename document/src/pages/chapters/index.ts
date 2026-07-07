@@ -75,6 +75,39 @@ const data: IChapterData[] = [
             "Inverse Velocity Kinematics",
         ],
     },
+    {
+        chapter: 7,
+        title: "Kinematics of Closed Chains",
+        contents: lazy(() => import("./Chapter7")),
+        sections: [
+            "Closed Chains and Parallel Mechanisms",
+            "Forward and Inverse Kinematics",
+            "Differential Kinematics",
+            "Singularities",
+        ],
+    },
+    {
+        chapter: 8,
+        title: "Dynamics of Open Chains",
+        contents: lazy(() => import("./Chapter8")),
+        sections: [
+            "The Equations of Motion",
+            "Lagrangian Dynamics of a 2R Arm",
+            "Newton–Euler Inverse Dynamics",
+            "Forward Dynamics and Simulation",
+        ],
+    },
+    {
+        chapter: 9,
+        title: "Trajectory Generation",
+        contents: lazy(() => import("./Chapter9")),
+        sections: [
+            "Paths and Time Scaling",
+            "Polynomial Time Scaling",
+            "Trapezoidal and S-Curve Profiles",
+            "Via Point Trajectories",
+        ],
+    },
 ]
 
 export default data.sort((a, b) => a.chapter - b.chapter)
