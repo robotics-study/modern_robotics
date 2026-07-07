@@ -2,6 +2,7 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {Circle, Layer, Line, Stage, Text} from "react-konva";
 import CanvasFigure from "../../CanvasFigure";
 import {useCanvasColors, type CanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 시간 스케일링 s(t) 세 종류(cubic·quintic·trapezoidal)를 s, ṡ, s̈ 세 그래프로 비교한다.
 // Play 를 누르면 path θ(s) 위의 점이 s(t) 속도로 움직여, cubic/quintic 은 가운데서 빠르고
@@ -166,6 +167,7 @@ const REF_DASH = [5, 4];
 
 const TimeScalingScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const tr = useTr();
     const [profile, setProfile] = useState<Profile>("cubic");
     const [T, setT] = useState(2);
     const [v, setV] = useState(0.85);
@@ -276,7 +278,7 @@ const TimeScalingScene = ({width, height}: SceneProps) => {
                     <span className="w-8 shrink-0">T</span>
                     <input type="range" min={0.5} max={4} step={0.1} value={T}
                            onChange={(e) => setT(parseFloat(e.target.value))}
-                           className="w-full accent-[var(--accent)]" aria-label="total time T"/>
+                           className="w-full accent-[var(--accent)]" aria-label={tr("total time T", "전체 시간 T")}/>
                     <span className="w-12 shrink-0 text-right tabular-nums">{T.toFixed(1)} s</span>
                 </label>
                 {profile === "trapezoidal" && (
@@ -284,7 +286,7 @@ const TimeScalingScene = ({width, height}: SceneProps) => {
                         <span className="w-8 shrink-0">v</span>
                         <input type="range" min={0.5} max={3} step={0.05} value={v}
                                onChange={(e) => setV(parseFloat(e.target.value))}
-                               className="w-full accent-[var(--accent)]" aria-label="coast speed v"/>
+                               className="w-full accent-[var(--accent)]" aria-label={tr("coast speed v", "정속(coast) 속도 v")}/>
                         <span className="w-12 shrink-0 text-right tabular-nums">{v.toFixed(2)}</span>
                     </label>
                 )}
@@ -305,8 +307,12 @@ const TimeScalingScene = ({width, height}: SceneProps) => {
 };
 
 const TimeScalingProfiles = () => {
+    const tr = useTr();
     return <CanvasFigure
-        label="time scaling · s(t), ṡ(t), s̈(t) for cubic / quintic / trapezoidal"
+        label={tr(
+            "time scaling · s(t), ṡ(t), s̈(t) for cubic / quintic / trapezoidal",
+            "Time Scaling · cubic / quintic / trapezoidal 의 s(t), ṡ(t), s̈(t)"
+        )}
         tight
         bodyClassName="w-fit"
         className="w-full"

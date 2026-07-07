@@ -4,6 +4,7 @@ import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 4절 링크(four-bar): 가장 단순한 폐연쇄 — 루프 하나, C-space 1자유도.
 // 지면 P0—P3 를 기준으로 크랭크 P0→A 를 슬라이더 θ 로 돌리면, 커플러 b 와 로커 c 가
@@ -82,6 +83,7 @@ interface SceneProps {
 
 const FourBarScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const t = useTr();
     const [theta, setTheta] = useState(1.1);
     const [sign, setSign] = useState(1);
 
@@ -159,7 +161,7 @@ const FourBarScene = ({width, height}: SceneProps) => {
                         value={theta}
                         onChange={(e) => setTheta(parseFloat(e.target.value))}
                         className="w-full accent-[var(--accent)]"
-                        aria-label="driving crank angle theta"
+                        aria-label={t("driving crank angle theta", "구동 크랭크 각도 theta")}
                     />
                     <span className="w-12 shrink-0 text-right tabular-nums">
                         {Math.round((theta * 180) / Math.PI)}°
@@ -213,8 +215,12 @@ const FourBarScene = ({width, height}: SceneProps) => {
 };
 
 const FourBarLinkage = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="four-bar linkage · sweep θ; the C-space panel shows ψ(θ) and its bifurcations"
+        label={t(
+            "four-bar linkage · sweep θ; the C-space panel shows ψ(θ) and its bifurcations",
+            "Four-Bar Linkage · θ 를 훑는다; C-space 패널은 ψ(θ) 와 그 분기점을 보여준다"
+        )}
         tight
         bodyClassName="w-fit"
         className="w-full"

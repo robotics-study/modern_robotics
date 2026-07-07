@@ -5,6 +5,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 import {massMatrix2R, TWO_R} from "./twoRModel";
 
 // 2R 팔의 순방향 동역학 실시간 시뮬레이터(이 장의 대표 그림). 책의 점질량 모델을 그대로 쓴다:
@@ -82,6 +83,7 @@ interface SceneProps {
 
 const TwoRScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const t = useTr();
     const [tau, setTau] = useState<[number, number]>([0, 0]);
     const [gravity, setGravity] = useState(true);
     const [gravComp, setGravComp] = useState(false);
@@ -218,14 +220,14 @@ const TwoRScene = ({width, height}: SceneProps) => {
                         <input type="checkbox" checked={gravity}
                                onChange={(e) => setGravity(e.target.checked)}
                                className="accent-[var(--accent)]"/>
-                        <span>gravity</span>
+                        <span>{t("gravity", "중력")}</span>
                     </label>
                     <label className="flex items-center gap-1.5 cursor-pointer"
                            style={{opacity: gravity ? 1 : 0.4}}>
                         <input type="checkbox" checked={gravComp} disabled={!gravity}
                                onChange={(e) => setGravComp(e.target.checked)}
                                className="accent-[var(--accent)]"/>
-                        <span>grav. comp.</span>
+                        <span>{t("grav. comp.", "중력 보상")}</span>
                     </label>
                 </div>
                 {[0, 1].map((i) => (
@@ -246,8 +248,8 @@ const TwoRScene = ({width, height}: SceneProps) => {
                 ))}
                 <div className="text-center pt-1 tabular-nums">
                     {running
-                        ? <span className="text-[var(--accent)] font-semibold">running</span>
-                        : <span>paused</span>}{" "}
+                        ? <span className="text-[var(--accent)] font-semibold">{t("running", "실행 중")}</span>
+                        : <span>{t("paused", "일시정지")}</span>}{" "}
                     · E = {totalE.toFixed(2)} J
                 </div>
             </div>
@@ -256,8 +258,9 @@ const TwoRScene = ({width, height}: SceneProps) => {
 };
 
 const TwoRDynamics = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="forward dynamics · a 2R arm as a double pendulum"
+        label={t("forward dynamics · a 2R arm as a double pendulum", "Forward Dynamics · 이중 진자로서의 2R 팔")}
         tight
         bodyClassName="w-fit"
         className="w-full"

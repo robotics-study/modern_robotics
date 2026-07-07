@@ -4,6 +4,7 @@ import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 import {massMatrix2R, TWO_R} from "./twoRModel";
 
 // 관성의 자세 의존성: 자세 θ 에서 단위 관절토크 원 {‖u‖=1} 을 M⁻¹ 로 사상하면 관절가속도 타원
@@ -133,8 +134,9 @@ const MassMatrixScene = ({width, height}: SceneProps) => {
 };
 
 const MassMatrixEllipse = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="acceleration ellipse · configuration-dependence of inertia"
+        label={t("acceleration ellipse · configuration-dependence of inertia", "가속도 타원 · 관성의 configuration 의존성")}
         tight
         bodyClassName="w-fit"
         className="w-full"

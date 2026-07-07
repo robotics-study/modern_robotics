@@ -4,6 +4,7 @@ import CanvasFigure from "../../CanvasFigure";
 import AxisTriad from "../../3d/AxisTriad";
 import Label3D from "../../3d/Label3D";
 import {Color3, Quaternion, TransformNode, Vector3} from "@babylonjs/core";
+import {useTr} from "../../../libs/i18n";
 
 // 지수 좌표 R = e^[ω̂]θ 의 기하: 고정된 회전축 ω̂(주황 막대) 둘레로 body frame 이 각 θ 만큼 돈다.
 // 슬라이더로 θ 를 직접 돌려 축-각 파라미터가 회전을 어떻게 만드는지 본다.
@@ -34,6 +35,7 @@ interface SceneProps {
 }
 
 const ExpRotationScene = ({canvasClassName}: SceneProps) => {
+    const t = useTr();
     const [theta, setTheta] = useState(Math.PI / 2);
     const nodeRef = useRef<TransformNode | null>(null);
     const pose = useMemo(() => Quaternion.RotationAxis(AXIS, theta), [theta]);
@@ -68,10 +70,10 @@ const ExpRotationScene = ({canvasClassName}: SceneProps) => {
                     value={theta}
                     onChange={(e) => setTheta(parseFloat(e.target.value))}
                     className="w-full accent-[var(--accent)]"
-                    aria-label="rotation angle theta"
+                    aria-label={t("rotation angle theta", "회전각 theta")}
                 />
                 <div className="text-xs text-muted text-center">
-                    θ = {theta.toFixed(2)} rad ({(theta * 180 / Math.PI).toFixed(0)}°) · ω̂ fixed
+                    θ = {theta.toFixed(2)} rad ({(theta * 180 / Math.PI).toFixed(0)}°) · ω̂ {t("fixed", "고정")}
                 </div>
             </div>
         </div>
@@ -79,8 +81,9 @@ const ExpRotationScene = ({canvasClassName}: SceneProps) => {
 };
 
 const ExponentialRotation = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="exponential coordinates · R = e^[ω̂]θ"
+        label={t("exponential coordinates · R = e^[ω̂]θ", "Exponential Coordinates · R = e^[ω̂]θ")}
         className="w-full sm:w-2/3 mx-auto"
         bodyClassName="w-[min(80vmin,520px)]"
         modal={<ExpRotationScene canvasClassName="aspect-square w-full rounded-lg"/>}

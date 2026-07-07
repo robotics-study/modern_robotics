@@ -3,6 +3,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Mesh, StandardMaterial, Vector3, VertexData} from "@babylonjs/core";
 import {useCallback} from "react";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
 
 const Skew = () => {
@@ -186,7 +187,8 @@ const HelicalLink = ({
     </box>
 }
 const HelicalJoint = () => {
-    return <CanvasFigure label="helical joint" className="w-1/2 md:w-1/4">
+    const t = useTr()
+    return <CanvasFigure label={t("helical joint", "Helical Joint")} className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{

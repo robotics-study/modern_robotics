@@ -5,6 +5,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {jacobian2R, manipulabilityEllipse, planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 조작성 타원: tip 이 각 방향으로 얼마나 쉽게 움직일 수 있는지를 나타내는 타원.
 // 단위 관절속도 원을 Jacobian 으로 사상한 결과다. 특이점(θ2→0,π)에서 선분으로 붕괴한다.
@@ -26,6 +27,7 @@ interface SceneProps {
 
 const ManipulabilityScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const t = useTr();
     const [theta, setTheta] = useState<[number, number]>([0.5, 1.1]);
     const [showForce, setShowForce] = useState(false);
 
@@ -116,7 +118,7 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
                         <input type="checkbox" checked={showForce}
                                onChange={(e) => setShowForce(e.target.checked)}
                                className="accent-[var(--accent)]"/>
-                        <span style={{color: FORCE_COLOR}}>force ellipse</span>
+                        <span style={{color: FORCE_COLOR}}>{t("force ellipse", "힘 타원")}</span>
                     </label>
                 </div>
             </div>
@@ -125,8 +127,9 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
 };
 
 const ManipulabilityEllipse = () => {
+    const t = useTr()
     return <CanvasFigure
-        label="manipulability ellipse · isotropy of the 2R tip"
+        label={t("manipulability ellipse · isotropy of the 2R tip", "Manipulability 타원 · 2R 팁의 등방성")}
         tight
         bodyClassName="w-fit"
         className="w-full"

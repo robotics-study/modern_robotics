@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {slugify} from "../libs/slug";
+import {useLang, useTr} from "../libs/i18n";
 import cn from "../libs/cn";
 
 interface TocItem {
@@ -11,6 +12,8 @@ interface TocItem {
 // 우측 "On this page" — 렌더된 본문의 h2/h3 를 스캔해 id 부여 + 스크롤스파이.
 // 본문(특히 lazy 챕터·KaTeX·3D)이 비동기로 붙으므로 헤딩이 나타날 때까지 rAF 로 재시도한다.
 const Toc = ({chapter}: { chapter: number }) => {
+    const {lang} = useLang()
+    const t = useTr()
     const [items, setItems] = useState<TocItem[]>([])
     const [active, setActive] = useState("")
 
@@ -38,7 +41,8 @@ const Toc = ({chapter}: { chapter: number }) => {
         setItems([])
         scan()
         return () => cancelAnimationFrame(raf)
-    }, [chapter])
+        // 언어 전환 시 헤딩 텍스트가 바뀌므로 다시 스캔한다.
+    }, [chapter, lang])
 
     useEffect(() => {
         if (!items.length) return
@@ -59,7 +63,7 @@ const Toc = ({chapter}: { chapter: number }) => {
 
     return (
         <aside className="toc">
-            <h4>On this page</h4>
+            <h4>{t("On this page", "목차")}</h4>
             {items.map((it) => (
                 <a key={it.id}
                    href={`#${it.id}`}

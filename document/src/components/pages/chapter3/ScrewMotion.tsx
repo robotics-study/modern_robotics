@@ -3,8 +3,9 @@ import CanvasFigure from "../../CanvasFigure";
 import AxisTriad from "../../3d/AxisTriad";
 import {Animation, Color3, IAnimationKey, TransformNode, Vector3} from "@babylonjs/core";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
-// 트위스트 V = S θ̇: 스크류 축 둘레의 나선 운동. body frame 이 축(수직 ŷ)을 돌면서 동시에 축을 따라
+// twist V = S θ̇: screw 축 둘레의 나선 운동. body frame 이 축(수직 ŷ)을 돌면서 동시에 축을 따라
 // 병진해 나선을 그린다 — 순수 회전(각속도)과 순수 병진이 결합된 rigid-body velocity.
 const RADIUS = 4;
 const TURNS = 2;
@@ -47,7 +48,8 @@ const ScrewFrame = () => {
 };
 
 const ScrewMotion = () => {
-    return <CanvasFigure label="screw motion · twist about ŷ" className="w-full sm:w-2/3 mx-auto">
+    const t = useTr();
+    return <CanvasFigure label={t("screw motion · twist about ŷ", "screw 운동 · ŷ 둘레 twist")} className="w-full sm:w-2/3 mx-auto">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{radius: 20, at: {x: 8, y: 4, z: 10}}}

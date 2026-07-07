@@ -4,6 +4,7 @@ import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // via point 궤적: 정해진 시각에 네 점을 지나는 곡선을 x(t)·y(t) 각각 piecewise cubic 으로 보간한다.
 // 내부 via 점의 속도 벡터(슬라이더)를 바꾸면 곡선이 휘어, "via 속도가 경로 모양을 결정한다"를 보게 한다.
@@ -163,8 +164,12 @@ const ViaScene = ({width, height}: SceneProps) => {
 };
 
 const ViaPointTrajectory = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="via-point trajectory · tune the interior via velocities to bend the path"
+        label={t(
+            "via-point trajectory · tune the interior via velocities to bend the path",
+            "Via Point Trajectory · 내부 Via Point 속도를 조절해 경로를 휘게 한다"
+        )}
         tight
         bodyClassName="w-fit"
         className="w-full"

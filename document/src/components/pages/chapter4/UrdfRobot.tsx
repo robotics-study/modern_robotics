@@ -5,6 +5,7 @@ import {useScene} from "react-babylonjs";
 import {ReactNode} from "react";
 import {InlineMath} from "../../math/Tex";
 import CodeFigure from "../../CodeFigure";
+import {T, useTr} from "../../../libs/i18n";
 
 // URDF 가 기술하는 것: link(질량·형상) 들이 joint(타입·축·부모/자식) 로 이어진 트리.
 // 여기선 base → joint → link 를 3단 중첩 부모관계로 세우고 관절을 회전시켜 정방향 기구학을 보인다.
@@ -120,24 +121,54 @@ const XACRO = `<?xml version="1.0"?>
 
 // 코드블록 아래 각주: xacro/URDF 핵심 요소가 무엇을 하는지 매핑한다.
 const NOTES: {tag: string; body: ReactNode}[] = [
-    {tag: "xacro:property", body: <>named constants for the chain's dimensions, referenced as <code>${"{l1}"}</code>.</>},
-    {tag: "xacro:macro", body: <>a parameterized, reusable block — <code>bar_link</code> stamps out all three links from one definition instead of repeating them.</>},
-    {tag: "link", body: <>a rigid body: <code>visual</code> geometry plus <code>inertial</code> mass and inertia.</>},
+    {
+        tag: "xacro:property",
+        body: <T
+            en={<>named constants for the chain's dimensions, referenced as <code>${"{l1}"}</code>.</>}
+            ko={<>체인 치수를 위한 이름 붙은 상수들로, <code>${"{l1}"}</code> 처럼 참조된다.</>}
+        />,
+    },
+    {
+        tag: "xacro:macro",
+        body: <T
+            en={<>a parameterized, reusable block — <code>bar_link</code> stamps out all three links from one definition instead of repeating them.</>}
+            ko={<>매개변수화된 재사용 블록 — <code>bar_link</code> 가 반복 없이 하나의 정의로 세 링크를 모두 찍어낸다.</>}
+        />,
+    },
+    {
+        tag: "link",
+        body: <T
+            en={<>a rigid body: <code>visual</code> geometry plus <code>inertial</code> mass and inertia.</>}
+            ko={<>강체: <code>visual</code> 형상과 <code>inertial</code> 질량·관성.</>}
+        />,
+    },
     {
         tag: "joint type=\"revolute\"",
-        body: <>a rotating joint. <code>parent</code>→<code>child</code> builds the tree, <code>axis</code> is
-            the rotation axis, <code>origin</code> is the fixed transform to the parent link (the{" "}
-            <InlineMath math='T_{i-1,i}'/> forward kinematics multiplies), and <code>limit</code> bounds its
-            travel.</>,
+        body: <T
+            en={<>a rotating joint. <code>parent</code>→<code>child</code> builds the tree, <code>axis</code> is
+                the rotation axis, <code>origin</code> is the fixed transform to the parent link (the{" "}
+                <InlineMath math='T_{i-1,i}'/> forward kinematics multiplies), and <code>limit</code> bounds its
+                travel.</>}
+            ko={<>Revolute Joint. <code>parent</code>→<code>child</code> 가 트리를 세우고, <code>axis</code> 는
+                회전 축, <code>origin</code> 은 부모 링크로의 고정 변환(Forward Kinematics가 곱하는{" "}
+                <InlineMath math='T_{i-1,i}'/>), <code>limit</code> 은 그 가동 범위를 제한한다.</>}
+        />,
     },
-    {tag: "build", body: <>at build time xacro expands every property and macro into plain URDF.</>},
+    {
+        tag: "build",
+        body: <T
+            en={<>at build time xacro expands every property and macro into plain URDF.</>}
+            ko={<>빌드 시점에 xacro 가 모든 property 와 macro 를 순수 URDF 로 전개한다.</>}
+        />,
+    },
 ];
 
 const UrdfRobot = () => {
+    const t = useTr();
     return <div className="my-4">
         <div className="flex flex-col lg:flex-row gap-4 lg:items-stretch">
             <div className="lg:w-1/2 flex">
-                <CanvasFigure label="serial-chain robot · links + joints" className="w-full">
+                <CanvasFigure label={t("serial-chain robot · links + joints", "Serial Chain 로봇 · 링크 + 관절")} className="w-full">
                     <Physics3DCanvas
                         className="aspect-square w-full rounded-lg"
                         initialView={{radius: 18, at: {x: 8, y: 8, z: 10}, to: {x: 0, y: 3, z: 0}}}

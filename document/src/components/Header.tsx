@@ -1,6 +1,8 @@
 import BrandLogo from "./BrandLogo";
 import SearchBox from "./SearchBox";
+import LangToggle from "./LangToggle";
 import {useChapterNav} from "../libs/nav";
+import {useTr} from "../libs/i18n";
 
 const REPO = "https://github.com/robotics-study/modern_robotics"
 const TEXTBOOK = "https://hades.mech.northwestern.edu/index.php/Modern_Robotics"
@@ -18,6 +20,7 @@ const ExtIcon = () => (
 // 스티키 상단 바 — 브랜드 · 네비 · 검색. 테마 토글은 없다(시스템 설정을 그대로 따름).
 const Header = ({onMenu, showMenu}: { onMenu: () => void; showMenu: boolean }) => {
     const {go} = useChapterNav()
+    const t = useTr()
 
     return (
         <header className="topbar">
@@ -42,13 +45,14 @@ const Header = ({onMenu, showMenu}: { onMenu: () => void; showMenu: boolean }) =
             </div>
 
             <nav className="topnav">
-                <a onClick={() => go(null)}>Overview</a>
+                <a onClick={() => go(null)}>{t("Overview", "개요")}</a>
                 <a href={REPO} target="_blank" rel="noopener noreferrer">GitHub<ExtIcon/></a>
-                <a href={TEXTBOOK} target="_blank" rel="noopener noreferrer">Textbook<ExtIcon/></a>
+                <a href={TEXTBOOK} target="_blank" rel="noopener noreferrer">{t("Textbook", "교재")}<ExtIcon/></a>
             </nav>
 
             <span className="spacer"/>
             <SearchBox/>
+            <LangToggle/>
         </header>
     )
 }

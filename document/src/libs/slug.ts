@@ -4,8 +4,10 @@ export function slugify(text: string): string {
     return text
         .trim()
         .toLowerCase()
-        .replace(/[^\w\s-]/g, "")   // 알파벳/숫자/공백/하이픈 외 제거
-        .replace(/[\s_]+/g, "-")     // 공백·언더스코어 → 하이픈
-        .replace(/-+/g, "-")          // 연속 하이픈 축약
-        .replace(/^-|-$/g, "")        // 양끝 하이픈 제거
+        // 영숫자·비-ASCII 문자(한글 등)·공백·하이픈만 남긴다. ASCII 문장부호/기호는 제거.
+        // (\p{L} 정규식은 es5 타깃에서 못 써 유니코드 범위로 대체.)
+        .replace(/[^0-9a-zÀ-￿\s-]/g, "")
+        .replace(/[\s_]+/g, "-")             // 공백·언더스코어 → 하이픈
+        .replace(/-+/g, "-")                  // 연속 하이픈 축약
+        .replace(/^-|-$/g, "")                // 양끝 하이픈 제거
 }

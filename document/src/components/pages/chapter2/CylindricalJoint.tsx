@@ -3,6 +3,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
 import {ReactNode, useCallback} from "react";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
 interface CylindricalLinkProps {
     name: string,
@@ -92,7 +93,8 @@ const CylindricalLink = ({
     </mesh>
 }
 const CylindricalJoint = () => {
-    return <CanvasFigure label="cylindrical joint" className="w-1/2 md:w-1/4">
+    const t = useTr()
+    return <CanvasFigure label={t("cylindrical joint", "Cylindrical Joint")} className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{

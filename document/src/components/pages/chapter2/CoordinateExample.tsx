@@ -5,6 +5,7 @@ import Konva from "konva";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
 import CanvasFigure from "../../CanvasFigure";
+import {useTr} from "../../../libs/i18n";
 
 interface CoordinateExampleProps {
     className: string
@@ -123,8 +124,9 @@ const CoordinateStage = ({width, height, className}: CoordinateStageProps) => {
 }
 
 const CoordinateExample = ({className}: CoordinateExampleProps) => {
+    const t = useTr()
     return <CanvasFigure
-        label="coordinate"
+        label={t("coordinate", "좌표계")}
         tight
         bodyClassName="w-fit"
         modal={<CoordinateStage width={520} height={520}

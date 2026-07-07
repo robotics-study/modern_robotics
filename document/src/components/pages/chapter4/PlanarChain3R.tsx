@@ -5,6 +5,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 3R 평면 개방연쇄의 정방향 기구학. 슬라이더로 관절각 θ1,θ2,θ3 를 돌리면 링크를 순차 누적해
 // end-effector 위치 (x,y) 와 방향 φ 가 실시간 갱신된다.
@@ -97,8 +98,9 @@ const PlanarChainScene = ({width, height}: SceneProps) => {
 };
 
 const PlanarChain3R = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="3R planar chain · forward kinematics"
+        label={t("3R planar chain · forward kinematics", "3R 평면 체인 · Forward Kinematics")}
         tight
         bodyClassName="w-fit"
         className="w-full"
