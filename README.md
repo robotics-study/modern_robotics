@@ -33,6 +33,15 @@ Interactive study notes for **Kevin M. Lynch & Frank C. Park's**
 
 ---
 
+> **Disclaimer.** These are unofficial, non-commercial study notes based on Kevin M. Lynch &
+> Frank C. Park's _Modern Robotics: Mechanics, Planning, and Control_ (Cambridge University Press,
+> 2017). This project is **not affiliated with or endorsed by** the authors or the publisher. All
+> explanatory text, code, and interactive figures here are original work; the book's own text and
+> figures are not reproduced, and the book PDF is not redistributed. Concepts, equations, and
+> algorithms are described in our own words and implementations.
+
+---
+
 ## Overview
 
 This repo has two parts:
@@ -163,4 +172,9 @@ interactive or animated figure, the way Chapter 2 does. When adding or expanding
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+The original source code of this project (the web app and sample code) is released under the
+[MIT](https://opensource.org/licenses/MIT) license — see [`LICENSE`](./LICENSE).
+
+The MIT license covers only this project's own code. The underlying textbook, _Modern Robotics_
+by Lynch & Park (Cambridge University Press, 2017), remains the copyright of its authors and
+publisher and is **not** relicensed here.
