@@ -3,6 +3,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Vector3} from "@babylonjs/core";
 import {useCallback} from "react";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
 interface SphericalLinkProps {
     name: string,
@@ -86,7 +87,8 @@ const SphericalLink = ({
     </mesh>
 }
 const SphericalJoint = () => {
-    return <CanvasFigure label="spherical joint" className="w-1/2 md:w-1/4">
+    const t = useTr()
+    return <CanvasFigure label={t("spherical joint", "Spherical Joint")} className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{

@@ -3,6 +3,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
 import {useCallback} from "react";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
 interface PrismaticLinkProps {
     color: Color3,
@@ -63,7 +64,8 @@ const PrismaticLink = ({
     </box>
 }
 const PrismaticJoint = () => {
-    return <CanvasFigure label="prismatic joint" className="w-1/2 md:w-1/4">
+    const t = useTr()
+    return <CanvasFigure label={t("prismatic joint", "Prismatic Joint")} className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{

@@ -2,7 +2,13 @@
 // document.title 과 description·Open Graph·canonical 메타를 클라이언트에서 갱신한다.
 // index.html 에 정적으로 심어 둔 태그를 찾아 값만 바꾸고, 없으면(사이드 이펙트 대비) 만든다.
 
-const SITE = "Modern Robotics · Study"
+import {Lang, pick} from "./i18n";
+import {IChapterData} from "../../types/global";
+
+const SITE: Record<Lang, string> = {
+    en: "Modern Robotics · Study",
+    ko: "모던 로보틱스 · 스터디",
+}
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
     let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`)
@@ -46,21 +52,27 @@ export function applyPageMeta({title, description}: PageMeta) {
     setCanonical(url)
 }
 
+const HOME_DESC: Record<Lang, string> = {
+    en:
+        "Interactive study notes for Kevin M. Lynch & Frank C. Park's 'Modern Robotics': " +
+        "configuration space, rigid-body motions, and forward kinematics with 3D joint visualizations.",
+    ko:
+        "Kevin M. Lynch & Frank C. Park 의 'Modern Robotics' 인터랙티브 학습 노트 — " +
+        "configuration 공간, rigid-body motion, 3D 관절 시각화로 배우는 forward kinematics.",
+}
+
 // 챕터 → 페이지 메타. 홈(챕터 없음)은 사이트 기본값으로 되돌린다.
-export function chapterMeta(chapter?: {chapter: number; title: string; sections?: string[]}): PageMeta {
+export function chapterMeta(lang: Lang, chapter?: IChapterData): PageMeta {
     if (!chapter) {
-        return {
-            title: SITE,
-            description:
-                "Interactive study notes for Kevin M. Lynch & Frank C. Park's 'Modern Robotics': " +
-                "configuration space, rigid-body motions, and forward kinematics with 3D joint visualizations.",
-        }
+        return {title: SITE[lang], description: HOME_DESC[lang]}
     }
-    const topics = (chapter.sections ?? []).join(", ")
+    const title = pick(lang, chapter.title)
+    const topics = (chapter.sections ?? []).map((s) => pick(lang, s)).join(", ")
+    const body = lang === "ko"
+        ? `Modern Robotics ${chapter.chapter}장 — ${title}${topics ? `: ${topics}` : ""}.`
+        : `Modern Robotics Ch.${chapter.chapter} — ${title}${topics ? `: ${topics}` : ""}.`
     return {
-        title: `${chapter.title} · Ch.${chapter.chapter} · ${SITE}`,
-        description: topics
-            ? `Modern Robotics Ch.${chapter.chapter} — ${chapter.title}: ${topics}.`
-            : `Modern Robotics Ch.${chapter.chapter} — ${chapter.title}.`,
+        title: `${title} · Ch.${chapter.chapter} · ${SITE[lang]}`,
+        description: body,
     }
 }

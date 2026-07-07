@@ -5,6 +5,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {det2R, jacobian2R, planarFk, Vec2} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 2R 팔의 Jacobian 열 시각화. 슬라이더로 관절각을 돌리면 tip 에서 두 화살표가 뻗는다:
 // J1(관절1만 θ̇=1), J2(관절2만 θ̇=1). 두 화살표가 나란해지는 θ2=0,π 에서 det J=0 — 특이점이다.
@@ -113,8 +114,9 @@ const JacobianScene = ({width, height}: SceneProps) => {
 };
 
 const JacobianColumns = () => {
+    const t = useTr()
     return <CanvasFigure
-        label="Jacobian columns · tip velocity of each joint"
+        label={t("Jacobian columns · tip velocity of each joint", "Jacobian 열 · 각 관절의 팁 속도")}
         tight
         bodyClassName="w-fit"
         className="w-full"

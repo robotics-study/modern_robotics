@@ -218,6 +218,46 @@
     border-color: var(--accent);
 }
 
+/* language toggle — 미니멀 텍스트 세그먼트 + 글로브 (nav_study 헤더와 동일) */
+.lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.lang-toggle .g-ico {
+    opacity: .75;
+}
+
+.lang-toggle .l-sep {
+    color: var(--border);
+    font-weight: 400;
+}
+
+.lang-toggle button {
+    color: var(--muted);
+    padding: 1px 2px;
+    border-radius: 5px;
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+.lang-toggle button:hover {
+    color: var(--text);
+}
+
+.lang-toggle button.active {
+    color: var(--accent);
+}
+
 /* search */
 .search {
     position: relative;

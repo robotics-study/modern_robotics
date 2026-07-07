@@ -10,9 +10,11 @@ import ChapterContents from "./components/ChapterContents";
 import {BASE_PATH} from "./libs/url";
 import {useSearchParams, BrowserRouter, Routes, Route} from "react-router-dom";
 import cn from "./libs/cn";
+import {LangProvider, useLang} from "./libs/i18n";
 
 const PageSelector = () => {
     const [searchParam] = useSearchParams()
+    const {lang} = useLang()
     const [menuOpen, setMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setMenuOpen(false), [])
 
@@ -22,10 +24,10 @@ const PageSelector = () => {
         [chapter],
     )
 
-    // 챕터 전환마다 제목·메타를 현재 뷰에 맞춘다 (SPA 이므로 크롤러/프리뷰용 갱신).
+    // 챕터 전환·언어 전환마다 제목·메타를 현재 뷰에 맞춘다 (SPA 이므로 크롤러/프리뷰용 갱신).
     useEffect(() => {
-        applyPageMeta(chapterMeta(current))
-    }, [current])
+        applyPageMeta(chapterMeta(lang, current))
+    }, [current, lang])
 
     return (
         <>
@@ -56,9 +58,11 @@ const PageSelector = () => {
 const App = () => {
     return <BrowserRouter basename={BASE_PATH || "/"}
                           future={{v7_startTransition: true, v7_relativeSplatPath: true}}>
-        <Routes>
-            <Route path={"/"} element={<PageSelector/>}/>
-        </Routes>
+        <LangProvider>
+            <Routes>
+                <Route path={"/"} element={<PageSelector/>}/>
+            </Routes>
+        </LangProvider>
     </BrowserRouter>
 }
 

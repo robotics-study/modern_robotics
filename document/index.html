@@ -15,9 +15,15 @@
     <meta name="theme-color" content="#0b1020"/>
     <meta name="robots" content="index, follow"/>
     <link rel="canonical" href="https://robotics-study.github.io/modern_robotics/"/>
+    <!-- 언어별 대체 URL — 한국어는 ?lang=ko 쿼리로 표현된다. -->
+    <link rel="alternate" hreflang="en" href="https://robotics-study.github.io/modern_robotics/"/>
+    <link rel="alternate" hreflang="ko" href="https://robotics-study.github.io/modern_robotics/?lang=ko"/>
+    <link rel="alternate" hreflang="x-default" href="https://robotics-study.github.io/modern_robotics/"/>
 
     <!-- Open Graph / Twitter — 링크 공유 시 카드 미리보기. document.title 은 챕터 전환마다 갱신된다. -->
     <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="og:locale:alternate" content="ko_KR"/>
     <meta property="og:site_name" content="Modern Robotics · Study"/>
     <meta property="og:title" content="Modern Robotics · Study"/>
     <meta property="og:description"
@@ -38,7 +44,7 @@
             "name": "Modern Robotics · Study",
             "description": "Interactive study notes for Kevin M. Lynch & Frank C. Park's 'Modern Robotics': configuration space, rigid-body motions, and forward kinematics with 3D joint visualizations.",
             "url": "https://robotics-study.github.io/modern_robotics/",
-            "inLanguage": "en",
+            "inLanguage": ["en", "ko"],
             "learningResourceType": "Study notes",
             "about": ["Robotics", "Kinematics", "Configuration Space", "Rigid-Body Motion", "Forward Kinematics"],
             "isBasedOn": {

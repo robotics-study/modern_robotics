@@ -6,6 +6,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {jacobian2R, planarFk, Vec2} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 수치 역기구학(Newton–Raphson): 초기 추정 θ0 에서 시작해 Δθ = J⁻¹(x_d − f(θ)) 를 반복 적용,
 // tip 이 목표(goal)로 수렴한다. "Step" 으로 한 번에 한 반복씩 진행하며 tip 궤적과 오차를 보인다.
@@ -47,6 +48,7 @@ interface SceneProps {
 
 const NewtonScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const t = useTr();
     const [goal, setGoal] = useState<Vec2>(() => fk([Math.PI / 6, Math.PI / 2])); // θ_d = (30°, 90°)
     const [theta, setTheta] = useState<[number, number]>(INITIAL_GUESS);
     const [trace, setTrace] = useState<Vec2[]>(() => [fk(INITIAL_GUESS)]);
@@ -111,7 +113,8 @@ const NewtonScene = ({width, height}: SceneProps) => {
                         strokeWidth={2}/>
                 <Circle x={gPx.x} y={gPx.y} radius={8} draggable fill={GOAL_COLOR} stroke={colors.surface}
                         strokeWidth={2} onDragMove={onDragGoal}/>
-                <Text x={gPx.x + 12} y={gPx.y - 6} text="goal" fontSize={12} fill={GOAL_COLOR} fontStyle="bold"/>
+                <Text x={gPx.x + 12} y={gPx.y - 6} text={t("goal", "목표")} fontSize={12} fill={GOAL_COLOR}
+                      fontStyle="bold"/>
             </CoordinateSystem>
             <div className="w-full flex items-center justify-between text-xs text-muted">
                 <div className="flex gap-2">
@@ -134,8 +137,9 @@ const NewtonScene = ({width, height}: SceneProps) => {
 };
 
 const NewtonRaphsonIK = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="numerical IK · Newton–Raphson iteration"
+        label={t("numerical IK · Newton–Raphson iteration", "수치적 Inverse Kinematics · 뉴턴–랩슨 반복")}
         tight
         bodyClassName="w-fit"
         className="w-full"

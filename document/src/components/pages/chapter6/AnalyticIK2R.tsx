@@ -6,6 +6,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {ik2R, IkSolution, planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 2R 위치 역기구학: 목표점(주황)을 드래그하면 그 점에 도달하는 두 해(righty·lefty)를 실시간으로 그린다.
 // 작업공간(annulus) 밖으로 끌면 해가 없어지고 목표점이 회색으로 바뀐다.
@@ -20,6 +21,7 @@ interface SceneProps {
 
 const IkScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const t = useTr();
     const [target, setTarget] = useState({x: 2.0, y: 1.4});
 
     const sol = useMemo(() => ik2R(target.x, target.y, L1, L2), [target]);
@@ -84,15 +86,15 @@ const IkScene = ({width, height}: SceneProps) => {
             <div className="w-full text-xs text-muted text-center">
                 {sol.reachable && sol.righty && sol.lefty ? (
                     <span>
-                        <span className="text-[var(--accent)] font-semibold">righty</span>{" "}
+                        <span className="text-[var(--accent)] font-semibold">{t("righty", "오른손잡이(righty)")}</span>{" "}
                         θ = ({(sol.righty.theta1 * 180 / Math.PI).toFixed(0)}°,{" "}
                         {(sol.righty.theta2 * 180 / Math.PI).toFixed(0)}°) ·{" "}
-                        <span style={{color: LEFTY_COLOR}} className="font-semibold">lefty</span>{" "}
+                        <span style={{color: LEFTY_COLOR}} className="font-semibold">{t("lefty", "왼손잡이(lefty)")}</span>{" "}
                         θ = ({(sol.lefty.theta1 * 180 / Math.PI).toFixed(0)}°,{" "}
                         {(sol.lefty.theta2 * 180 / Math.PI).toFixed(0)}°)
                     </span>
                 ) : (
-                    <span>outside the workspace — no solution. Drag the target back into the annulus.</span>
+                    <span>{t("outside the workspace — no solution. Drag the target back into the annulus.", "작업 공간 밖 — 해가 없다. 목표점을 환형 영역 안으로 다시 끌어 놓아라.")}</span>
                 )}
             </div>
         </div>
@@ -100,8 +102,9 @@ const IkScene = ({width, height}: SceneProps) => {
 };
 
 const AnalyticIK2R = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="analytic IK · drag the target for lefty / righty solutions"
+        label={t("analytic IK · drag the target for lefty / righty solutions", "해석적 Inverse Kinematics · 목표점을 드래그해 왼손잡이 / 오른손잡이 해를 확인")}
         tight
         bodyClassName="w-fit"
         className="w-full"

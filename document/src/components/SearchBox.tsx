@@ -1,17 +1,20 @@
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {searchDocs, SearchEntry} from "../libs/search";
 import {useChapterNav} from "../libs/nav";
+import {useLang, useTr} from "../libs/i18n";
 import cn from "../libs/cn";
 
 // nav_study 검색 드롭다운의 React 포팅 — 점수 정렬·키보드 탐색·바깥 클릭 닫기.
 const SearchBox = () => {
     const {go} = useChapterNav()
+    const {lang} = useLang()
+    const t = useTr()
     const [query, setQuery] = useState("")
     const [sel, setSel] = useState(-1)
     const [open, setOpen] = useState(false)
     const boxRef = useRef<HTMLDivElement>(null)
 
-    const results = useMemo<SearchEntry[]>(() => (query.trim() ? searchDocs(query) : []), [query])
+    const results = useMemo<SearchEntry[]>(() => (query.trim() ? searchDocs(query, lang) : []), [query, lang])
 
     // 쿼리가 비면 선택/열림 초기화
     useEffect(() => {
@@ -59,7 +62,7 @@ const SearchBox = () => {
             </svg>
             <input
                 type="search"
-                placeholder="Search…"
+                placeholder={t("Search…", "검색 / Search…")}
                 autoComplete="off"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -68,7 +71,7 @@ const SearchBox = () => {
             />
             <div className={cn("search-results", open && "open")}>
                 {results.length === 0
-                    ? <div className="r-empty">No results</div>
+                    ? <div className="r-empty">{t("No results", "결과 없음")}</div>
                     : results.map((r, i) => (
                         <a key={`${r.chapter}-${r.anchor ?? "top"}`}
                            className={cn(i === sel && "sel")}

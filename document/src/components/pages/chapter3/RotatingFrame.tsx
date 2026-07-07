@@ -5,6 +5,7 @@ import Label3D from "../../3d/Label3D";
 import {Animation, Color3, Mesh, Quaternion, TransformNode, Vector3} from "@babylonjs/core";
 import {useRef} from "react";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
 const OMEGA_COLOR = new Color3(0.95, 0.65, 0.2);
 const VEL_COLOR = new Color3(0.13, 0.83, 0.93);
@@ -102,7 +103,8 @@ const AngularVelocityScene = () => {
 };
 
 const RotatingFrame = () => {
-    return <CanvasFigure label="angular velocity · v = ω × r at each point" className="w-full sm:w-2/3 mx-auto">
+    const t = useTr();
+    return <CanvasFigure label={t("angular velocity · v = ω × r at each point", "각속도 · 각 점마다 v = ω × r")} className="w-full sm:w-2/3 mx-auto">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{radius: 24, at: {x: 9, y: 8, z: 11}, to: {x: 0, y: 2, z: 0}}}

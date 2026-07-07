@@ -4,6 +4,7 @@ import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
+import {useTr} from "../../../libs/i18n";
 
 // 3-RPR 평면 병렬기구: 고정 삼각형 aᵢ 와 가동 플랫폼 삼각형 bᵢ 를 3개의 다리로 잇는다.
 // 각 다리는 P(수동)–R(수동)–P(능동, 길이 sᵢ)로, 프리즘 관절 sᵢ 만 구동한다.
@@ -34,6 +35,7 @@ interface SceneProps {
 
 const RPRScene = ({width, height}: SceneProps) => {
     const colors = useCanvasColors();
+    const t = useTr();
     const [pose, setPose] = useState({px: 0, py: 0, phi: 0});
 
     const {legs, worldB} = useMemo(() => {
@@ -93,21 +95,21 @@ const RPRScene = ({width, height}: SceneProps) => {
                     <span className="w-8 shrink-0">pₓ</span>
                     <input type="range" min={-1.6} max={1.6} step={0.01} value={pose.px}
                            onChange={(e) => setField("px", parseFloat(e.target.value))}
-                           className="w-full accent-[var(--accent)]" aria-label="platform x position"/>
+                           className="w-full accent-[var(--accent)]" aria-label={t("platform x position", "플랫폼 x 위치")}/>
                     <span className="w-12 shrink-0 text-right tabular-nums">{pose.px.toFixed(2)}</span>
                 </label>
                 <label className="flex items-center gap-2">
                     <span className="w-8 shrink-0">p_y</span>
                     <input type="range" min={-1.2} max={1.4} step={0.01} value={pose.py}
                            onChange={(e) => setField("py", parseFloat(e.target.value))}
-                           className="w-full accent-[var(--accent)]" aria-label="platform y position"/>
+                           className="w-full accent-[var(--accent)]" aria-label={t("platform y position", "플랫폼 y 위치")}/>
                     <span className="w-12 shrink-0 text-right tabular-nums">{pose.py.toFixed(2)}</span>
                 </label>
                 <label className="flex items-center gap-2">
                     <span className="w-8 shrink-0">φ</span>
                     <input type="range" min={-Math.PI / 2} max={Math.PI / 2} step={0.01} value={pose.phi}
                            onChange={(e) => setField("phi", parseFloat(e.target.value))}
-                           className="w-full accent-[var(--accent)]" aria-label="platform orientation phi"/>
+                           className="w-full accent-[var(--accent)]" aria-label={t("platform orientation phi", "플랫폼 방향 phi")}/>
                     <span className="w-12 shrink-0 text-right tabular-nums">
                         {Math.round((pose.phi * 180) / Math.PI)}°
                     </span>
@@ -124,8 +126,12 @@ const RPRScene = ({width, height}: SceneProps) => {
 };
 
 const RPRParallel = () => {
+    const t = useTr();
     return <CanvasFigure
-        label="3-RPR parallel mechanism · leg lengths follow directly from the platform pose"
+        label={t(
+            "3-RPR parallel mechanism · leg lengths follow directly from the platform pose",
+            "3-RPR Parallel Mechanism · 다리 길이는 플랫폼 자세에서 곧바로 나온다"
+        )}
         tight
         bodyClassName="w-fit"
         className="w-full"

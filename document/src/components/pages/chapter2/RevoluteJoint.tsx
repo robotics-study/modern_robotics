@@ -3,6 +3,7 @@ import CanvasFigure from "../../CanvasFigure";
 import {Animation, Color3, IAnimationKey, Mesh, Vector3} from "@babylonjs/core";
 import {useCallback} from "react";
 import {useScene} from "react-babylonjs";
+import {useTr} from "../../../libs/i18n";
 
 interface RevoluteLinkProps {
     color: Color3,
@@ -66,7 +67,8 @@ const RevoluteLink = ({
     </box>
 }
 const RevoluteJoint = () => {
-    return <CanvasFigure label="revolute joint" className="w-1/2 md:w-1/4">
+    const t = useTr()
+    return <CanvasFigure label={t("revolute joint", "Revolute Joint")} className="w-1/2 md:w-1/4">
         <Physics3DCanvas
             className="aspect-square w-full rounded-lg"
             initialView={{
