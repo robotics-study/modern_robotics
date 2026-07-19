@@ -1,5 +1,4 @@
 import {BlockMath, InlineMath} from "../../components/math/Tex";
-import {resolvePath} from "../../libs/url";
 import {T} from "../../libs/i18n";
 import RotatingFrame from "../../components/pages/chapter3/RotatingFrame";
 import ExponentialRotation from "../../components/pages/chapter3/ExponentialRotation";
@@ -195,12 +194,6 @@ const Chapter3 = () => {
             <BlockMath math='R[\omega]R^T = [R\omega]'/>
 
             <T en={<h2>Angular velocities</h2>} ko={<h2>각속도</h2>}/>
-            <img
-                className="w-1/2 mx-auto rounded-lg border border-border"
-                src={resolvePath("img/3_1.png")}
-                alt="Angular velocity of a rotating frame"
-                loading="lazy"
-            />
             <T
                 en={<p>
                     Angular velocity <InlineMath math='\omega'/> (orange) is a vector: its direction is the rotation
