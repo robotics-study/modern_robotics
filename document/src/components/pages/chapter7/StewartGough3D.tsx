@@ -34,7 +34,7 @@ const yTo = (dir: Vector3): Quaternion => {
     return Quaternion.RotationAxis(axis.normalize(), Math.acos(dot));
 };
 
-// 망원경식 다리: 아래쪽 굵은 sleeve + 위쪽 가는 piston, 양 끝 spherical 관절 구.
+// 망원경식 다리: 아래쪽 굵은 sleeve + 위쪽 piston, 양 끝 spherical 관절 구.
 const Leg = ({name, a, b}: {name: string; a: Vector3; b: Vector3}) => {
     const d = b.subtract(a);
     const len = d.length();
@@ -47,7 +47,8 @@ const Leg = ({name, a, b}: {name: string; a: Vector3; b: Vector3}) => {
                       position={new Vector3(0, -(len - sleeveLen) / 2, 0)}>
                 <Metal name={`${name}-sleeve`} color={HOUSING_DARK}/>
             </cylinder>
-            <cylinder name={`${name}-piston`} diameter={0.075} height={len} tessellation={12}>
+            {/* piston 은 양 끝 관절 구 너머까지 살짝 관통시켜, 짧은 자세에서도 상판과 끊겨 보이지 않게 한다 */}
+            <cylinder name={`${name}-piston`} diameter={0.11} height={len + 0.24} tessellation={12}>
                 <Metal name={`${name}-piston`} color={LINK_GRAY}/>
             </cylinder>
             {[-1, 1].map((s) => (
