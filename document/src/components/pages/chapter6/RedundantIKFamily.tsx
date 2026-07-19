@@ -1,7 +1,7 @@
 import {Fragment, useEffect, useMemo, useRef, useState} from "react";
 import {Circle, Line} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {ik2R, Vec2} from "../../../libs/planarArm";
@@ -37,6 +37,8 @@ interface SceneProps {
 }
 
 const RedundantScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [goal, setGoal] = useState<Vec2>({x: 2.6, y: 1.4});
@@ -81,7 +83,7 @@ const RedundantScene = ({width, height}: SceneProps) => {
     }, [playing, goal, family]);
 
     const current = solveAt(goal, psi) ?? family[Math.floor(family.length / 2)] ?? null;
-    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, res);
     const goalPx = toPx(goal);
 
     const drawArm = (sol: Solution, opacity: number, strokeW: number, withJoints: boolean) => {
@@ -107,7 +109,7 @@ const RedundantScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 해 가족의 고스트: 전부 같은 목표점에 tip 을 붙이고 있다 */}
@@ -125,7 +127,7 @@ const RedundantScene = ({width, height}: SceneProps) => {
                         y: Math.max(10, Math.min(height - 10, pos.y)),
                     })}
                     onDragMove={(e) => {
-                        setGoal(mapToGlobal(width, height, e.target.x(), e.target.y(), RESOLUTION));
+                        setGoal(mapToGlobal(width, height, e.target.x(), e.target.y(), res));
                     }}
                 />
             </CoordinateSystem>
@@ -171,7 +173,7 @@ const RedundantIKFamily = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<RedundantScene width={460} height={460}/>}
+        modal={<RedundantScene {...modalCanvasSize()}/>}
     >
         <RedundantScene width={320} height={320}/>
     </CanvasFigure>;

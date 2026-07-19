@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Arrow, Circle, Ellipse, Layer, Line, Stage, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {det2R, jacobian2R, manipulabilityEllipse, planarFk, Vec2} from "../../../libs/planarArm";
@@ -20,7 +20,10 @@ const J2_COLOR = "#e0533d";
 // 속도(단위/s)를 화면 길이로 바꾸는 배율 — 화살표·타원이 팔과 비슷한 크기로 보이게.
 const VEL_SCALE = 0.45;
 
-const VelocityMappingScene = () => {
+const VelocityMappingScene = ({zoom = 1}: {zoom?: number}) => {
+    // 모달 확대용: 패널 픽셀 크기를 키우면 world 스케일(resolution)도 같이 커진다.
+    const pnl = PANEL * zoom, armW = ARM_W * zoom;
+    const res = RESOLUTION / zoom;
     const colors = useCanvasColors();
     const t = useTr();
     const [theta, setTheta] = useState<[number, number]>([0.4, 1.2]);
@@ -62,25 +65,25 @@ const VelocityMappingScene = () => {
     useEffect(() => {
         if (!playing) return;
         setTrail((prev) => {
-            const m = globalToMap(ARM_W, ARM_W, tip.x, tip.y, RESOLUTION);
+            const m = globalToMap(armW, armW, tip.x, tip.y, res);
             const next = [...prev, m.x, m.y];
             return next.length > 400 ? next.slice(next.length - 400) : next;
         });
     }, [tip.x, tip.y, playing]);
 
     // 왼쪽(관절속도) 패널 좌표계.
-    const sL = (PANEL / 2 - PAD) / 1.6;
-    const pL = (x: number, y: number) => ({x: PANEL / 2 + x * sL, y: PANEL / 2 - y * sL});
+    const sL = (pnl / 2 - PAD) / 1.6;
+    const pL = (x: number, y: number) => ({x: pnl / 2 + x * sL, y: pnl / 2 - y * sL});
     const originL = pL(0, 0);
     const qdPx = pL(qd.x, qd.y);
 
     // 오른쪽(작업 공간) 좌표계: 속도 오버레이는 팁 기준으로 VEL_SCALE 배.
-    const toPx = (p: Vec2) => globalToMap(ARM_W, ARM_W, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(armW, armW, p.x, p.y, res);
     const armPx = world.map(toPx);
     const tipPx = armPx[armPx.length - 1];
     const velPx = (w: Vec2) => ({
-        x: tipPx.x + w.x * VEL_SCALE / RESOLUTION,
-        y: tipPx.y - w.y * VEL_SCALE / RESOLUTION,
+        x: tipPx.x + w.x * VEL_SCALE / res,
+        y: tipPx.y - w.y * VEL_SCALE / res,
     });
 
     // |θ̇i| ≤ 1 정사각형의 상: 팁에서 낼 수 있는 속도의 평행사변형 (±J1±J2).
@@ -95,10 +98,10 @@ const VelocityMappingScene = () => {
 
     const axes = (c: CanvasColors) => (
         <>
-            <Line points={[PAD, PANEL / 2, PANEL - PAD, PANEL / 2]} stroke={c.border} strokeWidth={1}/>
-            <Line points={[PANEL / 2, PAD, PANEL / 2, PANEL - PAD]} stroke={c.border} strokeWidth={1}/>
-            <Text x={PANEL - PAD - 10} y={PANEL / 2 + 5} text="θ̇₁" fontSize={11} fill={c.muted}/>
-            <Text x={PANEL / 2 + 5} y={PAD - 3} text="θ̇₂" fontSize={11} fill={c.muted}/>
+            <Line points={[PAD, pnl / 2, pnl - PAD, pnl / 2]} stroke={c.border} strokeWidth={1}/>
+            <Line points={[pnl / 2, PAD, pnl / 2, pnl - PAD]} stroke={c.border} strokeWidth={1}/>
+            <Text x={pnl - PAD - 10} y={pnl / 2 + 5} text="θ̇₁" fontSize={11} fill={c.muted}/>
+            <Text x={pnl / 2 + 5} y={PAD - 3} text="θ̇₂" fontSize={11} fill={c.muted}/>
         </>
     );
 
@@ -114,7 +117,7 @@ const VelocityMappingScene = () => {
             <div className="flex flex-row flex-wrap gap-2 items-center justify-center">
                 {/* 관절속도 선택 패널 */}
                 <div className="flex flex-col items-center gap-0.5">
-                    <Stage width={PANEL} height={PANEL}
+                    <Stage width={pnl} height={pnl}
                            className="bg-surface border border-border rounded-lg overflow-hidden">
                         <Layer>
                             {axes(colors)}
@@ -128,11 +131,11 @@ const VelocityMappingScene = () => {
                                 x={qdPx.x} y={qdPx.y} radius={9} fill={colors.accent}
                                 stroke={colors.surface} strokeWidth={2} draggable
                                 dragBoundFunc={(pos) => ({
-                                    x: Math.max(8, Math.min(PANEL - 8, pos.x)),
-                                    y: Math.max(8, Math.min(PANEL - 8, pos.y)),
+                                    x: Math.max(8, Math.min(pnl - 8, pos.x)),
+                                    y: Math.max(8, Math.min(pnl - 8, pos.y)),
                                 })}
                                 onDragMove={(e) => {
-                                    setQd({x: (e.target.x() - PANEL / 2) / sL, y: (PANEL / 2 - e.target.y()) / sL});
+                                    setQd({x: (e.target.x() - pnl / 2) / sL, y: (pnl / 2 - e.target.y()) / sL});
                                 }}
                             />
                         </Layer>
@@ -149,9 +152,9 @@ const VelocityMappingScene = () => {
                 {/* 실제 팔 + 팁에 붙은 속도 기하 */}
                 <div className="flex flex-col items-center gap-0.5">
                     <CoordinateSystem
-                        width={ARM_W}
-                        height={ARM_W}
-                        resolution={RESOLUTION}
+                        width={armW}
+                        height={armW}
+                        resolution={res}
                         className="bg-surface border border-border rounded-lg"
                     >
                         {trail.length >= 4 && (
@@ -171,8 +174,8 @@ const VelocityMappingScene = () => {
                         <Line points={paraPx.flatMap((m) => [m.x, m.y])} closed stroke={colors.muted}
                               strokeWidth={1.5} dash={[6, 5]}/>
                         <Ellipse x={tipPx.x} y={tipPx.y}
-                                 radiusX={Math.max(ell.major * VEL_SCALE / RESOLUTION, 1)}
-                                 radiusY={Math.max(ell.minor * VEL_SCALE / RESOLUTION, 1)}
+                                 radiusX={Math.max(ell.major * VEL_SCALE / res, 1)}
+                                 radiusY={Math.max(ell.minor * VEL_SCALE / res, 1)}
                                  rotation={(-ell.angle * 180) / Math.PI}
                                  stroke={colors.accent} strokeWidth={1.5} dash={[2, 4]} opacity={0.7}/>
                         {/* J 의 두 열: 관절 1만 / 관절 2만 단위 속도로 돌릴 때의 팁 속도 */}
@@ -242,7 +245,7 @@ const VelocityMapping = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<VelocityMappingScene/>}
+        modal={<VelocityMappingScene zoom={Math.min(2.4, modalCanvasSize(1.9).width / (PANEL + ARM_W + 60))}/>}
     >
         <VelocityMappingScene/>
     </CanvasFigure>;

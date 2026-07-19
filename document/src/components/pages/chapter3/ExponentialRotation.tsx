@@ -111,7 +111,7 @@ const ExponentialRotation = () => {
     return <CanvasFigure
         label={t("exponential coordinates · R = e^[ω̂]θ", "Exponential Coordinates · R = e^[ω̂]θ")}
         className="w-full sm:w-2/3 mx-auto"
-        bodyClassName="w-[min(80vmin,520px)]"
+        bodyClassName="w-[min(100%,76vh)]"
         modal={<ExpRotationScene canvasClassName="aspect-square w-full rounded-lg"/>}
     >
         <ExpRotationScene canvasClassName="aspect-square w-full rounded-lg"/>

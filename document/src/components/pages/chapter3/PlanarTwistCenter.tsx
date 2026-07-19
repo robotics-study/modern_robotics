@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Arrow, Circle, Group, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {Vec2} from "../../../libs/planarArm";
@@ -21,6 +21,8 @@ interface SceneProps {
 }
 
 const PlanarTwistScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [q, setQ] = useState<Vec2>({x: -1.5, y: 1});
@@ -60,7 +62,7 @@ const PlanarTwistScene = ({width, height}: SceneProps) => {
         };
     }, [playing]);
 
-    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, res);
     const qPx = toPx(q);
     const origin = toPx({x: 0, y: 0});
     const cPx = toPx(pose.c);
@@ -88,11 +90,11 @@ const PlanarTwistScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 원점이 그리는 원 (반지름 |q|): "원점에 있는 몸체 점"의 궤적 */}
-                <Circle x={qPx.x} y={qPx.y} radius={rOrigin / RESOLUTION} stroke={colors.border}
+                <Circle x={qPx.x} y={qPx.y} radius={rOrigin / res} stroke={colors.border}
                         strokeWidth={1.5} dash={[6, 5]}/>
                 {/* 몸체 */}
                 <Group>
@@ -126,7 +128,7 @@ const PlanarTwistScene = ({width, height}: SceneProps) => {
                         y: Math.max(20, Math.min(height - 20, pos.y)),
                     })}
                     onDragMove={(e) => {
-                        setQ(mapToGlobal(width, height, e.target.x(), e.target.y(), RESOLUTION));
+                        setQ(mapToGlobal(width, height, e.target.x(), e.target.y(), res));
                     }}
                 />
                 <Text x={qPx.x + 10} y={qPx.y - 8} text="q" fontSize={14} fontStyle="bold"
@@ -173,7 +175,7 @@ const PlanarTwistCenter = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<PlanarTwistScene width={460} height={460}/>}
+        modal={<PlanarTwistScene {...modalCanvasSize()}/>}
     >
         <PlanarTwistScene width={320} height={320}/>
     </CanvasFigure>;

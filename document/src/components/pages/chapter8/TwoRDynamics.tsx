@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Circle, Line} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -82,6 +82,8 @@ interface SceneProps {
 }
 
 const TwoRScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [tau, setTau] = useState<[number, number]>([0, 0]);
@@ -168,9 +170,9 @@ const TwoRScene = ({width, height}: SceneProps) => {
     };
 
     const {points} = planarFk(render.theta, [L1, L2]);
-    const px = points.map((p) => globalToMap(width, height, p.x, p.y, RESOLUTION));
+    const px = points.map((p) => globalToMap(width, height, p.x, p.y, res));
     const trailPx = trailRef.current.flatMap((p) => {
-        const m = globalToMap(width, height, p.x, p.y, RESOLUTION);
+        const m = globalToMap(width, height, p.x, p.y, res);
         return [m.x, m.y];
     });
     const massRadius = (m: number) => 5 + Math.sqrt(m) * 5;
@@ -188,7 +190,7 @@ const TwoRScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {trailPx.length >= 4 && (
@@ -264,7 +266,7 @@ const TwoRDynamics = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<TwoRScene width={460} height={460}/>}
+        modal={<TwoRScene {...modalCanvasSize()}/>}
     >
         <TwoRScene width={320} height={320}/>
     </CanvasFigure>;

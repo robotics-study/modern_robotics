@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {Arrow, Circle, Layer, Line, Rect, Stage, Text} from "react-konva";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {useCanvasColors} from "../../../libs/useTheme";
 
@@ -13,7 +13,7 @@ const W = 340, H = 210;
 const FORCE_COLOR = "#e0533d";
 const MOMENT_COLOR = "#f2a63a";
 
-const WrenchScene = () => {
+const WrenchScene = ({zoom = 1}: {zoom?: number}) => {
     const colors = useCanvasColors();
     const t = useTr();
     const [L1, setL1] = useState(0.1);      // 센서 → 손 질량중심 (m)
@@ -31,8 +31,10 @@ const WrenchScene = () => {
     const fArrow = (x: number, mass: number) => [x, yArm + 14, x, yArm + 14 + mass * G * 7];
 
     return (
-        <div className="flex flex-col gap-2 items-center" style={{width: W}}>
-            <Stage width={W} height={H} className="bg-surface border border-border rounded-lg overflow-hidden">
+        <div className="flex flex-col gap-2 items-center" style={{width: W * zoom}}>
+            {/* 모달 확대용: Stage 벡터 스케일로 그림 전체를 키운다 (드래그 요소 없음) */}
+            <Stage width={W * zoom} height={H * zoom} scaleX={zoom} scaleY={zoom}
+                   className="bg-surface border border-border rounded-lg overflow-hidden">
                 <Layer>
                     {/* 팔 + 센서 */}
                     <Line points={[x0, yArm, xApple, yArm]} stroke={colors.text} strokeWidth={4}
@@ -120,7 +122,7 @@ const WrenchBalance = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<WrenchScene/>}
+        modal={<WrenchScene zoom={Math.min(2.6, modalCanvasSize(340 / 210).width / 340)}/>}
     >
         <WrenchScene/>
     </CanvasFigure>;

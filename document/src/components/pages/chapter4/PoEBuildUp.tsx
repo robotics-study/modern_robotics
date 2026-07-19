@@ -1,7 +1,7 @@
 import {Fragment, useEffect, useRef, useState} from "react";
 import {Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
@@ -29,6 +29,8 @@ interface SceneProps {
 }
 
 const PoEScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [theta, setTheta] = useState<[number, number, number]>([0.8, 0.7, 0.9]);
@@ -72,7 +74,7 @@ const PoEScene = ({width, height}: SceneProps) => {
     const animating = animT !== null;
     const activeJoint = animating ? order[stage] : -1;
 
-    const toPx = (p: {x: number; y: number}) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: {x: number; y: number}) => globalToMap(width, height, p.x, p.y, res);
     const home = planarFk([0, 0, 0], LINKS).points.map(toPx);
     const arm = planarFk(disp, LINKS).points.map(toPx);
     // 지금 돌고 있는 관절의 축 위치: 현재 표시 자세에서의 관절 위치.
@@ -96,7 +98,7 @@ const PoEScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 홈 자세 M (흐리게) */}
@@ -209,7 +211,7 @@ const PoEBuildUp = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<PoEScene width={460} height={460}/>}
+        modal={<PoEScene {...modalCanvasSize()}/>}
     >
         <PoEScene width={320} height={320}/>
     </CanvasFigure>;

@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useRef, useState} from "react";
 import {Arrow, Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
@@ -37,6 +37,8 @@ interface SceneProps {
 }
 
 const ViaScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     // 내부 via P2, P3 의 속도 벡터. 양 끝점 속도는 0 으로 고정.
     const [vel, setVel] = useState({vx2: 1, vy2: 0, vx3: 0, vy3: -1});
@@ -77,7 +79,7 @@ const ViaScene = ({width, height}: SceneProps) => {
         };
     }, [playing]);
 
-    const toPx = (x: number, y: number) => globalToMap(width, height, x - CX, y - CY, RESOLUTION);
+    const toPx = (x: number, y: number) => globalToMap(width, height, x - CX, y - CY, res);
 
     // 곡선을 촘촘히 샘플해 폴리라인으로.
     const path = useMemo(() => {
@@ -113,7 +115,7 @@ const ViaScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 <Line points={path} stroke={colors.accent} strokeWidth={3} lineCap="round" lineJoin="round"/>
@@ -173,7 +175,7 @@ const ViaPointTrajectory = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<ViaScene width={460} height={460}/>}
+        modal={<ViaScene {...modalCanvasSize()}/>}
     >
         <ViaScene width={320} height={320}/>
     </CanvasFigure>;

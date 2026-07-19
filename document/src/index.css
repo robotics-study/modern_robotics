@@ -1117,8 +1117,11 @@ a.mini-chip:hover {
 .canvas-modal {
     display: flex;
     flex-direction: column;
-    max-width: min(92vw, 640px);
-    max-height: 90vh;
+    /* 확대 보기가 목적이므로 화면을 거의 채우는 고정 크기로 띄운다 */
+    width: min(96vw, 1500px);
+    height: min(94vh, 1040px);
+    max-width: none;
+    max-height: none;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -1161,10 +1164,29 @@ a.mini-chip:hover {
 }
 
 .canvas-modal-body {
+    flex: 1;
     padding: 18px;
     overflow: auto;
     display: grid;
     place-items: center;
+}
+
+/* 모바일: 팝업이 화면 전체를 덮는다 */
+@media (max-width: 640px) {
+    .canvas-modal-backdrop {
+        padding: 0;
+    }
+
+    .canvas-modal {
+        width: 100vw;
+        height: 100dvh;
+        border: none;
+        border-radius: 0;
+    }
+
+    .canvas-modal-body {
+        padding: 10px;
+    }
 }
 
 @keyframes canvas-modal-fade {

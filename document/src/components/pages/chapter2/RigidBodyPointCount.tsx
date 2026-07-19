@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {circleCircleIntersect, Vec2} from "../../../libs/planarArm";
@@ -30,6 +30,8 @@ interface SceneProps {
 }
 
 const PointCountScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [A, setA] = useState<Vec2>({x: -1.2, y: -0.6});
@@ -59,16 +61,16 @@ const PointCountScene = ({width, height}: SceneProps) => {
         return {x: A.x + 2 * s * ux - vx, y: A.y + 2 * s * uy - vy};
     })();
 
-    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, res);
     const aPx = toPx(A), bPx = toPx(B), cPx = toPx(C), ctrPx = toPx(center);
-    const rPx = (r: number) => r / RESOLUTION;
+    const rPx = (r: number) => r / res;
 
     return (
         <div className="flex flex-col gap-2 items-center" style={{width}}>
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 동전 본체 */}
@@ -104,7 +106,7 @@ const PointCountScene = ({width, height}: SceneProps) => {
                         y: Math.max(24, Math.min(height - 24, pos.y)),
                     })}
                     onDragMove={(e) => {
-                        setA(mapToGlobal(width, height, e.target.x(), e.target.y(), RESOLUTION));
+                        setA(mapToGlobal(width, height, e.target.x(), e.target.y(), res));
                     }}
                 />
                 <Text x={aPx.x + 10} y={aPx.y - 8} text="A" fontSize={14} fontStyle="bold"
@@ -157,7 +159,7 @@ const RigidBodyPointCount = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<PointCountScene width={460} height={460}/>}
+        modal={<PointCountScene {...modalCanvasSize()}/>}
     >
         <PointCountScene width={320} height={320}/>
     </CanvasFigure>;

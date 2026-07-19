@@ -115,7 +115,7 @@ const FixedVsBodyRotation = () => {
             "앞곱 R·Rsb 는 고정 프레임 축, 뒤곱 Rsb·R 은 물체 프레임 축 둘레로 돈다",
         )}
         className="w-full sm:w-4/5 mx-auto"
-        bodyClassName="w-[min(85vmin,620px)]"
+        bodyClassName="w-[min(100%,104vh)]"
         modal={<FixedVsBodyScene canvasClassName="aspect-[4/3] w-full rounded-lg"/>}
     >
         <FixedVsBodyScene canvasClassName="aspect-[4/3] w-full rounded-lg"/>

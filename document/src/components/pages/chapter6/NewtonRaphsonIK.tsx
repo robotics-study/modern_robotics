@@ -2,7 +2,7 @@ import {useMemo, useState} from "react";
 import {Circle, Line, Text} from "react-konva";
 import type Konva from "konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {jacobian2R, planarFk, Vec2} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -47,6 +47,8 @@ interface SceneProps {
 }
 
 const NewtonScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [goal, setGoal] = useState<Vec2>(() => fk([Math.PI / 6, Math.PI / 2])); // θ_d = (30°, 90°)
@@ -76,7 +78,7 @@ const NewtonScene = ({width, height}: SceneProps) => {
         setIter((i) => i + 1);
     };
 
-    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, res);
     const armPx = planarFk(theta, [L1, L2]).points.flatMap((p) => {
         const m = toPx(p);
         return [m.x, m.y];
@@ -89,7 +91,7 @@ const NewtonScene = ({width, height}: SceneProps) => {
     const center = toPx({x: 0, y: 0});
 
     const onDragGoal = (e: Konva.KonvaEventObject<DragEvent>) => {
-        reset(mapToGlobal(width, height, e.target.x(), e.target.y(), RESOLUTION));
+        reset(mapToGlobal(width, height, e.target.x(), e.target.y(), res));
     };
 
     return (
@@ -97,7 +99,7 @@ const NewtonScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* tip 궤적: 반복마다 목표로 다가가는 경로 */}
@@ -143,7 +145,7 @@ const NewtonRaphsonIK = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<NewtonScene width={460} height={460}/>}
+        modal={<NewtonScene {...modalCanvasSize()}/>}
     >
         <NewtonScene width={320} height={320}/>
     </CanvasFigure>;

@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useRef, useState} from "react";
 import {Circle, Image as KImage, Layer, Line, Stage, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {ik2R, jacobian2R, planarFk, Vec2} from "../../../libs/planarArm";
@@ -66,9 +66,11 @@ const solveNR = (
     return {kind: -1, trace};
 };
 
-const BasinScene = () => {
+const BasinScene = ({panel = 250}: {panel?: number}) => {
     const colors = useCanvasColors();
     const t = useTr();
+    // 모달 확대용: 패널 픽셀 크기를 키우면 world 스케일(resolution)도 같이 키운다.
+    const res = RESOLUTION * (250 / panel);
     const [goal, setGoal] = useState<Vec2>({x: 1.8, y: 1.6});
     const [guess, setGuess] = useState<[number, number]>([-2.2, 0.4]);
     const [step, setStep] = useState(0);
@@ -123,11 +125,11 @@ const BasinScene = () => {
         return cv;
     }, [goal, sol]);
 
-    const toPx = (p: Vec2) => globalToMap(ARM_W, ARM_W, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(panel, panel, p.x, p.y, res);
     const goalPx = toPx(goal);
     const thToPx = (t1: number, t2: number) => ({
-        x: ((wrap(t1) + Math.PI) / (2 * Math.PI)) * BASIN_W,
-        y: ((Math.PI - wrap(t2)) / (2 * Math.PI)) * BASIN_W,
+        x: ((wrap(t1) + Math.PI) / (2 * Math.PI)) * panel,
+        y: ((Math.PI - wrap(t2)) / (2 * Math.PI)) * panel,
     });
 
     // 현재 스텝의 팔 자세 (trace 범위를 넘으면 마지막 자세 유지).
@@ -156,7 +158,7 @@ const BasinScene = () => {
             const p = thToPx(nr.trace[i][0], nr.trace[i][1]);
             if (i > 0) {
                 const prev = thToPx(nr.trace[i - 1][0], nr.trace[i - 1][1]);
-                if (Math.abs(p.x - prev.x) > BASIN_W / 2 || Math.abs(p.y - prev.y) > BASIN_W / 2) {
+                if (Math.abs(p.x - prev.x) > panel / 2 || Math.abs(p.y - prev.y) > panel / 2) {
                     if (cur.length >= 4) segs.push(cur);
                     cur = [];
                 }
@@ -177,9 +179,9 @@ const BasinScene = () => {
                 {/* 팔 공간: 두 해(흐림) + 반복을 따라가는 현재 팔 */}
                 <div className="flex flex-col items-center gap-0.5">
                     <CoordinateSystem
-                        width={ARM_W}
-                        height={ARM_W}
-                        resolution={RESOLUTION}
+                        width={panel}
+                        height={panel}
+                        resolution={res}
                         className="bg-surface border border-border rounded-lg"
                     >
                         {drawSolution(sol.righty, RIGHTY_COLOR)}
@@ -196,11 +198,11 @@ const BasinScene = () => {
                             x={goalPx.x} y={goalPx.y} radius={8} fill={GOAL_COLOR}
                             stroke={colors.surface} strokeWidth={2} draggable
                             dragBoundFunc={(pos) => ({
-                                x: Math.max(10, Math.min(ARM_W - 10, pos.x)),
-                                y: Math.max(10, Math.min(ARM_W - 10, pos.y)),
+                                x: Math.max(10, Math.min(panel - 10, pos.x)),
+                                y: Math.max(10, Math.min(panel - 10, pos.y)),
                             })}
                             onDragMove={(e) => {
-                                setGoal(mapToGlobal(ARM_W, ARM_W, e.target.x(), e.target.y(), RESOLUTION));
+                                setGoal(mapToGlobal(panel, panel, e.target.x(), e.target.y(), res));
                             }}
                         />
                     </CoordinateSystem>
@@ -212,10 +214,10 @@ const BasinScene = () => {
 
                 {/* θ-공간 지도: 색 = 그 픽셀에서 출발하면 도달하는 해. ✛ 를 끌어 출발점을 고른다 */}
                 <div className="flex flex-col items-center gap-0.5">
-                    <Stage width={BASIN_W} height={BASIN_W}
+                    <Stage width={panel} height={panel}
                            className="bg-surface border border-border rounded-lg overflow-hidden">
                         <Layer imageSmoothingEnabled={false}>
-                            <KImage image={basinCanvas} width={BASIN_W} height={BASIN_W}/>
+                            <KImage image={basinCanvas} width={panel} height={panel}/>
                             {traceSegs.map((seg, i) => (
                                 <Line key={`tr${i}`} points={seg} stroke={colors.text} strokeWidth={1.5}
                                       opacity={0.8} dash={[3, 3]}/>
@@ -238,18 +240,18 @@ const BasinScene = () => {
                                 fill={colors.surface} stroke={colors.text} strokeWidth={2.5}
                                 draggable
                                 dragBoundFunc={(pos) => ({
-                                    x: Math.max(4, Math.min(BASIN_W - 4, pos.x)),
-                                    y: Math.max(4, Math.min(BASIN_W - 4, pos.y)),
+                                    x: Math.max(4, Math.min(panel - 4, pos.x)),
+                                    y: Math.max(4, Math.min(panel - 4, pos.y)),
                                 })}
                                 onDragMove={(e) => {
-                                    const t1 = (e.target.x() / BASIN_W) * 2 * Math.PI - Math.PI;
-                                    const t2 = Math.PI - (e.target.y() / BASIN_W) * 2 * Math.PI;
+                                    const t1 = (e.target.x() / panel) * 2 * Math.PI - Math.PI;
+                                    const t2 = Math.PI - (e.target.y() / panel) * 2 * Math.PI;
                                     setGuess([t1, t2]);
                                 }}
                             />
                             <Text x={guessPx.x - 4} y={guessPx.y - 6} text="✛" fontSize={12}
                                   fill={colors.text} listening={false}/>
-                            <Text x={6} y={BASIN_W - 18} text="θ₁ →" fontSize={11} fill={colors.muted}/>
+                            <Text x={6} y={panel - 18} text="θ₁ →" fontSize={11} fill={colors.muted}/>
                             <Text x={6} y={6} text="θ₂ ↑" fontSize={11} fill={colors.muted}/>
                         </Layer>
                     </Stage>
@@ -289,7 +291,7 @@ const BasinOfAttraction = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<BasinScene/>}
+        modal={<BasinScene panel={Math.floor(modalCanvasSize(2.1).width / 2) - 16}/>}
     >
         <BasinScene/>
     </CanvasFigure>;

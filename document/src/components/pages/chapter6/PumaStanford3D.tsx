@@ -248,7 +248,7 @@ export const Puma3D = () => {
             "PUMA 형 (6R) 구조 모식도: 팔꿈치가 revolute 이고, 손목 세 축이 빨간 wrist center 를 지난다",
         )}
         className="w-full sm:w-2/3 mx-auto"
-        bodyClassName="w-[min(80vmin,560px)]"
+        bodyClassName="w-[min(100%,104vh)]"
         modal={<ArmScene kind="puma" canvasClassName="aspect-[4/3] w-full rounded-lg"/>}
     >
         <ArmScene kind="puma" canvasClassName="aspect-[4/3] w-full rounded-lg"/>
@@ -263,7 +263,7 @@ export const Stanford3D = () => {
             "Stanford 형 (RRPRRR) 구조 모식도: 팔꿈치가 망원경식 prismatic 관절로 바뀌었다",
         )}
         className="w-full sm:w-2/3 mx-auto"
-        bodyClassName="w-[min(80vmin,560px)]"
+        bodyClassName="w-[min(100%,104vh)]"
         modal={<ArmScene kind="stanford" canvasClassName="aspect-[4/3] w-full rounded-lg"/>}
     >
         <ArmScene kind="stanford" canvasClassName="aspect-[4/3] w-full rounded-lg"/>

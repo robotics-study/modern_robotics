@@ -1,6 +1,6 @@
 import {useEffect, useMemo, useRef, useState} from "react";
 import {Circle, Layer, Line, Stage, Text} from "react-konva";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useCanvasColors, type CanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
 
@@ -316,7 +316,7 @@ const TimeScalingProfiles = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<TimeScalingScene width={460} height={460}/>}
+        modal={<TimeScalingScene {...modalCanvasSize()}/>}
     >
         <TimeScalingScene width={320} height={320}/>
     </CanvasFigure>;

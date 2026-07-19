@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Circle, Layer, Line, Rect, Stage, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
@@ -29,11 +29,13 @@ interface SceneProps {
 }
 
 const CSpaceScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const [theta, setTheta] = useState<[number, number]>([0.9, 1.1]);
 
     const world = useMemo(() => planarFk(theta, LINKS).points, [theta]);
-    const px = world.map((p) => globalToMap(width, height, p.x, p.y, RESOLUTION));
+    const px = world.map((p) => globalToMap(width, height, p.x, p.y, res));
 
     const setJoint = (i: number, v: number) =>
         setTheta((prev) => {
@@ -47,7 +49,7 @@ const CSpaceScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {px.slice(0, -1).map((p, i) => (
@@ -113,7 +115,7 @@ const CSpacePreview2R = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<CSpaceScene width={460} height={460}/>}
+        modal={<CSpaceScene {...modalCanvasSize()}/>}
     >
         <CSpaceScene width={320} height={320}/>
     </CanvasFigure>;

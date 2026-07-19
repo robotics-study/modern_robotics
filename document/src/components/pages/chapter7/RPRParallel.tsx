@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
@@ -34,6 +34,8 @@ interface SceneProps {
 }
 
 const RPRScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [pose, setPose] = useState({px: 0, py: 0, phi: 0});
@@ -49,7 +51,7 @@ const RPRScene = ({width, height}: SceneProps) => {
         return {legs, worldB};
     }, [pose]);
 
-    const toPx = (p: {x: number; y: number}) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: {x: number; y: number}) => globalToMap(width, height, p.x, p.y, res);
     const aPx = A_BASE.map(toPx);
     const bPx = worldB.map(toPx);
     const platformPts = bPx.flatMap((p) => [p.x, p.y]);
@@ -63,7 +65,7 @@ const RPRScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 세 다리 aᵢ→Bᵢ (능동 프리즘 관절) */}
@@ -135,7 +137,7 @@ const RPRParallel = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<RPRScene width={460} height={460}/>}
+        modal={<RPRScene {...modalCanvasSize()}/>}
     >
         <RPRScene width={320} height={320}/>
     </CanvasFigure>;

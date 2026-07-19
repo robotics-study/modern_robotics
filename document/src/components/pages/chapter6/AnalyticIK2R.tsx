@@ -2,7 +2,7 @@ import {useMemo, useState} from "react";
 import {Circle, Line, Ring, Text} from "react-konva";
 import type Konva from "konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {ik2R, IkSolution, planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -20,6 +20,8 @@ interface SceneProps {
 }
 
 const IkScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [target, setTarget] = useState({x: 2.0, y: 1.4});
@@ -30,27 +32,27 @@ const IkScene = ({width, height}: SceneProps) => {
     const armPoints = (s: IkSolution) => {
         const {points} = planarFk([s.theta1, s.theta2], [L1, L2]);
         return points.flatMap((p) => {
-            const m = globalToMap(width, height, p.x, p.y, RESOLUTION);
+            const m = globalToMap(width, height, p.x, p.y, res);
             return [m.x, m.y];
         });
     };
 
-    const tPx = globalToMap(width, height, target.x, target.y, RESOLUTION);
-    const center = globalToMap(width, height, 0, 0, RESOLUTION);
-    const scale = 1 / RESOLUTION;
+    const tPx = globalToMap(width, height, target.x, target.y, res);
+    const center = globalToMap(width, height, 0, 0, res);
+    const scale = 1 / res;
 
     // 각 호를 월드 좌표로 샘플해 폴리라인으로 그린다 (화면 y 반전에 따른 방향 혼동 방지).
     const arcPts = (cx: number, cy: number, radius: number, a0: number, a1: number) => {
         const pts: number[] = [];
         for (let i = 0; i <= 16; i++) {
             const a = a0 + (i / 16) * (a1 - a0);
-            const m = globalToMap(width, height, cx + radius * Math.cos(a), cy + radius * Math.sin(a), RESOLUTION);
+            const m = globalToMap(width, height, cx + radius * Math.cos(a), cy + radius * Math.sin(a), res);
             pts.push(m.x, m.y);
         }
         return pts;
     };
     const labelAt = (cx: number, cy: number, radius: number, a: number) =>
-        globalToMap(width, height, cx + radius * Math.cos(a), cy + radius * Math.sin(a), RESOLUTION);
+        globalToMap(width, height, cx + radius * Math.cos(a), cy + radius * Math.sin(a), res);
 
     // 공식에 등장하는 세 각: γ = 목표 방위각, α = 목표 방향과 링크 1 사이, β = 팔꿈치 내부각.
     // 호는 항상 두 방향 사이의 짧은 쪽으로 감아 그린다.
@@ -75,7 +77,7 @@ const IkScene = ({width, height}: SceneProps) => {
     })();
 
     const onDrag = (e: Konva.KonvaEventObject<DragEvent>) => {
-        const g = mapToGlobal(width, height, e.target.x(), e.target.y(), RESOLUTION);
+        const g = mapToGlobal(width, height, e.target.x(), e.target.y(), res);
         setTarget({x: g.x, y: g.y});
     };
 
@@ -84,7 +86,7 @@ const IkScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 작업공간 annulus: 안쪽 |L1−L2|, 바깥 L1+L2 */}
@@ -167,7 +169,7 @@ const AnalyticIK2R = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<IkScene width={460} height={460}/>}
+        modal={<IkScene {...modalCanvasSize()}/>}
     >
         <IkScene width={320} height={320}/>
     </CanvasFigure>;

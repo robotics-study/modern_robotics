@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Arrow, Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {det2R, jacobian2R, planarFk, Vec2} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -27,6 +27,8 @@ interface SceneProps {
 }
 
 const JacobianScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const [theta, setTheta] = useState<[number, number]>([0.6, 0.9]);
 
@@ -36,12 +38,12 @@ const JacobianScene = ({width, height}: SceneProps) => {
         return {world: points, cols, det: det2R(theta[1], L1, L2)};
     }, [theta]);
 
-    const px = world.map((p) => globalToMap(width, height, p.x, p.y, RESOLUTION));
+    const px = world.map((p) => globalToMap(width, height, p.x, p.y, res));
     const tip = world[world.length - 1];
     const tipPx = px[px.length - 1];
 
     // 열 벡터(단위: length/rad)를 tip 에서 맵 좌표로 그린다. y 는 화면 아래가 +라 부호 반전.
-    const arrowEnd = (v: Vec2) => ({x: tipPx.x + v.x / RESOLUTION, y: tipPx.y - v.y / RESOLUTION});
+    const arrowEnd = (v: Vec2) => ({x: tipPx.x + v.x / res, y: tipPx.y - v.y / res});
     const e1 = arrowEnd(cols[0]);
     const e2 = arrowEnd(cols[1]);
     const singular = Math.abs(det) < 0.15;
@@ -58,7 +60,7 @@ const JacobianScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {px.slice(0, -1).map((p, i) => (
@@ -120,7 +122,7 @@ const JacobianColumns = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<JacobianScene width={460} height={460}/>}
+        modal={<JacobianScene {...modalCanvasSize()}/>}
     >
         <JacobianScene width={320} height={320}/>
     </CanvasFigure>;
