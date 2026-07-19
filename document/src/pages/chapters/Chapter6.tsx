@@ -2,6 +2,8 @@ import {BlockMath, InlineMath} from "../../components/math/Tex";
 import AnalyticIK2R from "../../components/pages/chapter6/AnalyticIK2R";
 import BasinOfAttraction from "../../components/pages/chapter6/BasinOfAttraction";
 import NewtonRaphsonIK from "../../components/pages/chapter6/NewtonRaphsonIK";
+import {Puma3D, Stanford3D} from "../../components/pages/chapter6/PumaStanford3D";
+import RedundantIKFamily from "../../components/pages/chapter6/RedundantIKFamily";
 import {T} from "../../libs/i18n";
 
 const Chapter6 = () => {
@@ -39,6 +41,22 @@ const Chapter6 = () => {
                     즉 "elbow-up"과 "elbow-down" 자세를 갖는다.
                 </p>}
             />
+            <T
+                en={<p>
+                    And "infinitely many" is not exotic. Give the planar arm a third joint and ask only for the
+                    tip position: three joints, two constraints, so one joint's worth of freedom is left over.
+                    The arm below keeps its tip glued to the goal while the whole body sweeps through a
+                    continuous family of solutions. An arm with more joints than the task needs is called{" "}
+                    <strong>redundant</strong>:
+                </p>}
+                ko={<p>
+                    그리고 "무한히 많다"는 드문 일이 아니다. 평면 팔에 관절을 하나 더 주고 tip 위치만 요구해
+                    보자. 관절 셋에 제약이 둘이니 관절 하나만큼의 자유가 남는다. 아래 팔은 tip 을 목표에 붙인
+                    채 몸 전체가 연속적인 해의 가족을 훑는다. task 가 필요로 하는 것보다 관절이 많은 팔을{" "}
+                    <strong>redundant</strong> 팔이라 부른다:
+                </p>}
+            />
+            <RedundantIKFamily/>
 
             <T en={<h2>Analytic Inverse Kinematics</h2>} ko={<h2>해석적 Inverse Kinematics</h2>}/>
             <T
@@ -46,12 +64,20 @@ const Chapter6 = () => {
                     When the geometry is simple enough, the solution can be written in closed form. For the 2R
                     arm everything follows from the law of cosines,{" "}
                     <InlineMath math='c^2 = a^2 + b^2 - 2ab\cos C'/>, applied to the triangle formed by the two
-                    links and the line from base to target. With <InlineMath math='r^2 = x^2 + y^2'/>,
+                    links and the line from base to target. Three named angles appear (all marked in the figure
+                    below): <InlineMath math='\gamma'/> is the bearing of the target measured from the x-axis,{" "}
+                    <InlineMath math='\alpha'/> is the angle between that target line and link 1, and{" "}
+                    <InlineMath math='\beta'/> is the interior angle at the elbow. With{" "}
+                    <InlineMath math='r^2 = x^2 + y^2'/>,
                 </p>}
                 ko={<p>
                     기하 구조가 충분히 단순하면 해를 닫힌 형태로 적을 수 있다. 2R 팔에서는 모든 것이 코사인 법칙{" "}
                     <InlineMath math='c^2 = a^2 + b^2 - 2ab\cos C'/> 에서 나온다. 두 링크와 베이스에서 목표점까지의
-                    선분이 이루는 삼각형에 적용하면 된다. <InlineMath math='r^2 = x^2 + y^2'/> 이라 하면,
+                    선분이 이루는 삼각형에 적용하면 된다. 이름 붙은 각 셋이 등장한다(아래 그림에 모두 표시되어
+                    있다). <InlineMath math='\gamma'/> 는 x축에서 잰 목표점의 방위각,{" "}
+                    <InlineMath math='\alpha'/> 는 그 목표선과 링크 1 사이의 각,{" "}
+                    <InlineMath math='\beta'/> 는 팔꿈치의 내부각이다.{" "}
+                    <InlineMath math='r^2 = x^2 + y^2'/> 이라 하면,
                 </p>}
             />
             <BlockMath math={`\\beta = \\cos^{-1}\\!\\frac{L_1^2 + L_2^2 - r^2}{2 L_1 L_2}, \\qquad \\alpha = \\cos^{-1}\\!\\frac{r^2 + L_1^2 - L_2^2}{2 L_1 r}, \\qquad \\gamma = \\operatorname{atan2}(y, x)`}/>
@@ -83,15 +109,25 @@ const Chapter6 = () => {
                 en={<p>
                     The same decoupling scales to six-dof arms of special design. For a <strong>PUMA-type</strong> 6R
                     arm the three wrist axes intersect at a point, the <em>wrist center</em>{" "}
-                    <InlineMath math='p = (p_x, p_y, p_z)'/>, so the problem splits in two. The{" "}
-                    <strong>inverse-position</strong> subproblem places the wrist center with the first three
-                    joints. Looking straight down the base axis,
+                    <InlineMath math='p = (p_x, p_y, p_z)'/>, so the problem splits in two. Take in the
+                    structure below first. The key feature is the three wrist axes meeting at one red point:
                 </p>}
                 ko={<p>
                     같은 분리 기법은 특수하게 설계된 6자유도 팔로 확장된다. <strong>PUMA 형</strong> 6R 팔은 손목 축
                     셋이 한 점, 곧 <em>손목 중심</em> <InlineMath math='p = (p_x, p_y, p_z)'/> 에서 교차하므로
-                    문제가 둘로 나뉜다. <strong>역위치</strong> 부분 문제는 처음 세 관절로 손목 중심을 놓는 일이다.
-                    베이스 축을 따라 내려다보면,
+                    문제가 둘로 나뉜다. 아래 구조 모식도에서 형태를 먼저 눈에 담아 두자. 핵심은 손목 세 축이
+                    빨간 점 하나에서 만난다는 것이다:
+                </p>}
+            />
+            <Puma3D/>
+            <T
+                en={<p>
+                    The <strong>inverse-position</strong> subproblem places the wrist center with the first
+                    three joints. Looking straight down the base axis,
+                </p>}
+                ko={<p>
+                    <strong>역위치</strong> 부분 문제는 처음 세 관절로 손목 중심을 놓는 일이다. 베이스
+                    축을 따라 내려다보면,
                 </p>}
             />
             <div className="overflow-x-auto">
@@ -152,6 +188,7 @@ const Chapter6 = () => {
                     바꾼 것인데, 셋째 "각"이 길이가 되어 위치 해가 오히려 더 단순해진다:
                 </p>}
             />
+            <Stanford3D/>
             <div className="overflow-x-auto">
                 <BlockMath math='\theta_1 = \operatorname{atan2}(p_y, p_x),
 \qquad \theta_2 = \operatorname{atan2}(s, r),
@@ -172,16 +209,42 @@ const Chapter6 = () => {
             <T
                 en={<p>
                     Most robots have no closed-form solution. The <strong>Newton–Raphson</strong> method solves{" "}
-                    <InlineMath math='x_d - f(\theta) = 0'/> iteratively. Expanding the forward kinematics to first
-                    order about a guess <InlineMath math='\theta^0'/> gives{" "}
-                    <InlineMath math='J(\theta^0)\,\Delta\theta = x_d - f(\theta^0)'/>, so each step corrects the guess
-                    by
+                    <InlineMath math='x_d - f(\theta) = 0'/> iteratively, and its whole logic is one Taylor
+                    expansion. Around a guess <InlineMath math='\theta^0'/> the forward kinematics is
+                    approximately linear:
                 </p>}
                 ko={<p>
                     대부분의 로봇은 닫힌 형태의 해가 없다. <strong>Newton–Raphson</strong> 방법은{" "}
-                    <InlineMath math='x_d - f(\theta) = 0'/> 을 반복적으로 푼다. 추정 <InlineMath math='\theta^0'/>{" "}
-                    주변에서 Forward Kinematics를 1차까지 전개하면 <InlineMath math='J(\theta^0)\,\Delta\theta = x_d - f(\theta^0)'/>{" "}
-                    가 되어, 각 스텝마다 추정을 다음과 같이 보정한다
+                    <InlineMath math='x_d - f(\theta) = 0'/> 을 반복적으로 푸는데, 그 논리 전체가 Taylor 전개
+                    하나다. 추정 <InlineMath math='\theta^0'/> 주변에서 Forward Kinematics는 근사적으로
+                    선형이다:
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='x_d = f(\theta_d) \approx f(\theta^0) + \underbrace{\frac{\partial f}{\partial \theta}(\theta^0)}_{J(\theta^0)}\underbrace{(\theta_d - \theta^0)}_{\Delta\theta}
+\quad\Longrightarrow\quad J(\theta^0)\,\Delta\theta = x_d - f(\theta^0)'/>
+            </div>
+            <T
+                en={<p>
+                    Discard the higher-order terms and solve the linear equation for{" "}
+                    <InlineMath math='\Delta\theta'/>:
+                </p>}
+                ko={<p>
+                    고차항을 버리고 이 선형 방정식을 <InlineMath math='\Delta\theta'/> 에 대해 풀면:
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='\Delta\theta = J^{\dagger}(\theta^0)\big(x_d - f(\theta^0)\big)
+\quad\Longrightarrow\quad \theta^1 = \theta^0 + \Delta\theta'/>
+            </div>
+            <T
+                en={<p>
+                    The corrected guess <InlineMath math='\theta^1'/> lands closer to the true root. Each
+                    step therefore corrects the guess by
+                </p>}
+                ko={<p>
+                    보정된 추정 <InlineMath math='\theta^1'/> 은 참 해에 더 가까워진다. 따라서 각 스텝은
+                    추정을 다음과 같이 보정한다
                 </p>}
             />
             <BlockMath math={`\\theta^{k+1} = \\theta^{k} + J^{\\dagger}(\\theta^{k})\\big(x_d - f(\\theta^{k})\\big)`}/>
@@ -198,26 +261,120 @@ const Chapter6 = () => {
                 </p>}
             />
             <div className="overflow-x-auto">
-                <BlockMath math='J^{\dagger} = J^{\mathsf T}(JJ^{\mathsf T})^{-1} \;\;(n > m,\ \text{min-norm solution})
-\qquad
-J^{\dagger} = (J^{\mathsf T}J)^{-1}J^{\mathsf T} \;\;(n < m,\ \text{least-squares solution})'/>
+                <BlockMath math='\begin{gathered}
+J^{\dagger} = J^{\mathsf T}(JJ^{\mathsf T})^{-1} \;\;(n > m,\ \text{min-norm solution})\\[4pt]
+J^{\dagger} = (J^{\mathsf T}J)^{-1}J^{\mathsf T} \;\;(n < m,\ \text{least-squares solution})
+\end{gathered}'/>
             </div>
             <T
                 en={<p>
-                    With more joints than task coordinates (a "fat" <InlineMath math='J'/>, redundant robot),
-                    infinitely many <InlineMath math='\Delta\theta'/> work and the pseudoinverse picks the
-                    smallest one. With fewer joints, or at a singularity, no exact step exists and it picks the
-                    one that minimizes the remaining error. Iteration continues until the error{" "}
-                    <InlineMath math='\lVert x_d - f(\theta)\rVert'/> falls below a tolerance. Step through the
-                    iteration below: the tip walks toward the goal, converging in a handful of steps.
+                    Both formulas come from a short optimization argument.{" "}
+                    <strong>Fat case</strong> (more joints than task coordinates,{" "}
+                    <InlineMath math='n > m'/>): infinitely many <InlineMath math='y'/> satisfy{" "}
+                    <InlineMath math='Jy = z'/>, so ask for the smallest one.
                 </p>}
                 ko={<p>
-                    관절 수가 task 좌표보다 많으면(가로로 긴 <InlineMath math='J'/>, redundant 로봇) 무한히 많은{" "}
-                    <InlineMath math='\Delta\theta'/> 가 가능하고 pseudoinverse는 그중 가장 작은 것을 고른다.
-                    관절 수가 부족하거나 Singularity 위에 있으면 정확한 스텝이 없고, 남는 오차를 최소화하는
-                    스텝을 고른다. 오차 <InlineMath math='\lVert x_d - f(\theta)\rVert'/> 가 허용치 아래로
-                    떨어질 때까지 반복한다. 아래에서 한 스텝씩 진행해 보라. 끝점이 목표를 향해 걸어가며 몇 스텝
-                    만에 수렴한다.
+                    두 공식 모두 짧은 최적화 논증으로 나온다. <strong>가로로 긴 경우</strong> (관절이 task
+                    좌표보다 많은 <InlineMath math='n > m'/>): <InlineMath math='Jy = z'/> 를 만족하는{" "}
+                    <InlineMath math='y'/> 가 무한히 많으니, 그중 가장 작은 것을 요구한다.
+                </p>}
+            />
+            <ol className="list-decimal pl-6 space-y-1">
+                <li>
+                    <T
+                        en={<span>Minimize <InlineMath math='\tfrac{1}{2}\|y\|^2'/> subject to{" "}
+                            <InlineMath math='Jy = z'/>, with a Lagrange multiplier{" "}
+                            <InlineMath math='\lambda'/>:</span>}
+                        ko={<span><InlineMath math='Jy = z'/> 를 조건으로{" "}
+                            <InlineMath math='\tfrac{1}{2}\|y\|^2'/> 을 최소화한다. Lagrange 승수{" "}
+                            <InlineMath math='\lambda'/> 를 붙이면:</span>}
+                    />
+                    <BlockMath math='L(y, \lambda) = \tfrac{1}{2}y^{\mathsf T}y - \lambda^{\mathsf T}(Jy - z)'/>
+                </li>
+                <li>
+                    <T
+                        en={<span>Set the derivative in <InlineMath math='y'/> to zero:</span>}
+                        ko={<span><InlineMath math='y'/> 에 대한 미분을 0 으로 놓는다:</span>}
+                    />
+                    <BlockMath math='\frac{\partial L}{\partial y} = y - J^{\mathsf T}\lambda = 0
+\;\Rightarrow\; y = J^{\mathsf T}\lambda'/>
+                </li>
+                <li>
+                    <T
+                        en={<span>Substitute into the constraint to find <InlineMath math='\lambda'/>:</span>}
+                        ko={<span>제약식에 대입해 <InlineMath math='\lambda'/> 를 구한다:</span>}
+                    />
+                    <BlockMath math='z = Jy = (JJ^{\mathsf T})\lambda
+\;\Rightarrow\; \lambda = (JJ^{\mathsf T})^{-1}z'/>
+                </li>
+                <li>
+                    <T
+                        en={<span>Back-substitute to get the min-norm solution:</span>}
+                        ko={<span>다시 대입하면 min-norm 해가 나온다:</span>}
+                    />
+                    <BlockMath math='y^* = J^{\mathsf T}(JJ^{\mathsf T})^{-1}z
+\;\Rightarrow\; J^{\dagger} = J^{\mathsf T}(JJ^{\mathsf T})^{-1}'/>
+                </li>
+                <li>
+                    <T
+                        en={<span>Why it is the smallest: any other solution is{" "}
+                            <InlineMath math='y^* + n'/> with <InlineMath math='Jn = 0'/>, and{" "}
+                            <InlineMath math='y^{*\mathsf T}n = \lambda^{\mathsf T}Jn = 0'/>, so by
+                            Pythagoras:</span>}
+                        ko={<span>왜 가장 작은가: 다른 해는 모두 <InlineMath math='Jn = 0'/> 인{" "}
+                            <InlineMath math='n'/> 을 더한 <InlineMath math='y^* + n'/> 꼴이고,{" "}
+                            <InlineMath math='y^{*\mathsf T}n = \lambda^{\mathsf T}Jn = 0'/> 이라
+                            피타고라스로:</span>}
+                    />
+                    <BlockMath math='\|y^* + n\|^2 = \|y^*\|^2 + \|n\|^2 \;\ge\; \|y^*\|^2'/>
+                </li>
+            </ol>
+            <T
+                en={<p>
+                    <strong>Tall case</strong> (<InlineMath math='n < m'/>): no exact solution exists, so
+                    minimize the error instead.
+                </p>}
+                ko={<p>
+                    <strong>세로로 긴 경우</strong> (<InlineMath math='n < m'/>): 정확한 해가 없으니 대신
+                    오차를 최소화한다.
+                </p>}
+            />
+            <ol className="list-decimal pl-6 space-y-1">
+                <li>
+                    <T
+                        en={<span>Choose the error to minimize:</span>}
+                        ko={<span>최소화할 오차를 잡는다:</span>}
+                    />
+                    <BlockMath math='E(y) = \|Jy - z\|^2'/>
+                </li>
+                <li>
+                    <T
+                        en={<span>Set the gradient to zero to get the normal equation:</span>}
+                        ko={<span>gradient 를 0 으로 놓으면 normal equation 이 나온다:</span>}
+                    />
+                    <BlockMath math='\nabla E = 2J^{\mathsf T}Jy - 2J^{\mathsf T}z = 0
+\;\Rightarrow\; J^{\mathsf T}Jy = J^{\mathsf T}z'/>
+                </li>
+                <li>
+                    <T
+                        en={<span>Solve to get the least-squares solution:</span>}
+                        ko={<span>풀면 least-squares 해다:</span>}
+                    />
+                    <BlockMath math='y^* = (J^{\mathsf T}J)^{-1}J^{\mathsf T}z
+\;\Rightarrow\; J^{\dagger} = (J^{\mathsf T}J)^{-1}J^{\mathsf T}'/>
+                </li>
+            </ol>
+            <T
+                en={<p>
+                    Iteration continues until the error{" "}
+                    <InlineMath math='\lVert x_d - f(\theta)\rVert'/> falls below a tolerance. Step
+                    through the iteration below: the tip walks toward the goal, converging in a handful of
+                    steps.
+                </p>}
+                ko={<p>
+                    오차 <InlineMath math='\lVert x_d - f(\theta)\rVert'/> 가 허용치 아래로 떨어질 때까지
+                    반복한다. 아래에서 한 스텝씩 진행해 보라. 끝점이 목표를 향해 걸어가며 몇 스텝 만에
+                    수렴한다.
                 </p>}
             />
             <NewtonRaphsonIK/>
