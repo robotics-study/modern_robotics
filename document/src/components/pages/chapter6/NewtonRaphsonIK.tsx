@@ -139,7 +139,7 @@ const NewtonScene = ({width, height}: SceneProps) => {
 const NewtonRaphsonIK = () => {
     const t = useTr();
     return <CanvasFigure
-        label={t("numerical IK · Newton–Raphson iteration", "수치적 Inverse Kinematics · 뉴턴–랩슨 반복")}
+        label={t("numerical IK · Newton–Raphson iteration", "수치적 Inverse Kinematics · Newton–Raphson 반복")}
         tight
         bodyClassName="w-fit"
         className="w-full"
