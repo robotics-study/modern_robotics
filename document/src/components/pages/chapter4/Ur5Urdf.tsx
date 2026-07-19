@@ -1,0 +1,146 @@
+import CodeFigure from "../../CodeFigure";
+import {useTr} from "../../../libs/i18n";
+
+// 실제 로봇의 URDF: 책 4.2절에 실린 Universal Robots UR5 의 기구·관성 기술 전문.
+// (책의 주석대로 관성값은 근사치이고 관절 한계는 생략되어 있다.)
+const UR5_URDF = `<?xml version="1.0" ?>
+<robot name="ur5">
+
+  <!-- ********** KINEMATIC PROPERTIES (JOINTS) ********** -->
+  <joint name="world_joint" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+  </joint>
+
+  <joint name="joint1" type="continuous">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.089159"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="joint2" type="continuous">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin rpy="0.0 1.570796325 0.0" xyz="0.0 0.13585 0.0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="joint3" type="continuous">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 -0.1197 0.425"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="joint4" type="continuous">
+    <parent link="link3"/>
+    <child link="link4"/>
+    <origin rpy="0.0 1.570796325 0.0" xyz="0.0 0.0 0.39225"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="joint5" type="continuous">
+    <parent link="link4"/>
+    <child link="link5"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.093 0.0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="joint6" type="continuous">
+    <parent link="link5"/>
+    <child link="link6"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.09465"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="ee_joint" type="fixed">
+    <origin rpy="-1.570796325 0 0" xyz="0 0.0823 0"/>
+    <parent link="link6"/>
+    <child link="ee_link"/>
+  </joint>
+
+  <!-- ********** INERTIAL PROPERTIES (LINKS) ********** -->
+  <link name="world"/>
+
+  <link name="base_link">
+    <inertial>
+      <mass value="4.0"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.00443333156" ixy="0.0" ixz="0.0"
+               iyy="0.00443333156" iyz="0.0" izz="0.0072"/>
+    </inertial>
+  </link>
+
+  <link name="link1">
+    <inertial>
+      <mass value="3.7"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.010267495893" ixy="0.0" ixz="0.0"
+               iyy="0.010267495893" iyz="0.0" izz="0.00666"/>
+    </inertial>
+  </link>
+
+  <link name="link2">
+    <inertial>
+      <mass value="8.393"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.28"/>
+      <inertia ixx="0.22689067591" ixy="0.0" ixz="0.0"
+               iyy="0.22689067591" iyz="0.0" izz="0.0151074"/>
+    </inertial>
+  </link>
+
+  <link name="link3">
+    <inertial>
+      <mass value="2.275"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.25"/>
+      <inertia ixx="0.049443313556" ixy="0.0" ixz="0.0"
+               iyy="0.049443313556" iyz="0.0" izz="0.004095"/>
+    </inertial>
+  </link>
+
+  <link name="link4">
+    <inertial>
+      <mass value="1.219"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.111172755531" ixy="0.0" ixz="0.0"
+               iyy="0.111172755531" iyz="0.0" izz="0.21942"/>
+    </inertial>
+  </link>
+
+  <link name="link5">
+    <inertial>
+      <mass value="1.219"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.111172755531" ixy="0.0" ixz="0.0"
+               iyy="0.111172755531" iyz="0.0" izz="0.21942"/>
+    </inertial>
+  </link>
+
+  <link name="link6">
+    <inertial>
+      <mass value="0.1879"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <inertia ixx="0.0171364731454" ixy="0.0" ixz="0.0"
+               iyy="0.0171364731454" iyz="0.0" izz="0.033822"/>
+    </inertial>
+  </link>
+
+  <link name="ee_link"/>
+</robot>`;
+
+const Ur5Urdf = () => {
+    const t = useTr();
+    return <CodeFigure
+        code={UR5_URDF}
+        label={t(
+            "the real thing: UR5 URDF (kinematics + inertial properties; joint limits omitted, inertias approximate)",
+            "실제 로봇: UR5 의 URDF (기구 + 관성 — 관절 한계는 생략, 관성값은 근사치)",
+        )}
+        className="w-full"
+        codeClassName="max-h-96 overflow-y-auto text-xs"
+    />;
+};
+
+export default Ur5Urdf;
