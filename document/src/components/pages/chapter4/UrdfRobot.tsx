@@ -228,8 +228,8 @@ const NOTES: {tag: string; body: ReactNode}[] = [
     {
         tag: "xacro:macro",
         body: <T
-            en={<>a parameterized, reusable block — <code>bar_link</code> stamps out all three links from one definition instead of repeating them.</>}
-            ko={<>매개변수화된 재사용 블록 — <code>bar_link</code> 가 반복 없이 하나의 정의로 세 링크를 모두 찍어낸다.</>}
+            en={<>a parameterized, reusable block: <code>bar_link</code> stamps out all three links from one definition instead of repeating them.</>}
+            ko={<>매개변수화된 재사용 블록. <code>bar_link</code> 가 반복 없이 하나의 정의로 세 링크를 모두 찍어낸다.</>}
         />,
     },
     {

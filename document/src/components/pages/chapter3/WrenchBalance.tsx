@@ -114,8 +114,8 @@ const WrenchBalance = () => {
     const t = useTr();
     return <CanvasFigure
         label={t(
-            "why an outstretched arm hurts: stretch L2 — the force |f| never changes, only the moment |m| grows",
-            "팔을 뻗으면 힘든 이유: L2 를 늘려 보라 — 힘 |f| 는 그대로, 모멘트 |m| 만 자란다",
+            "why an outstretched arm hurts: stretch L2, and the force |f| never changes while the moment |m| grows",
+            "팔을 뻗으면 힘든 이유: L2 를 늘려 보라. 힘 |f| 는 그대로, 모멘트 |m| 만 자란다",
         )}
         tight
         bodyClassName="w-fit"

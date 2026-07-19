@@ -45,6 +45,18 @@ looping **animation** (e.g. the rotating frame, screw-motion helix).
   `resolvePath()` (never hard-code the `/modern_robotics` base path).
 - **Comments** explain *why*; identifiers and signatures carry the *what*.
 
+## Prose style (EN & KO)
+
+- **No em-dash (`—`) parentheticals in body prose, captions, or UI strings.** Mid-sentence
+  `— aside —` insertions break the reading flow. Restructure instead: split into separate
+  sentences, use a colon for elaborations, or parentheses for short glosses. (Em dashes as
+  structural separators in card/list layouts, e.g. `Ch.N · Title — blurb`, are fine, as are
+  hyphens/en-dashes inside names like Denavit–Hartenberg.)
+- **Korean prose keeps industry/math terms in English when the English is clearer** (e.g.
+  linear map, adjoint map, null space, iso-effort — not 선형 사상/수반 사상/영공간/등노력).
+  Prefer plain everyday wording over textbook jargon; figure labels should be as blunt as
+  "빠름/느림". Settled Korean terms (자유도, 강체, 자코비안, 정역학/동역학 …) stay Korean.
+
 ## Verify
 
 The dev server runs from `document/` (`yarn dev`). After changing a figure, load the affected

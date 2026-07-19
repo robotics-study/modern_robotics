@@ -62,8 +62,8 @@ const MECHS: Mech[] = [
         key: "parallelogram",
         name: {en: "parallelogram", ko: "평행사변형 링크"},
         counts: {
-            en: "m = 3, N = 5, J = 6 revolute joints — yet watch it move with 1 DOF!",
-            ko: "m = 3, N = 5, J = 6 revolute 관절 — 그런데 보라, 자유도 1 로 움직인다!",
+            en: "m = 3, N = 5, J = 6 revolute joints. Yet watch it move with 1 DOF!",
+            ko: "m = 3, N = 5, J = 6 revolute 관절. 그런데 보라, 자유도 1 로 움직인다!",
         },
         formula: String.raw`\mathrm{dof} = 3(5-1-6) + 6 = 0 \;\;(\text{actual: } 1)`,
         note: {

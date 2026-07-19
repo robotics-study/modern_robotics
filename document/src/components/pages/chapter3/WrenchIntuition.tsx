@@ -113,7 +113,7 @@ const WrenchIntuitionScene = ({width, height}: SceneProps) => {
                     {" "}= ±|f|·d · ℱ = (m, f) = ({m.toFixed(2)}, {f.x.toFixed(2)}, {f.y.toFixed(2)})
                 </div>
                 <div className="text-center">
-                    {t("drag r along the dashed line — m stays put; off the line — m changes",
+                    {t("drag r along the dashed line (m stays put) or off it (m changes)",
                         "r 를 점선(작용선)을 따라 끌면 m 은 그대로, 선을 벗어나면 m 이 변한다")}
                 </div>
             </div>

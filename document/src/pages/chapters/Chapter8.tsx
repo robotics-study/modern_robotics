@@ -342,7 +342,7 @@ const Chapter8 = () => {
                 ko={<p>
                     마지막으로, 토크를 가속도로 바꾸는 연산자는 <InlineMath math='M^{-1}(\theta)'/>
                     자신이며, 이는 configuration에 강하게 의존한다. 관절 토크의 단위 원{" "}
-                    <InlineMath math='\{u : \lVert u\rVert = 1\}'/> 을 <InlineMath math='M^{-1}'/> 로 사상하면{" "}
+                    <InlineMath math='\{u : \lVert u\rVert = 1\}'/> 을 <InlineMath math='M^{-1}'/> 로 보내면{" "}
                     <InlineMath math='(\ddot\theta_1, \ddot\theta_2)'/> 평면에서{" "}
                     <strong>가속도 타원</strong> <InlineMath math='\{M^{-1}u\}'/> 이 된다. 둥근 타원은 팔이 모든 방향으로
                     거의 똑같이 쉽게 가속함을 뜻하고, 늘어난 타원은 한 방향으로는 가속하기 쉽지만 다른 방향으로는 굼뜨고

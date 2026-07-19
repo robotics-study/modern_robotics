@@ -136,7 +136,7 @@ const Ur5Urdf = () => {
         code={UR5_URDF}
         label={t(
             "the real thing: UR5 URDF (kinematics + inertial properties; joint limits omitted, inertias approximate)",
-            "실제 로봇: UR5 의 URDF (기구 + 관성 — 관절 한계는 생략, 관성값은 근사치)",
+            "실제 로봇: UR5 의 URDF (기구 + 관성; 관절 한계는 생략, 관성값은 근사치)",
         )}
         className="w-full"
         codeClassName="max-h-96 overflow-y-auto text-xs"

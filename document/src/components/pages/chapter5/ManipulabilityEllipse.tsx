@@ -1,5 +1,5 @@
 import {useMemo, useState} from "react";
-import {Circle, Ellipse, Line} from "react-konva";
+import {Circle, Ellipse, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
@@ -43,6 +43,13 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
     const rotationDeg = (-ell.angle * 180) / Math.PI;
     const scale = 1 / RESOLUTION;
     const ratio = ell.minor > 1e-4 ? ell.major / ell.minor : Infinity;
+    // 타원 축 끝 라벨 위치: 긴 축 = 움직이기 쉬운 방향, 짧은 축 = 어려운 방향.
+    const axisEnd = (len: number, ang: number) => ({
+        x: tipPx.x + len * scale * Math.cos(ang),
+        y: tipPx.y - len * scale * Math.sin(ang),
+    });
+    const majorEnd = axisEnd(ell.major, ell.angle);
+    const minorEnd = axisEnd(ell.minor, ell.angle + Math.PI / 2);
 
     const setJoint = (i: number, v: number) =>
         setTheta((prev) => {
@@ -83,6 +90,18 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
                     stroke={colors.accent}
                     strokeWidth={2}
                 />
+                {/* 어느 방향이 쉬운지 즉석 라벨: 긴 축 = 빠름, 짧은 축 = 느림 (force 켜면 반대) */}
+                {ell.minor > 1e-4 && (
+                    <>
+                        <Text x={majorEnd.x + 4} y={majorEnd.y - 6}
+                              text={showForce ? t("fast · weak push", "빠름 · 밀기 약함") : t("fast", "빠름")}
+                              fontSize={11} fontStyle="bold" fill={colors.accent}/>
+                        <Text x={minorEnd.x + 4} y={minorEnd.y - 6}
+                              text={showForce ? t("slow · strong push", "느림 · 밀기 강함") : t("slow", "느림")}
+                              fontSize={11} fontStyle="bold"
+                              fill={showForce ? FORCE_COLOR : colors.muted}/>
+                    </>
+                )}
                 {px.slice(0, -1).map((p, i) => (
                     <Line key={`link-${i}`} points={[p.x, p.y, px[i + 1].x, px[i + 1].y]}
                           stroke={colors.text} strokeWidth={4} lineCap="round" opacity={0.75}/>
@@ -112,13 +131,18 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
                 ))}
                 <div className="flex items-center justify-between pt-1">
                     <span>
-                        ℓ_max/ℓ_min = {ratio === Infinity ? "∞ (singular)" : ratio.toFixed(2)}
+                        {t("fast ÷ slow", "빠른 방향 ÷ 느린 방향")} ={" "}
+                        {ratio === Infinity
+                            ? `∞ (${t("singular!", "특이점!")})`
+                            : ratio.toFixed(2)}
                     </span>
                     <label className="flex items-center gap-1.5 cursor-pointer">
                         <input type="checkbox" checked={showForce}
                                onChange={(e) => setShowForce(e.target.checked)}
                                className="accent-[var(--accent)]"/>
-                        <span style={{color: FORCE_COLOR}}>{t("force ellipse", "힘 타원")}</span>
+                        <span style={{color: FORCE_COLOR}}>
+                            {t("force ellipse (easy-to-push directions)", "force 타원 (밀기 좋은 방향)")}
+                        </span>
                     </label>
                 </div>
             </div>
@@ -129,7 +153,10 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
 const ManipulabilityEllipse = () => {
     const t = useTr()
     return <CanvasFigure
-        label={t("manipulability ellipse · isotropy of the 2R tip", "Manipulability 타원 · 2R 팁의 등방성")}
+        label={t(
+            "manipulability ellipse · in which directions can the tip move fast? long axis = easy, short axis = hard",
+            "manipulability 타원 · 팁이 어느 방향으로 빨리 움직일 수 있나? 긴 축 = 쉽다, 짧은 축 = 어렵다",
+        )}
         tight
         bodyClassName="w-fit"
         className="w-full"

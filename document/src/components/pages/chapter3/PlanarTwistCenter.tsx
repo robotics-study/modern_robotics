@@ -155,8 +155,8 @@ const PlanarTwistScene = ({width, height}: SceneProps) => {
                     </span>
                 </div>
                 <div className="text-center">
-                    {t("drag q — vs is the velocity of the (imagined) body point now at the origin",
-                        "q 를 끌어 보라 — vs 는 (상상으로 키운) 몸체에서 지금 원점에 있는 점의 속도다")}
+                    {t("drag q: vs is the velocity of the (imagined) body point now at the origin",
+                        "q 를 끌어 보라. vs 는 (상상으로 키운) 몸체에서 지금 원점에 있는 점의 속도다")}
                 </div>
             </div>
         </div>

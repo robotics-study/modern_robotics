@@ -16,20 +16,20 @@ const Chapter3 = () => {
                 en={<p>
                     Chapter 2 told us a rigid body needs six numbers; this chapter builds the machinery that
                     actually carries them. We attach a frame to the body and represent its configuration as a{" "}
-                    <InlineMath math='4 \times 4'/> matrix — an <em>implicit</em> representation with more
+                    <InlineMath math='4 \times 4'/> matrix: an <em>implicit</em> representation with more
                     numbers than DOF but no singularities, and one whose matrix product does triple duty:
                     representing configurations, changing reference frames, and displacing bodies. Velocities
                     fare even better: although the C-space is curved, velocities live in a flat{" "}
                     <InlineMath math='\mathbb{R}^6'/> as <strong>twists</strong> (angular + linear velocity),
                     forces as <strong>wrenches</strong> (moment + force), and every rigid-body motion turns out
-                    to be a <strong>screw motion</strong> — the geometric heart of the whole book.
+                    to be a <strong>screw motion</strong>. This is the geometric heart of the whole book.
                 </p>}
                 ko={<p>
                     2장에서 강체에는 여섯 개의 수가 필요함을 보았다. 이 장은 그 수들을 실제로 다루는 기계를
                     만든다. 물체에 프레임을 붙이고 그 configuration을 <InlineMath math='4 \times 4'/> 행렬로
-                    나타낸다 — 자유도보다 수가 많지만 특이점이 없는 <em>암시적</em> 표현이고, 행렬 곱 하나가
+                    나타낸다. 자유도보다 수가 많지만 특이점이 없는 <em>암시적</em> 표현이고, 행렬 곱 하나가
                     configuration 표현·기준 프레임 변경·강체 이동의 세 가지 일을 해낸다. 속도는 더 좋다:
-                    C-space 는 굽어 있어도 속도는 평평한 <InlineMath math='\mathbb{R}^6'/> 에 산다 —
+                    C-space 는 굽어 있어도 속도는 평평한 <InlineMath math='\mathbb{R}^6'/> 에 산다.
                     각속도+선속도가 <strong>twist</strong>, 모멘트+힘이 <strong>wrench</strong> 가 되고, 모든
                     강체 운동은 <strong>screw motion</strong> 임이 드러난다. 책 전체를 떠받치는 기하다.
                 </p>}
@@ -54,7 +54,7 @@ const Chapter3 = () => {
             </div>
             <T
                 en={<p>
-                    Four numbers, three constraints (unit columns, orthogonality) — one DOF, parametrized by{" "}
+                    Four numbers, three constraints (unit columns, orthogonality), one DOF parametrized by{" "}
                     <InlineMath math='\theta'/>: our first <strong>rotation matrix</strong>. The pair{" "}
                     <InlineMath math='(P, p)'/> serves three purposes: it <em>represents</em>{" "}
                     <InlineMath math='\{b\}'/> in <InlineMath math='\{s\}'/>; it <em>changes reference
@@ -62,18 +62,18 @@ const Chapter3 = () => {
                     <InlineMath math='\{b\}'/> to <InlineMath math='\{s\}'/>); and it <em>displaces</em> rigid
                     bodies (<InlineMath math="R' = PR,\; r' = Pr + p"/>). And a preview of what is coming: any
                     such planar displacement equals a single rotation of some angle{" "}
-                    <InlineMath math='\beta'/> about some fixed point <InlineMath math='s'/> — a planar{" "}
+                    <InlineMath math='\beta'/> about some fixed point <InlineMath math='s'/>: a planar{" "}
                     <strong>screw motion</strong> with coordinates <InlineMath math='(\beta, s_x, s_y)'/>.
                 </p>}
                 ko={<p>
-                    수 넷에 제약 셋(단위 열, 직교) — 자유도 하나, <InlineMath math='\theta'/> 로 매개된다. 첫{" "}
+                    수 넷에 제약 셋(단위 열, 직교)이니 자유도는 하나, <InlineMath math='\theta'/> 로 매개된다. 첫{" "}
                     <strong>회전 행렬</strong>이다. 쌍 <InlineMath math='(P, p)'/> 는 세 가지 일을 한다:{" "}
                     <InlineMath math='\{s\}'/> 안의 <InlineMath math='\{b\}'/> 를 <em>표현</em>하고, <em>기준
                     프레임을 바꾸며</em> (<InlineMath math='R = PQ,\; r = Pq + p'/> 가 <InlineMath math='\{b\}'/>{" "}
                     표현을 <InlineMath math='\{s\}'/> 표현으로 바꾼다), 강체를 <em>이동</em>시킨다
                     (<InlineMath math="R' = PR,\; r' = Pr + p"/>). 그리고 다가올 것의 예고편: 이런 평면 이동은
-                    모두 어떤 고정점 <InlineMath math='s'/> 둘레의 단일 회전 <InlineMath math='\beta'/> 와 같다
-                    — 좌표 <InlineMath math='(\beta, s_x, s_y)'/> 를 갖는 평면 <strong>screw motion</strong> 이다.
+                    모두 어떤 고정점 <InlineMath math='s'/> 둘레의 단일 회전 <InlineMath math='\beta'/> 와 같다.
+                    좌표 <InlineMath math='(\beta, s_x, s_y)'/> 를 갖는 평면 <strong>screw motion</strong> 이다.
                 </p>}
             />
             <T
@@ -81,7 +81,7 @@ const Chapter3 = () => {
                     In space the same story needs <InlineMath math='R = [\hat{\mathrm{x}}_b \;
                     \hat{\mathrm{y}}_b \; \hat{\mathrm{z}}_b] \in \mathbb{R}^{3\times 3}'/>. Where do its
                     constraints come from? Each column is a unit vector (3 equations) and the columns are
-                    mutually orthogonal (3 more) — six constraints on nine numbers, written compactly as{" "}
+                    mutually orthogonal (3 more): six constraints on nine numbers, written compactly as{" "}
                     <InlineMath math='R^T R = I'/>. That still allows left-handed frames: taking determinants
                     gives <InlineMath math='\det R = \pm 1'/>, and demanding right-handedness{" "}
                     (<InlineMath math='\hat{\mathrm{x}}_b \times \hat{\mathrm{y}}_b = \hat{\mathrm{z}}_b'/>)
@@ -90,7 +90,7 @@ const Chapter3 = () => {
                 ko={<p>
                     공간에서는 <InlineMath math='R = [\hat{\mathrm{x}}_b \; \hat{\mathrm{y}}_b \;
                     \hat{\mathrm{z}}_b] \in \mathbb{R}^{3\times 3}'/> 가 필요하다. 제약은 어디서 오는가? 각
-                    열이 단위 벡터(방정식 3개)이고 열들이 서로 직교(3개 더) — 아홉 수에 여섯 제약이며, 이를
+                    열이 단위 벡터(방정식 3개)이고 열들이 서로 직교(3개 더)다. 아홉 수에 여섯 제약이며, 이를
                     묶어 쓰면 <InlineMath math='R^T R = I'/> 다. 이것만으로는 왼손 프레임도 허용된다: 행렬식을
                     취하면 <InlineMath math='\det R = \pm 1'/> 이 나오고, 오른손 조건{" "}
                     (<InlineMath math='\hat{\mathrm{x}}_b \times \hat{\mathrm{y}}_b = \hat{\mathrm{z}}_b'/>)이{" "}
@@ -118,7 +118,7 @@ const Chapter3 = () => {
                     lengths: <InlineMath math='\|Rx\|^2 = x^TR^TRx = \|x\|^2'/>.
                 </p>}
                 ko={<p>
-                    <strong>군 성질</strong> — 각각 한 줄짜리 검산이다: 역행렬은{" "}
+                    <strong>군 성질</strong>은 각각 한 줄짜리 검산이다. 역행렬은{" "}
                     <InlineMath math='R^{-1} = R^T \in SO(3)'/> (<InlineMath math='R^TR = I'/> 에서); 곱은 군에
                     머문다 (<InlineMath math='(R_1R_2)^T R_1 R_2 = R_2^T R_2 = I'/>,{" "}
                     <InlineMath math='\det R_1 R_2 = 1'/>); 곱셈은 결합적이지만 <em>가환이 아니다</em>{" "}
@@ -180,13 +180,13 @@ const Chapter3 = () => {
             <T
                 en={<p>
                     so the bracket turns cross products into matrix products. The set of all such matrices is{" "}
-                    <InlineMath math='\mathfrak{so}(3)'/>. One identity we will use constantly — rotating a
+                    <InlineMath math='\mathfrak{so}(3)'/>. One identity we will use constantly, rotating a
                     cross product: for any <InlineMath math='\omega \in \mathbb{R}^3'/>,{" "}
                     <InlineMath math='R \in SO(3)'/>,
                 </p>}
                 ko={<p>
                     즉 괄호 표기는 외적을 행렬 곱으로 바꾼다. 이런 행렬 전체의 집합이{" "}
-                    <InlineMath math='\mathfrak{so}(3)'/> 이다. 앞으로 줄곧 쓸 항등식 하나 — 외적의 회전:
+                    <InlineMath math='\mathfrak{so}(3)'/> 이다. 앞으로 줄곧 쓸 항등식 하나, 외적의 회전:
                     임의의 <InlineMath math='\omega \in \mathbb{R}^3'/>, <InlineMath math='R \in SO(3)'/> 에
                     대해
                 </p>}
@@ -198,19 +198,19 @@ const Chapter3 = () => {
                 en={<p>
                     Angular velocity <InlineMath math='\omega'/> (orange) is a vector: its direction is the rotation
                     axis and its length the rate <InlineMath math='\dot{\theta}'/>. Every point of the body then moves
-                    with velocity <InlineMath math='v = \omega \times r'/> — always <strong>tangent</strong> to the
+                    with velocity <InlineMath math='v = \omega \times r'/>, always <strong>tangent</strong> to the
                     circle it traces (cyan arrows at the axis tips). A point lying on the axis itself, like the{" "}
                     <InlineMath math='\hat{y}'/> tip along <InlineMath math='\omega'/>, has{" "}
-                    <InlineMath math='\omega \times r = 0'/> and stays put — which is why the linear velocities below
+                    <InlineMath math='\omega \times r = 0'/> and stays put. This is why the linear velocities below
                     are <InlineMath math='\dot{\hat{x}} = \omega \times \hat{x}'/> and so on.
                 </p>}
                 ko={<p>
                     각속도 <InlineMath math='\omega'/>(주황)는 벡터이다: 방향은 회전축이고 크기는 회전률{" "}
                     <InlineMath math='\dot{\theta}'/> 이다. 그러면 물체의 모든 점은 속도{" "}
-                    <InlineMath math='v = \omega \times r'/> 로 움직이며 — 그 점이 그리는 원에 항상{" "}
+                    <InlineMath math='v = \omega \times r'/> 로 움직이며, 그 점이 그리는 원에 항상{" "}
                     <strong>접선</strong> 방향이다(축 끝의 청록 화살표). 축 위에 놓인 점, 예컨대{" "}
                     <InlineMath math='\omega'/> 방향의 <InlineMath math='\hat{y}'/> 끝점은{" "}
-                    <InlineMath math='\omega \times r = 0'/> 이라 제자리에 머문다 — 아래의 선속도가{" "}
+                    <InlineMath math='\omega \times r = 0'/> 이라 제자리에 머문다. 아래의 선속도가{" "}
                     <InlineMath math='\dot{\hat{x}} = \omega \times \hat{x}'/> 등인 이유다.
                 </p>}
             />
@@ -262,7 +262,7 @@ const Chapter3 = () => {
                     Note the symmetry: <InlineMath math='\dot RR^{-1} = [\omega_s]'/> and{" "}
                     <InlineMath math='R^{-1}\dot R = [\omega_b]'/>. Also note what{" "}
                     <InlineMath math='\omega_b'/> is <em>not</em>: it is not "angular velocity relative to a
-                    moving frame" — it is the same physical <InlineMath math='\mathrm{w}'/>, merely expressed
+                    moving frame". It is the same physical <InlineMath math='\mathrm{w}'/>, merely expressed
                     in the stationary frame that momentarily coincides with the body.
                 </p>}
                 ko={<p>
@@ -297,14 +297,14 @@ const Chapter3 = () => {
                 en={<p>
                     Why "exponential"? Rotate a vector <InlineMath math='p'/> about{" "}
                     <InlineMath math='\hat\omega'/> at 1 rad/s. Its tip traces a circle, so its velocity is{" "}
-                    <InlineMath math='\dot p = \hat\omega \times p = [\hat\omega]\,p'/> — a <em>linear</em>{" "}
+                    <InlineMath math='\dot p = \hat\omega \times p = [\hat\omega]\,p'/>, a <em>linear</em>{" "}
                     ODE. The scalar equation <InlineMath math='\dot x = ax'/> has solution{" "}
                     <InlineMath math='x(t) = e^{at}x_0'/>; for the matrix version we <em>define</em>
                 </p>}
                 ko={<p>
                     왜 "exponential"인가? 벡터 <InlineMath math='p'/> 를 <InlineMath math='\hat\omega'/> 둘레로
                     1 rad/s 로 돌리자. 끝점은 원을 그리므로 속도는{" "}
-                    <InlineMath math='\dot p = \hat\omega \times p = [\hat\omega]\,p'/> — <em>선형</em>{" "}
+                    <InlineMath math='\dot p = \hat\omega \times p = [\hat\omega]\,p'/>, 즉 <em>선형</em>{" "}
                     미분방정식이다. 스칼라 방정식 <InlineMath math='\dot x = ax'/> 의 해가{" "}
                     <InlineMath math='x(t) = e^{at}x_0'/> 이듯, 행렬 버전에서는 다음과 같이 <em>정의</em>한다
                 </p>}
@@ -349,7 +349,7 @@ const Chapter3 = () => {
                 en={<p>
                     Drag the slider to sweep the angle <InlineMath math='\theta'/> about a fixed axis{" "}
                     <InlineMath math='\hat{\omega}'/> (orange) and watch the nine entries of{" "}
-                    <InlineMath math='R'/> — computed live from Rodrigues' formula — track the frame.
+                    <InlineMath math='R'/>, computed live from Rodrigues' formula, track the frame.
                 </p>}
                 ko={<p>
                     슬라이더로 고정축 <InlineMath math='\hat{\omega}'/>(주황) 둘레의 각{" "}
@@ -360,7 +360,7 @@ const Chapter3 = () => {
             <ExponentialRotation/>
             <T
                 en={<p>
-                    <strong>Matrix logarithm</strong> — the inverse problem: given <InlineMath math='R'/>,
+                    <strong>Matrix logarithm</strong> is the inverse problem: given <InlineMath math='R'/>,
                     recover <InlineMath math='\hat\omega\theta'/>. Subtract the transpose of Rodrigues'
                     formula from itself: the <InlineMath math='I'/> and{" "}
                     <InlineMath math='[\hat\omega]^2'/> terms are symmetric and cancel, leaving{" "}
@@ -369,7 +369,7 @@ const Chapter3 = () => {
                     for <InlineMath math='\theta \in [0, \pi]'/>:
                 </p>}
                 ko={<p>
-                    <strong>Matrix logarithm</strong> — 역문제: <InlineMath math='R'/> 이 주어졌을 때{" "}
+                    <strong>Matrix logarithm</strong> 은 역문제다: <InlineMath math='R'/> 이 주어졌을 때{" "}
                     <InlineMath math='\hat\omega\theta'/> 를 되찾기. Rodrigues 공식에서 전치를 빼면{" "}
                     <InlineMath math='I'/> 와 <InlineMath math='[\hat\omega]^2'/> 항은 대칭이라 소거되고{" "}
                     <InlineMath math='R - R^T = 2\sin\theta\,[\hat\omega]'/> 만 남는다. 트레이스를 취하면{" "}
@@ -412,8 +412,8 @@ const Chapter3 = () => {
                     picture <InlineMath math='SO(3)'/> as a <strong>solid ball of radius{" "}
                     <InlineMath math='\pi'/></strong>: a point <InlineMath math='r'/> in the ball is the
                     rotation by <InlineMath math='\|r\|'/> about <InlineMath math='r/\|r\|'/>, and antipodal
-                    surface points are the <em>same</em> rotation — the <InlineMath math='\theta = \pi'/>{" "}
-                    ambiguity above. Singularities like this are the fate of <em>every</em> three-parameter
+                    surface points are the <em>same</em> rotation (the <InlineMath math='\theta = \pi'/>{" "}
+                    ambiguity above). Singularities like this are the fate of <em>every</em> three-parameter
                     representation (Euler angles included), which is precisely why the book computes with{" "}
                     <InlineMath math='R'/> itself.
                 </p>}
@@ -421,7 +421,7 @@ const Chapter3 = () => {
                     로그는 항상 <InlineMath math='\|\hat\omega\theta\| \le \pi'/> 를 돌려주므로{" "}
                     <InlineMath math='SO(3)'/> 를 <strong>반지름 <InlineMath math='\pi'/> 의 꽉 찬 공</strong>으로
                     그릴 수 있다: 공 안의 점 <InlineMath math='r'/> 은 축 <InlineMath math='r/\|r\|'/> 둘레{" "}
-                    <InlineMath math='\|r\|'/> 회전이고, 표면의 대척점 쌍은 <em>같은</em> 회전이다 — 위의{" "}
+                    <InlineMath math='\|r\|'/> 회전이고, 표면의 대척점 쌍은 <em>같은</em> 회전이다. 위의{" "}
                     <InlineMath math='\theta = \pi'/> 모호성이 그것이다. 이런 특이점은 <em>모든</em> 세-파라미터
                     표현(오일러 각 포함)의 숙명이고, 그래서 이 책은 <InlineMath math='R'/> 자체로 계산한다.
                 </p>}
@@ -444,12 +444,12 @@ const Chapter3 = () => {
             <T
                 en={<p>
                     Below, the body frame moves as a rigid body: at every instant it has a position{" "}
-                    <InlineMath math='p'/> (violet vector from the origin) and an orientation <InlineMath math='R'/> —
-                    a single <InlineMath math='T'/> capturing both. Drag to orbit.
+                    <InlineMath math='p'/> (violet vector from the origin) and an orientation <InlineMath math='R'/>,
+                    and a single <InlineMath math='T'/> captures both. Drag to orbit.
                 </p>}
                 ko={<p>
                     아래에서 물체 좌표계는 강체로서 움직인다: 매 순간 위치{" "}
-                    <InlineMath math='p'/>(원점에서 나온 보라색 벡터)와 방향 <InlineMath math='R'/> 을 가지며 —
+                    <InlineMath math='p'/>(원점에서 나온 보라색 벡터)와 방향 <InlineMath math='R'/> 을 가지며,
                     단일 <InlineMath math='T'/> 가 둘 다 담는다. 끌어서 시점을 돌려보라.
                 </p>}
             />
@@ -458,13 +458,13 @@ const Chapter3 = () => {
                 en={<p>
                     Why the funny last row? Append a 1 to a point,{" "}
                     <InlineMath math='\tilde{x} = (x, 1)'/>: then{" "}
-                    <InlineMath math='T\tilde{x} = (Rx + p,\, 1)'/> — one matrix product applies rotation{" "}
+                    <InlineMath math='T\tilde{x} = (Rx + p,\, 1)'/>. One matrix product applies rotation{" "}
                     <em>and</em> translation. These <strong>homogeneous coordinates</strong> also make
                     composition and inversion pure linear algebra:
                 </p>}
                 ko={<p>
                     마지막 행은 왜 붙는가? 점에 1 을 덧붙여 <InlineMath math='\tilde{x} = (x, 1)'/> 로 만들면{" "}
-                    <InlineMath math='T\tilde{x} = (Rx + p,\, 1)'/> — 행렬 곱 한 번이 회전<em>과</em> 병진을
+                    <InlineMath math='T\tilde{x} = (Rx + p,\, 1)'/> 이 된다. 행렬 곱 한 번이 회전<em>과</em> 병진을
                     함께 적용한다. 이 <strong>동차 좌표</strong> 덕에 합성과 역변환도 순수한 선형대수가 된다:
                 </p>}
             />
@@ -473,13 +473,13 @@ const Chapter3 = () => {
             <T
                 en={<p>
                     <InlineMath math='T'/> preserves distances and angles between points, which is exactly what
-                    "rigid" means — and like <InlineMath math='R'/>, it has the same <strong>three uses</strong>:
+                    "rigid" means. And like <InlineMath math='R'/>, it has the same <strong>three uses</strong>:
                     represent, change frames, displace. As a displacement operator{" "}
                     <InlineMath math='T = \operatorname{Trans}(p)\operatorname{Rot}(\hat\omega, \theta)'/>, the
                     order question returns with the same answer:
                 </p>}
                 ko={<p>
-                    <InlineMath math='T'/> 는 점들 사이의 거리와 각을 보존한다 — "강체"의 뜻 그대로다. 그리고{" "}
+                    <InlineMath math='T'/> 는 점들 사이의 거리와 각을 보존한다. "강체"의 뜻 그대로다. 그리고{" "}
                     <InlineMath math='R'/> 처럼 같은 <strong>세 가지 용도</strong>(표현, 프레임 변경, 이동)를
                     갖는다. 이동 연산자{" "}
                     <InlineMath math='T = \operatorname{Trans}(p)\operatorname{Rot}(\hat\omega, \theta)'/> 로
@@ -555,7 +555,7 @@ T_{sb}T\;(\text{body frame})'/>
                     Here is the subtlety: <InlineMath math='v_s'/> is <em>not</em>{" "}
                     <InlineMath math='\dot p'/>. Imagine the moving body extended to fill all of space;{" "}
                     <InlineMath math='v_s'/> is the velocity of the body point <em>currently passing through
-                    the <InlineMath math='\{s\}'/> origin</em>. The planar demo makes this concrete — every
+                    the <InlineMath math='\{s\}'/> origin</em>. The planar demo makes this concrete: every
                     planar twist is an instantaneous rotation about some center <InlineMath math='q'/>, and{" "}
                     <InlineMath math='v_s'/> is the red arrow at the origin:
                 </p>}
@@ -563,7 +563,7 @@ T_{sb}T\;(\text{body frame})'/>
                     미묘한 점이 여기 있다: <InlineMath math='v_s'/> 는 <InlineMath math='\dot p'/> 가{" "}
                     <em>아니다</em>. 움직이는 물체를 공간 전체를 채울 만큼 키웠다고 상상하면,{" "}
                     <InlineMath math='v_s'/> 는 <em>지금 <InlineMath math='\{s\}'/> 원점을 지나고 있는 물체
-                    점</em>의 속도다. 평면 데모가 이를 손에 잡히게 한다 — 모든 평면 twist 는 어떤 중심{" "}
+                    점</em>의 속도다. 평면 데모가 이를 손에 잡히게 한다. 모든 평면 twist 는 어떤 중심{" "}
                     <InlineMath math='q'/> 둘레의 순간 회전이고, <InlineMath math='v_s'/> 는 원점의 빨간
                     화살표다:
                 </p>}
@@ -577,10 +577,10 @@ T_{sb}T\;(\text{body frame})'/>
                     <InlineMath math='6\times 6'/> matrix, the <strong>adjoint representation</strong>:
                 </p>}
                 ko={<p>
-                    두 표현은 어떻게 이어지는가? 켤레 변환{" "}
+                    두 표현은 어떻게 이어지는가? Conjugation{" "}
                     <InlineMath math='[\mathcal{V}_s] = T[\mathcal{V}_b]T^{-1}'/> 이다. 블록을 전개하고{" "}
                     <InlineMath math='R[\omega]R^T = [R\omega]'/> 를 쓰면 결과가{" "}
-                    <InlineMath math='6\times 6'/> 행렬 하나로 묶인다 — <strong>adjoint 표현</strong>이다:
+                    <InlineMath math='6\times 6'/> 행렬 하나로 묶인다. <strong>adjoint 표현</strong>이다:
                 </p>}
             />
             <div className="overflow-x-auto">
@@ -593,17 +593,16 @@ T_{sb}T\;(\text{body frame})'/>
                     <strong>Screws.</strong> Just as <InlineMath math='\omega = \hat\omega\dot\theta'/>, every
                     twist is a <strong>screw axis</strong> times a speed:{" "}
                     <InlineMath math='\mathcal{V} = \mathcal{S}\dot\theta'/>. Geometrically a screw axis is{" "}
-                    <InlineMath math='\{q, \hat s, h\}'/> — a line through <InlineMath math='q'/> in direction{" "}
-                    <InlineMath math='\hat s'/> with pitch <InlineMath math='h'/> (advance per radian) — and
+                    <InlineMath math='\{q, \hat s, h\}'/>: a line through <InlineMath math='q'/> in direction{" "}
+                    <InlineMath math='\hat s'/> with pitch <InlineMath math='h'/> (advance per radian), and
                     the twist of a rotation rate <InlineMath math='\dot\theta'/> about it is
                 </p>}
                 ko={<p>
                     <strong>Screw.</strong> <InlineMath math='\omega = \hat\omega\dot\theta'/> 이듯 모든
                     twist 는 <strong>screw 축</strong> 곱하기 속력이다:{" "}
                     <InlineMath math='\mathcal{V} = \mathcal{S}\dot\theta'/>. 기하적으로 screw 축은{" "}
-                    <InlineMath math='\{q, \hat s, h\}'/> — 점 <InlineMath math='q'/> 를 지나고 방향{" "}
-                    <InlineMath math='\hat s'/>, 피치 <InlineMath math='h'/> (라디안당 전진량)를 갖는 직선 —
-                    이고, 그 둘레의 회전률 <InlineMath math='\dot\theta'/> 가 만드는 twist 는
+                    <InlineMath math='\{q, \hat s, h\}'/>, 곧 점 <InlineMath math='q'/> 를 지나고 방향{" "}
+                    <InlineMath math='\hat s'/>, 피치 <InlineMath math='h'/> (라디안당 전진량)를 갖는 직선이고, 그 둘레의 회전률 <InlineMath math='\dot\theta'/> 가 만드는 twist 는
                 </p>}
             />
             <div className="overflow-x-auto">
@@ -646,7 +645,7 @@ T_{sb}T\;(\text{body frame})'/>
                     둘레의 screw motion 이다. 그래서 회전에서 <InlineMath math='\hat\omega\theta'/> 가 하던
                     역할을 <InlineMath math='\mathcal{S}\theta \in \mathbb{R}^6'/> 이 맡는다.{" "}
                     <InlineMath math='e^{[\mathcal{S}]\theta}'/> 를 급수로 펼치면 회전 블록은 Rodrigues 를
-                    재현하고, 병진 블록은 <InlineMath math='G(\theta)v'/> 로 모인다 —{" "}
+                    재현하고, 병진 블록은 <InlineMath math='G(\theta)v'/> 로 모인다.{" "}
                     <InlineMath math='[\omega]^3 = -[\omega]'/> 이 급수를 다시 접는다:
                 </p>}
             />
@@ -685,7 +684,7 @@ T_{sb}T\;(\text{body frame})'/>
                     <InlineMath math='T_{sc} = e^{[\mathcal{S}]\theta}\,T_{sb}'/> with{" "}
                     <InlineMath math='\theta = 30^\circ'/> and{" "}
                     <InlineMath math='\mathcal{S} = (0, 0, 1,\; 3.37, -3.37, 0)'/>: a pure rotation (zero
-                    pitch) about the axis through <InlineMath math='q = (3.37, 3.37)'/> — one screw, both
+                    pitch) about the axis through <InlineMath math='q = (3.37, 3.37)'/>: one screw, both
                     displacement components at once.
                 </p>}
                 ko={<p>
@@ -694,7 +693,7 @@ T_{sb}T\;(\text{body frame})'/>
                     <InlineMath math='\theta = 30^\circ'/>,{" "}
                     <InlineMath math='\mathcal{S} = (0, 0, 1,\; 3.37, -3.37, 0)'/> 인 screw motion{" "}
                     <InlineMath math='T_{sc} = e^{[\mathcal{S}]\theta}\,T_{sb}'/> 로 이어진다: 점{" "}
-                    <InlineMath math='q = (3.37, 3.37)'/> 를 지나는 축 둘레의 순수 회전(피치 0) — screw 하나가
+                    <InlineMath math='q = (3.37, 3.37)'/> 를 지나는 축 둘레의 순수 회전(피치 0)이다. screw 하나가
                     회전과 병진을 한꺼번에 해치운다.
                 </p>}
             />
@@ -702,25 +701,25 @@ T_{sb}T\;(\text{body frame})'/>
             <T en={<h2>Wrenches</h2>} ko={<h2>Wrench</h2>}/>
             <T
                 en={<p>
-                    Push a wrench (spanner) handle: the bolt at the pivot feels your push <em>and</em> a twist
-                    — and the farther from the bolt you push, the stronger the twist, even though your force
+                    Push a wrench (spanner) handle: the bolt at the pivot feels your push <em>and</em> a twist.
+                    And the farther from the bolt you push, the stronger the twist, even though your force
                     never changed. So a single force <InlineMath math='f'/> is not enough to describe what a
                     rigid body feels; <em>where</em> it acts matters. Instead of carrying the application
                     point around, we record its turning effect about the frame origin, the{" "}
                     <strong>moment</strong> <InlineMath math='m = r \times f'/>, and package the two as the{" "}
-                    <strong>wrench</strong> <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/> — the
+                    <strong>wrench</strong> <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/>: the
                     complete "what the body feels". The pair loses nothing: sliding the application point
                     along the force's <em>line of action</em> changes neither <InlineMath math='f'/> nor{" "}
                     <InlineMath math='m'/> (and indeed <InlineMath math='|m| = |f| \cdot d'/>, with{" "}
                     <InlineMath math='d'/> the distance from the origin to that line). Try it:
                 </p>}
                 ko={<p>
-                    스패너 손잡이를 밀어 보라: 축의 볼트는 미는 힘<em>과 함께</em> 비틀림을 느낀다 — 그리고
+                    스패너 손잡이를 밀어 보라. 축의 볼트는 미는 힘<em>과 함께</em> 비틀림을 느낀다. 그리고
                     같은 힘이라도 볼트에서 멀리 밀수록 비틀림은 세진다. 즉 힘 <InlineMath math='f'/> 하나로는
                     강체가 느끼는 것을 다 말할 수 없다. <em>어디에</em> 작용하는지가 중요하다. 작용점을 들고
                     다니는 대신 원점 기준의 회전 효과, 곧 <strong>모멘트</strong>{" "}
                     <InlineMath math='m = r \times f'/> 를 기록하고, 둘을 묶은 것이 <strong>wrench</strong>{" "}
-                    <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/> — "물체가 느끼는 것 전부"다. 이
+                    <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/> 다. "물체가 느끼는 것 전부"인 셈이다. 이
                     쌍은 정보를 잃지 않는다: 작용점을 힘의 <em>작용선</em>을 따라 미끄러뜨리면{" "}
                     <InlineMath math='f'/> 도 <InlineMath math='m'/> 도 변하지 않는다 (실제로{" "}
                     <InlineMath math='|m| = |f| \cdot d'/>, <InlineMath math='d'/> 는 원점에서 작용선까지의
@@ -731,23 +730,23 @@ T_{sb}T\;(\text{body frame})'/>
             <T
                 en={<p>
                     Wrenches expressed in the same frame simply add, and a wrench with{" "}
-                    <InlineMath math='f = 0'/> is a <em>pure moment</em> (a twist with no net push — like
-                    turning a screwdriver between your fingertips).
+                    <InlineMath math='f = 0'/> is a <em>pure moment</em>: a twist with no net push, like
+                    turning a screwdriver between your fingertips.
                 </p>}
                 ko={<p>
                     같은 프레임으로 표현된 wrench 는 그냥 더하면 되고, <InlineMath math='f = 0'/> 인 wrench 는{" "}
-                    <em>순수 모멘트</em>다 (알짜 밀기 없이 비틀기만 — 손끝으로 드라이버를 돌리는 것처럼).
+                    <em>순수 모멘트</em>다. 알짜 밀기 없이 비틀기만 있는 것으로, 손끝으로 드라이버를 돌리는 것과 같다.
                 </p>}
             />
             <T
                 en={<p>
-                    How does a wrench change frames? No new machinery is needed — only the fact that{" "}
+                    How does a wrench change frames? No new machinery is needed, only the fact that{" "}
                     <strong>power is frame-independent</strong> (we cannot create energy by renaming
                     coordinates). Power is <InlineMath math='\mathcal{V}^T\mathcal{F}'/>, so with{" "}
                     <InlineMath math='\mathcal{V}_a = [\mathrm{Ad}_{T_{ab}}]\mathcal{V}_b'/>:
                 </p>}
                 ko={<p>
-                    wrench 는 프레임을 어떻게 갈아타는가? 새 도구는 필요 없다 — <strong>일률(power)은 프레임과
+                    wrench 는 프레임을 어떻게 갈아타는가? 새 도구는 필요 없다. <strong>일률(power)은 프레임과
                     무관하다</strong>는 사실만 있으면 된다(좌표 이름을 바꿔서 에너지를 만들 수는 없다). 일률은{" "}
                     <InlineMath math='\mathcal{V}^T\mathcal{F}'/> 이므로,{" "}
                     <InlineMath math='\mathcal{V}_a = [\mathrm{Ad}_{T_{ab}}]\mathcal{V}_b'/> 를 대입하면:
@@ -765,10 +764,10 @@ T_{sb}T\;(\text{body frame})'/>
                     Note the direction of the subscripts: the <em>transpose</em> of the adjoint that carries
                     twists from <InlineMath math='\{b\}'/> to <InlineMath math='\{a\}'/> carries wrenches the
                     other way. You already know this formula in your bones: hold a dumbbell at your chest,
-                    then at arm's length — it does not get heavier (same <InlineMath math='f'/>), yet your
+                    then at arm's length. It does not get heavier (same <InlineMath math='f'/>), yet your
                     wrist suffers, because the <em>moment</em> grows with distance. A robot's wrist
                     force–torque sensor feels exactly that. Below, the sensor <InlineMath math='\{f\}'/> holds
-                    a hand plus an apple; stretch <InlineMath math='L_2'/> and watch the two bars — the force
+                    a hand plus an apple; stretch <InlineMath math='L_2'/> and watch the two bars: the force
                     bar stays frozen while the moment bar grows. What the sensor reads is each gravity wrench
                     moved into its frame by <InlineMath math='[\mathrm{Ad}]^T'/> and summed:
                 </p>}
@@ -776,10 +775,10 @@ T_{sb}T\;(\text{body frame})'/>
                     아래첨자의 방향에 주목하라: twist 를 <InlineMath math='\{b\}'/> 에서{" "}
                     <InlineMath math='\{a\}'/> 로 보내는 adjoint 의 <em>전치</em>가 wrench 는 반대 방향으로
                     보낸다. 이 공식은 사실 몸이 이미 알고 있다: 아령을 가슴에 붙여 들 때와 팔을 쭉 뻗어 들
-                    때 — 아령이 더 무거워지는 게 아닌데(같은 <InlineMath math='f'/>) 손목은 훨씬 힘들다.{" "}
+                    때를 비교해 보라. 아령이 더 무거워지는 게 아닌데(같은 <InlineMath math='f'/>) 손목은 훨씬 힘들다.{" "}
                     <em>모멘트</em>가 거리와 함께 자라기 때문이다. 로봇 손목의 힘–토크 센서가 느끼는 것이
                     정확히 이것이다. 아래에서 센서 <InlineMath math='\{f\}'/> 가 손과 사과를 들고 있다:{" "}
-                    <InlineMath math='L_2'/> 를 늘리며 두 막대를 보라 — 힘 막대는 얼어붙어 있고 모멘트 막대만
+                    <InlineMath math='L_2'/> 를 늘리며 두 막대를 보라. 힘 막대는 얼어붙어 있고 모멘트 막대만
                     자란다. 센서가 읽는 값은 각 중력 wrench 를 <InlineMath math='[\mathrm{Ad}]^T'/> 로 센서
                     프레임에 옮겨 더한 것이다:
                 </p>}
