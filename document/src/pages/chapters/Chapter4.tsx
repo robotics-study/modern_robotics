@@ -367,14 +367,17 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
             />
             <T
                 en={<p>
-                    The robot below is exactly such a tree: three <strong>links</strong> (colored bars) joined by
-                    three <strong>joints</strong> (orange), each joint rotating its subtree — the same nested
-                    parent-child structure a URDF encodes.
+                    The robot below is exactly such a tree: the light-gray tubes are the{" "}
+                    <strong>links</strong> and the dark housings with blue rings are the three{" "}
+                    <strong>revolute joints</strong> (yaw at the base, pitch at the shoulder and elbow), each
+                    rotating its whole subtree — the same nested parent-child structure the URDF on the right
+                    encodes.
                 </p>}
                 ko={<p>
-                    아래 로봇이 바로 그런 트리이다: 세 개의 <strong>링크</strong>(색칠된 막대)가 세 개의{" "}
-                    <strong>관절</strong>(주황색)로 이어지고, 각 관절이 자신의 서브트리를 회전시킨다 — URDF 가
-                    부호화하는 것과 동일한 중첩된 부모-자식 구조이다.
+                    아래 로봇이 바로 그런 트리이다: 밝은 회색 튜브가 <strong>링크</strong>이고, 파란 링을 두른
+                    어두운 하우징이 세 개의 <strong>revolute 관절</strong>(베이스 요, 어깨·팔꿈치 피치)이다. 각
+                    관절이 자신의 서브트리 전체를 회전시킨다 — 오른쪽 URDF 가 부호화하는 것과 동일한 중첩된
+                    부모-자식 구조이다.
                 </p>}
             />
             <UrdfRobot/>
