@@ -34,7 +34,7 @@ const Chapter5 = () => {
                 </p>}
                 ko={<p>
                     행렬 <InlineMath math='J(\theta)'/>가 <strong>Jacobian</strong>이다. 이는 관절 속도에서 end-effector
-                    속도로의 선형 사상이며, 삼각 함수 항이 configuration에 의존하기 때문에 로봇이 움직임에 따라 변한다.
+                    속도로 가는 linear map이며, 삼각 함수 항이 configuration에 의존하기 때문에 로봇이 움직임에 따라 변한다.
                     2R 평면 체인이라면 Forward Kinematics{" "}
                     <InlineMath math='x_1 = L_1\cos\theta_1 + L_2\cos(\theta_1{+}\theta_2)'/>,{" "}
                     <InlineMath math='x_2 = L_1\sin\theta_1 + L_2\sin(\theta_1{+}\theta_2)'/> 를 항별로 미분해{" "}
@@ -72,18 +72,24 @@ const Chapter5 = () => {
             <JacobianColumns/>
             <T
                 en={<p>
-                    Because <InlineMath math='J'/> is a <em>linear</em> map, whole sets of joint velocities map in
-                    one stroke: the square of joint-rate bounds maps to a parallelogram of achievable tip
-                    velocities, and the unit "iso-effort" circle maps to an ellipse — the{" "}
-                    <strong>manipulability ellipse</strong> we will meet again below. Drag the joint-velocity
-                    point and sweep the posture; as <InlineMath math='\theta_2 \to 0'/> watch both images
-                    flatten onto a line:
+                    Try it on the arm itself. On the left, drag to choose how fast each joint spins; on the
+                    right, the tip immediately shows the resulting velocity <InlineMath math='J\dot\theta'/> —
+                    and pressing <strong>▶</strong> actually drives the arm with your chosen{" "}
+                    <InlineMath math='\dot\theta'/>, so the tip's trail follows the arrow. The dashed
+                    parallelogram hanging on the tip is <em>everything</em> the tip can do with{" "}
+                    <InlineMath math='|\dot\theta_i| \le 1'/>, and the dashed ellipse is the image of the
+                    "equal-effort" circle — the <strong>manipulability ellipse</strong> we will meet again
+                    below. Straighten the elbow (<InlineMath math='\theta_2 \to 0'/>) and watch the whole menu
+                    of tip velocities collapse onto a line: that is a singularity, felt rather than defined.
                 </p>}
                 ko={<p>
-                    <InlineMath math='J'/> 는 <em>선형</em> 사상이라 관절속도들의 집합이 통째로 사상된다: 관절 속도
-                    한계의 정사각형은 도달 가능한 팁 속도의 평행사변형으로, 등노력 단위원은 타원 — 아래에서 다시
-                    만날 <strong>조작성 타원</strong> — 으로 간다. 관절속도 점을 끌고 자세를 훑어 보라.{" "}
-                    <InlineMath math='\theta_2 \to 0'/> 이면 두 상(像)이 함께 선분으로 납작해진다:
+                    팔 위에서 직접 해 보자. 왼쪽에서 각 관절을 얼마나 빨리 돌릴지 드래그로 고르면, 오른쪽 팁에 그
+                    결과 속도 <InlineMath math='J\dot\theta'/> 가 바로 나타난다 — 그리고 <strong>▶</strong> 를
+                    누르면 고른 <InlineMath math='\dot\theta'/> 그대로 팔이 실제로 움직여, 팁의 자취가 화살표를
+                    따라간다. 팁에 매달린 점선 평행사변형은 <InlineMath math='|\dot\theta_i| \le 1'/> 로 팁이 낼
+                    수 있는 속도의 <em>전부</em>이고, 점선 타원은 "같은 노력" 원의 상 — 아래에서 다시 만날{" "}
+                    <strong>manipulability 타원</strong> — 이다. 팔꿈치를 펴 보라(<InlineMath math='\theta_2 \to 0'/>):
+                    팁이 낼 수 있는 속도 메뉴 전체가 선 하나로 무너진다. 정의가 아니라 몸으로 느끼는 특이점이다.
                 </p>}
             />
             <VelocityMapping/>
@@ -135,7 +141,7 @@ const Chapter5 = () => {
                     rates, <InlineMath math='\mathcal{V}_s = J_s(\theta)\dot\theta'/>, with
                 </p>}
                 ko={<p>
-                    각 항은 켤레 변환 <InlineMath math='T[\mathcal{S}]T^{-1}'/> — 정확히 3장의 adjoint 사상이다.
+                    각 항은 conjugation <InlineMath math='T[\mathcal{S}]T^{-1}'/> — 정확히 3장의 adjoint map이다.
                     따라서 <InlineMath math='\mathcal{V}_s'/> 는 열 벡터 곱하기 관절 속도의 합,{" "}
                     <InlineMath math='\mathcal{V}_s = J_s(\theta)\dot\theta'/> 이 되고, 그 열은
                 </p>}
@@ -170,19 +176,26 @@ const Chapter5 = () => {
             </div>
             <T
                 en={<p>
-                    (each revolute column uses <InlineMath math='v_{si} = -\omega_{si}\times q_i'/> with{" "}
-                    <InlineMath math='q_i'/> the joint's current position, e.g.{" "}
-                    <InlineMath math='q_2 = (L_1c_1, L_1s_1, 0)'/>; the prismatic column is{" "}
-                    <InlineMath math='(0, v)'/>). The <strong>body Jacobian</strong>{" "}
+                    Read it like a story, column by column — each column answers "if <em>only</em> this joint
+                    spins at unit speed, what does the tip frame do?" Column 1: rotation about the base's
+                    vertical axis through the origin, so <InlineMath math='\omega = (0,0,1)'/>,{" "}
+                    <InlineMath math='v = 0'/>. Columns 2 and 3: the same vertical rotation, but about an axis
+                    that joints 1 (and 2) have <em>carried away</em> to{" "}
+                    <InlineMath math='q_2 = (L_1c_1, L_1s_1, 0)'/> — hence the{" "}
+                    <InlineMath math='v = -\omega\times q'/> entries that grow with the reach. Column 4: the
+                    prismatic joint just slides everything up, a pure translation{" "}
+                    <InlineMath math='(0, 0, 0, 0, 0, 1)'/>. The <strong>body Jacobian</strong>{" "}
                     <InlineMath math='J_b(\theta)'/> comes from the same computation on{" "}
                     <InlineMath math='[\mathcal{V}_b] = T^{-1}\dot T'/> with the body-form PoE: now the factors{" "}
                     <em>after</em> joint <InlineMath math='i'/> survive,
                 </p>}
                 ko={<p>
-                    (각 revolute 열은 <InlineMath math='v_{si} = -\omega_{si}\times q_i'/>, 여기서{" "}
-                    <InlineMath math='q_i'/> 는 관절의 <em>현재</em> 위치 — 예컨대{" "}
-                    <InlineMath math='q_2 = (L_1c_1, L_1s_1, 0)'/>; prismatic 열은{" "}
-                    <InlineMath math='(0, v)'/>). <strong>Body Jacobian</strong>{" "}
+                    열 하나하나를 이야기처럼 읽자 — 각 열은 "<em>이 관절만</em> 단위 속도로 돌면 팁 프레임은 무엇을
+                    하는가?"에 답한다. 1열: 원점을 지나는 수직축 회전이라 <InlineMath math='\omega = (0,0,1)'/>,{" "}
+                    <InlineMath math='v = 0'/>. 2·3열: 같은 수직 회전이지만 관절 1(과 2)이 축을{" "}
+                    <InlineMath math='q_2 = (L_1c_1, L_1s_1, 0)'/> 까지 <em>실어 나른</em> 뒤라서, 팔 길이만큼
+                    자라는 <InlineMath math='v = -\omega\times q'/> 성분이 붙는다. 4열: prismatic 관절은 전부를
+                    위로 밀 뿐 — 순수 병진 <InlineMath math='(0, 0, 0, 0, 0, 1)'/>. <strong>Body Jacobian</strong>{" "}
                     <InlineMath math='J_b(\theta)'/> 는 body-form PoE 에 같은 계산을{" "}
                     <InlineMath math='[\mathcal{V}_b] = T^{-1}\dot T'/> 로 하면 나온다: 이번엔 관절{" "}
                     <InlineMath math='i'/> <em>뒤의</em> 인자들이 살아남아,
@@ -197,7 +210,7 @@ const Chapter5 = () => {
                 </p>}
                 ko={<p>
                     — 즉 <em>움직인 end-effector 프레임</em>에서 본 관절 <InlineMath math='i'/> 의 screw 축이며,
-                    베이스에 더 가까운 관절들의 영향을 받지 않는다. 두 Jacobian은 adjoint 사상으로 이어진다,
+                    베이스에 더 가까운 관절들의 영향을 받지 않는다. 두 Jacobian은 adjoint map으로 이어진다,
                 </p>}
             />
             <BlockMath math={`J_b(\\theta) = \\big[\\mathrm{Ad}_{T_{bs}}\\big] J_s(\\theta), \\qquad J_s(\\theta) = \\big[\\mathrm{Ad}_{T_{sb}}\\big] J_b(\\theta)`}/>
@@ -208,7 +221,7 @@ const Chapter5 = () => {
                     property of the configuration, not of the frame we chose to describe it in.
                 </p>}
                 ko={<p>
-                    수반 사상은 항상 가역이므로, <InlineMath math='J_s(\theta)'/>와{" "}
+                    adjoint map은 항상 가역이므로, <InlineMath math='J_s(\theta)'/>와{" "}
                     <InlineMath math='J_b(\theta)'/>는 항상 <strong>같은 랭크</strong>를 갖는다 — Singularity는
                     configuration의 성질이지, 그것을 기술하기 위해 우리가 선택한 프레임의 성질이 아니다.
                 </p>}
@@ -251,7 +264,7 @@ const Chapter5 = () => {
                     <InlineMath math='J'/> 가 full rank 면{" "}
                     <InlineMath math='\dot\theta = J^{-1}\mathcal{V}'/>. <InlineMath math='n < 6'/> 이면 어떤
                     twist 는 아예 도달 불가능하고, <InlineMath math='n > 6'/> 이면 로봇은{" "}
-                    <strong>여유자유도(redundant)</strong>다: 제약 여섯을 빼고도 <InlineMath math='n - 6'/> 개의{" "}
+                    <strong>redundant(여유자유도)</strong>다: 제약 여섯을 빼고도 <InlineMath math='n - 6'/> 개의{" "}
                     <em>내부 운동</em> 자유가 남는다 — 손바닥을 탁자에 붙여도 팔꿈치는 여전히 흔들 수 있다.
                     6장이 이 질문을 본격적으로 다룬다.
                 </p>}
@@ -267,8 +280,8 @@ const Chapter5 = () => {
                     <InlineMath math='\dot\theta'/> gives the central relation
                 </p>}
                 ko={<p>
-                    Jacobian은 Statics도 지배한다. 일률 보존에 의해, 정적 평형에서 관절 토크가 전달하는 일률은
-                    end-effector가 환경에 가하는 일률과 같다,{" "}
+                    Jacobian은 Statics도 지배한다. Power 보존에 의해, 정적 평형에서 관절 토크가 전달하는 power는
+                    end-effector가 환경에 가하는 power와 같다,{" "}
                     <InlineMath math='\tau^{\mathsf T}\dot\theta = \mathcal{F}^{\mathsf T}\mathcal{V}'/>. 여기에{" "}
                     <InlineMath math='\mathcal{V} = J(\theta)\dot\theta'/>를 대입하고 모든{" "}
                     <InlineMath math='\dot\theta'/>에 대해 성립하도록 요구하면 핵심 관계식이 나온다
@@ -284,9 +297,9 @@ const Chapter5 = () => {
                     straight — at that singularity the load passes directly through the joints.
                 </p>}
                 ko={<p>
-                    따라서 관절 속도를 twist로 사상하는 바로 그 Jacobian이 end-effector wrench{" "}
-                    <InlineMath math='\mathcal{F}'/>를 그것을 평형시키는 데 필요한 관절 토크로 되사상한다.{" "}
-                    <InlineMath math='J^{\mathsf T}'/>의 영공간에 있는 wrench는 관절 토크를 전혀 필요로 하지 않는다:
+                    따라서 관절 속도를 twist로 보내는 바로 그 Jacobian이 end-effector wrench{" "}
+                    <InlineMath math='\mathcal{F}'/>를 그것을 평형시키는 데 필요한 관절 토크로 되돌려 보낸다.{" "}
+                    <InlineMath math='J^{\mathsf T}'/>의 null space에 있는 wrench는 관절 토크를 전혀 필요로 하지 않는다:
                     구조물이 그것을 떠받친다. 이것이 팔을 뻗었을 때 팔꿈치가 곧게 펴져 있으면 무거운 여행 가방을 가장
                     쉽게 지탱하는 이유다 — 그 Singularity에서 하중이 관절을 곧바로 통과한다.
                 </p>}
@@ -385,8 +398,8 @@ const Chapter5 = () => {
                 </p>}
                 ko={<p>
                     어떤 자세가 Singularity에 얼마나 가까운지, 그리고 어느 방향으로 팔이 민첩하거나 둔한지?
-                    "등노력(iso-effort)" 관절 속도 단위구 <InlineMath math='\|\dot\theta\| = 1'/> 를 Jacobian 으로
-                    사상해 보자. <InlineMath math='\dot\theta = J^{-1}\dot q'/> 를 대입하면,
+                    "같은 노력"(iso-effort) 관절 속도의 단위 구 <InlineMath math='\|\dot\theta\| = 1'/> 를 Jacobian 으로
+                    보내 보자. <InlineMath math='\dot\theta = J^{-1}\dot q'/> 를 대입하면,
                 </p>}
             />
             <div className="overflow-x-auto">
@@ -406,7 +419,7 @@ const Chapter5 = () => {
                     segment.
                 </p>}
                 ko={<p>
-                    — 타원면의 방정식이다: 이것이 <strong>Manipulability Ellipsoid</strong>다. 주축은{" "}
+                    — ellipsoid(타원체)의 방정식이다: 이것이 <strong>Manipulability Ellipsoid</strong>다. 주축은{" "}
                     <InlineMath math='A'/> 의 고유벡터, 반축 길이는 <InlineMath math='\sqrt{\lambda_i}'/>{" "}
                     (<InlineMath math='J'/> 의 특이값 <InlineMath math='\ell_i'/>), 부피는{" "}
                     <InlineMath math='\sqrt{\det A}'/> 에 비례한다. 둥근 타원은 팁이 모든 방향으로 똑같이 잘
@@ -423,9 +436,8 @@ const Chapter5 = () => {
                     <InlineMath math='\mu_3 = \sqrt{\det A}'/> (bigger is better).
                 </p>}
                 ko={<p>
-                    스칼라 요약으로는 셋이 흔히 쓰인다 — 축비{" "}
-                    <InlineMath math='\mu_1 = \sqrt{\lambda_\text{max}/\lambda_\text{min}} \ge 1'/> (등방성;
-                    1이 최선), 그 제곱 <InlineMath math='\mu_2'/> (<InlineMath math='A'/> 의{" "}
+                    숫자 하나로 요약하는 지표도 셋이 흔히 쓰인다 — 긴 축 ÷ 짧은 축 비율{" "}
+                    <InlineMath math='\mu_1 = \sqrt{\lambda_\text{max}/\lambda_\text{min}} \ge 1'/> (1에 가까울수록 모든 방향이 고르게 쉽다), 그 제곱 <InlineMath math='\mu_2'/> (<InlineMath math='A'/> 의{" "}
                     <em>condition number</em>), 그리고 부피 지표{" "}
                     <InlineMath math='\mu_3 = \sqrt{\det A}'/> (클수록 좋다).
                 </p>}
@@ -464,9 +476,9 @@ const Chapter5 = () => {
                     쌍대성은 정확하다: <InlineMath math='\tau = J^{\mathsf T}\mathcal{F}'/> 에서 단위 토크 구{" "}
                     <InlineMath math='\|\tau\| = 1'/> 는 force ellipsoid{" "}
                     <InlineMath math='f^{\mathsf T}B^{-1}f = 1'/>,{" "}
-                    <InlineMath math='B = (JJ^{\mathsf T})^{-1} = A^{-1}'/> 로 사상된다 —{" "}
+                    <InlineMath math='B = (JJ^{\mathsf T})^{-1} = A^{-1}'/> 로 옮겨진다 —{" "}
                     <InlineMath math='A'/> 와 고유벡터는 같고 반축은 역수 <InlineMath math='1/\sqrt{\lambda_i}'/>.
-                    따라서 두 타원면 부피의 곱은 어떤 자세에서도 <em>일정</em>하다: 속도 조작성을 좋게 잡은 자세는
+                    따라서 두 ellipsoid 부피의 곱은 어떤 자세에서도 <em>일정</em>하다: 속도 manipulability를 좋게 잡은 자세는
                     힘 능력에서 대가를 치르고, 그 반대도 마찬가지다 — 정역학 절의 여행 가방 이야기가 바로 이
                     거래다.
                 </p>}

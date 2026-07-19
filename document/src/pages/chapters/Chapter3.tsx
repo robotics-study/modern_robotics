@@ -577,7 +577,7 @@ T_{sb}T\;(\text{body frame})'/>
                     <InlineMath math='6\times 6'/> matrix, the <strong>adjoint representation</strong>:
                 </p>}
                 ko={<p>
-                    두 표현은 어떻게 이어지는가? 켤레 변환{" "}
+                    두 표현은 어떻게 이어지는가? Conjugation{" "}
                     <InlineMath math='[\mathcal{V}_s] = T[\mathcal{V}_b]T^{-1}'/> 이다. 블록을 전개하고{" "}
                     <InlineMath math='R[\omega]R^T = [R\omega]'/> 를 쓰면 결과가{" "}
                     <InlineMath math='6\times 6'/> 행렬 하나로 묶인다 — <strong>adjoint 표현</strong>이다:

@@ -125,7 +125,7 @@ const Chapter7 = () => {
                 ko={<p>
                     <strong>따라서 Inverse Kinematics는 직접 계산이다</strong> — 자세를 대입하고 세 다리 길이를 읽어내면
                     되며, 반복도 분기도 없다. 아래의 자세 슬라이더를 끌면서{" "}
-                    <InlineMath math='s_1, s_2, s_3'/>가 즉시 갱신되는 것을 보라. 이 단순한 자세-구동기 사상이 바로 이
+                    <InlineMath math='s_1, s_2, s_3'/>가 즉시 갱신되는 것을 보라. 이 단순한 자세→구동기 대응이 바로 이
                     그림의 핵심이다.
                 </p>}
             />
@@ -214,7 +214,7 @@ const Chapter7 = () => {
                     플랫폼에 가하는 힘은 <strong>다리를 따라</strong> 작용하며, 그 screw 축이 다리의 직선인 순수
                     wrench다. 이 여섯 개의 직선을 모아 Open Chain에 쓰던 것과 같은 속도–힘 쌍대성{" "}
                     <InlineMath math='\tau = J^{\mathsf T}\mathcal{F}'/>을 적용하면, 다리 기하로부터 곧바로{" "}
-                    <strong>역 Jacobian</strong>이 나온다 — Forward Kinematics 사상의 미분이 전혀 필요 없다.
+                    <strong>역 Jacobian</strong>이 나온다 — Forward Kinematics의 미분이 전혀 필요 없다.
                 </p>}
             />
 

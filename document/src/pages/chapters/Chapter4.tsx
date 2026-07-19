@@ -318,7 +318,7 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
                 </p>}
                 ko={<p>
                     Body Form은 툴 쪽에서 기술되는 팔에서 빛난다. Barrett 의 <strong>WAM</strong> 7R 팔
-                    (6차원 task 공간에 관절 일곱 — 장애물 회피에 쓸 1차원 자기운동이 남는 <em>여유자유도</em>{" "}
+                    (6차원 task 공간에 관절 일곱 — 장애물 회피에 쓸 1차원 자기운동이 남는 <em>redundant</em>{" "}
                     팔)은 body 프레임 표가 특히 깔끔하다 — <InlineMath math='\{b\}'/> 에 가까운 손목 축일수록{" "}
                     <InlineMath math='v_i'/> 가 짧아진다:
                 </p>}
