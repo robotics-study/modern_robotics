@@ -25,6 +25,7 @@ const data: IChapterData[] = [
         sections: [
             {en: "Degrees of Freedom of a Rigid Body", ko: "강체의 자유도"},
             {en: "Degrees of Freedom of a Robot", ko: "로봇의 자유도"},
+            {en: "Grübler's Formula", ko: "Grübler 공식"},
             {en: "Configuration Space: Topology and Representation", ko: "Configuration 공간: 위상과 표현"},
             {en: "Configuration and Velocity Constraints", ko: "Configuration 제약과 속도 제약"},
             {en: "Task Space and Workspace", ko: "Task 공간과 작업 공간"},
