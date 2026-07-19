@@ -190,8 +190,8 @@ const VelocityMappingScene = () => {
                         <Circle x={tipPx.x} y={tipPx.y} radius={5} fill={colors.accent}/>
                     </CoordinateSystem>
                     <span className="text-xs text-muted">
-                        {t("2. the tip gets velocity J θ̇ — press ▶ to see it really move",
-                            "2. 팁이 속도 J θ̇ 를 얻는다 — ▶ 를 눌러 진짜로 움직여 보라")}
+                        {t("2. the tip gets velocity J θ̇. Press ▶ to see it really move",
+                            "2. 팁이 속도 J θ̇ 를 얻는다. ▶ 를 눌러 진짜로 움직여 보라")}
                     </span>
                 </div>
             </div>

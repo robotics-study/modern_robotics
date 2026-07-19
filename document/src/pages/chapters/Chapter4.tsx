@@ -64,12 +64,12 @@ const Chapter4 = () => {
             <T
                 en={<p>
                     Drag the three joint sliders and watch the end-effector <InlineMath math='(x, y)'/> and
-                    orientation <InlineMath math='\phi'/> follow directly from the joint values — this is exactly what
+                    orientation <InlineMath math='\phi'/> follow directly from the joint values. This is exactly what
                     forward kinematics computes.
                 </p>}
                 ko={<p>
                     세 개의 관절 슬라이더를 움직이며 end-effector <InlineMath math='(x, y)'/> 와
-                    방향 <InlineMath math='\phi'/> 이 관절 값으로부터 곧바로 따라오는 것을 지켜보라 — 이것이 바로
+                    방향 <InlineMath math='\phi'/> 이 관절 값으로부터 곧바로 따라오는 것을 지켜보라. 이것이 바로
                     Forward Kinematics가 계산하는 것이다.
                 </p>}
             />
@@ -91,17 +91,17 @@ const Chapter4 = () => {
             <T
                 en={<p>
                     Each <InlineMath math='T_{i-1,i}'/> depends only on <InlineMath math='\theta_i'/>, and{" "}
-                    <InlineMath math='T_{34}'/> is constant. This works — it is the basis of the{" "}
-                    <strong>Denavit–Hartenberg</strong> representation — but it drags <InlineMath math='n'/>{" "}
+                    <InlineMath math='T_{34}'/> is constant. This works (it is the basis of the{" "}
+                    <strong>Denavit–Hartenberg</strong> representation), but it drags <InlineMath math='n'/>{" "}
                     link frames along, each placed by fiddly rules. The <strong>product of exponentials
                     (PoE)</strong> formula reaches the same product with <em>no link frames at all</em>: only
                     the base frame, the end-effector frame, and one screw axis per joint.
                 </p>}
                 ko={<p>
                     각 <InlineMath math='T_{i-1,i}'/> 는 <InlineMath math='\theta_i'/> 에만 의존하고,{" "}
-                    <InlineMath math='T_{34}'/> 는 상수다. 이 방식도 통한다 —{" "}
-                    <strong>Denavit–Hartenberg</strong> 표현의 바탕이다 — 하지만 까다로운 규칙으로 배치해야 하는
-                    링크 프레임 <InlineMath math='n'/> 개를 끌고 다녀야 한다.{" "}
+                    <InlineMath math='T_{34}'/> 는 상수다. 이 방식도 통하고,{" "}
+                    <strong>Denavit–Hartenberg</strong> 표현의 바탕이기도 하다. 하지만 까다로운 규칙으로 배치해야
+                    하는 링크 프레임 <InlineMath math='n'/> 개를 끌고 다녀야 한다.{" "}
                     <strong>Product of Exponentials(PoE)</strong> 공식은 <em>링크 프레임 없이</em> 같은 곱에
                     도달한다: 베이스 프레임, end-effector 프레임, 그리고 관절마다 screw 축 하나면 끝이다.
                 </p>}
@@ -131,15 +131,15 @@ const Chapter4 = () => {
             <T
                 en={<p>
                     where <InlineMath math='v_3 = -\omega_3 \times q_3'/> for any point{" "}
-                    <InlineMath math='q_3 = (L_1{+}L_2, 0, 0)'/> on the axis — exactly the twist recipe from
-                    Chapter 3. Now let joint 2 vary too: it screws the rigid link-2/link-3 assembly, so{" "}
+                    <InlineMath math='q_3 = (L_1{+}L_2, 0, 0)'/> on the axis. This is exactly the twist recipe
+                    from Chapter 3. Now let joint 2 vary too: it screws the rigid link-2/link-3 assembly, so{" "}
                     <InlineMath math='T_{04} = e^{[\mathcal{S}_2]\theta_2}e^{[\mathcal{S}_3]\theta_3}M'/>.
                     Finally joint 1 screws the whole arm. Induction on the same argument gives, for any open
                     chain of <InlineMath math='n'/> one-DOF joints,
                 </p>}
                 ko={<p>
                     여기서 <InlineMath math='v_3 = -\omega_3 \times q_3'/> 이고{" "}
-                    <InlineMath math='q_3 = (L_1{+}L_2, 0, 0)'/> 는 축 위의 아무 점 — 정확히 3장의 twist
+                    <InlineMath math='q_3 = (L_1{+}L_2, 0, 0)'/> 는 축 위의 아무 점이다. 정확히 3장의 twist
                     레시피다. 이제 관절 2도 움직이자: 관절 2는 링크 2·3 강체 덩어리를 screw 운동시키므로{" "}
                     <InlineMath math='T_{04} = e^{[\mathcal{S}_2]\theta_2}e^{[\mathcal{S}_3]\theta_3}M'/>.
                     마지막으로 관절 1은 팔 전체를 돌린다. 같은 논증의 귀납으로, 1자유도 관절{" "}
@@ -149,7 +149,7 @@ const Chapter4 = () => {
             <BlockMath math='T(\theta) = e^{[\mathcal{S}_1]\theta_1} e^{[\mathcal{S}_2]\theta_2} \cdots e^{[\mathcal{S}_n]\theta_n}\, M'/>
             <T
                 en={<p>
-                    This is the <strong>space form</strong> of the PoE formula — every screw axis expressed in
+                    This is the <strong>space form</strong> of the PoE formula: every screw axis expressed in
                     the fixed base frame, read off <em>once</em>, at the home position. Set target angles with
                     the sliders, then press <strong>▶</strong>: the arm starts at <InlineMath math='M'/> and
                     the product is applied one factor at a time, farthest joint first (3 → 2 → 1). The ⊙ marks
@@ -157,7 +157,7 @@ const Chapter4 = () => {
                     the formula:
                 </p>}
                 ko={<p>
-                    이것이 PoE 공식의 <strong>Space Form</strong>이다 — 모든 screw 축을 고정 베이스 프레임에서,
+                    이것이 PoE 공식의 <strong>Space Form</strong>이다. 모든 screw 축을 고정 베이스 프레임에서,
                     홈 자세에서 <em>한 번만</em> 읽으면 된다. 슬라이더로 목표각을 정하고 <strong>▶</strong> 를
                     눌러 보라: 팔이 <InlineMath math='M'/> 에서 출발해 곱의 인자가 하나씩, 가장 먼 관절부터
                     (3 → 2 → 1) 적용된다. ⊙ 는 지금 자기 바깥의 전부를 screw 운동시키고 있는 축이고, 수식에서
@@ -235,13 +235,13 @@ const Chapter4 = () => {
                     Real robots read the same way. For Universal Robots' <strong>UR5</strong> at its zero pose,
                     the six screw axes and <InlineMath math='M'/> come straight from the arm's geometry, and
                     setting <InlineMath math='\theta_2 = -\pi/2,\ \theta_5 = \pi/2'/> (all others zero) collapses
-                    the product — every <InlineMath math='e^0 = I'/> drops out:
+                    the product, since every <InlineMath math='e^0 = I'/> drops out:
                 </p>}
                 ko={<p>
                     실제 로봇도 같은 방식으로 읽힌다. Universal Robots 의 <strong>UR5</strong> 를 영 자세에 두면
                     여섯 screw 축과 <InlineMath math='M'/> 이 팔의 기하에서 바로 나오고,{" "}
-                    <InlineMath math='\theta_2 = -\pi/2,\ \theta_5 = \pi/2'/> (나머지는 0)로 두면 곱이 무너진다 —{" "}
-                    <InlineMath math='e^0 = I'/> 가 전부 사라져서:
+                    <InlineMath math='\theta_2 = -\pi/2,\ \theta_5 = \pi/2'/> (나머지는 0)로 두면 곱이 무너진다.{" "}
+                    <InlineMath math='e^0 = I'/> 가 전부 사라져서 다음만 남는다:
                 </p>}
             />
             <div className="overflow-x-auto">
@@ -251,14 +251,14 @@ const Chapter4 = () => {
             </div>
             <T
                 en={<p>
-                    (lengths in meters). Versus D–H: the PoE description is not minimal —{" "}
-                    <InlineMath math='6n'/> numbers for the axes instead of D–H's <InlineMath math='3n'/> — but
+                    (lengths in meters). Versus D–H: the PoE description is not minimal ({" "}
+                    <InlineMath math='6n'/> numbers for the axes instead of D–H's <InlineMath math='3n'/>), but
                     nothing about frame placement needs to be remembered, and the screw axes are exactly the
                     quantities the velocity kinematics of Chapter 5 will need.
                 </p>}
                 ko={<p>
-                    (길이는 미터). D–H 와 비교하면: PoE 기술은 최소가 아니다 — 축에{" "}
-                    <InlineMath math='6n'/> 개의 수가 들어 D–H 의 <InlineMath math='3n'/> 보다 많다 — 하지만
+                    (길이는 미터). D–H 와 비교하면: PoE 기술은 최소가 아니어서 축에{" "}
+                    <InlineMath math='6n'/> 개의 수가 들어 D–H 의 <InlineMath math='3n'/> 보다 많다. 하지만
                     프레임 배치 규칙을 외울 필요가 전혀 없고, screw 축은 5장의 Velocity Kinematics가 그대로 쓸
                     바로 그 양이다.
                 </p>}
@@ -290,7 +290,7 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
                 en={<p>
                     This is the <strong>body form</strong>: the same joint axes, now expressed in the
                     end-effector frame at the home position. The two forms differ only in the order of
-                    interpretation — flip the toggle in the figure above to see it. In the space form,{" "}
+                    interpretation; flip the toggle in the figure above to see it. In the space form,{" "}
                     <InlineMath math='M'/> is transformed first by the most distal joint, moving inward; a
                     space-frame axis <InlineMath math='\mathcal{S}_i'/> is unaffected by more <em>distal</em>{" "}
                     joints. In the body form, <InlineMath math='M'/> is transformed first by the most proximal
@@ -300,7 +300,7 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
                 </p>}
                 ko={<p>
                     이것이 <strong>Body Form</strong>이다: 같은 관절 축을 홈 자세의 end-effector 프레임에서
-                    표현한 것이다. 두 형식은 해석 순서만 다르다 — 위 figure의 토글을 눌러 보라. Space Form에서는{" "}
+                    표현한 것이다. 두 형식은 해석 순서만 다르다. 위 figure의 토글을 눌러 보라. Space Form에서는{" "}
                     <InlineMath math='M'/> 이 가장 먼 관절부터 안쪽으로 변환되며, 공간 프레임 축{" "}
                     <InlineMath math='\mathcal{S}_i'/> 는 더 <em>먼</em> 관절의 영향을 받지 않는다. Body
                     Form에서는 가장 가까운 관절부터 바깥쪽으로 변환되며, 물체 프레임 축{" "}
@@ -313,13 +313,13 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
                     The body form shines for arms described from the tool side. Barrett's <strong>WAM</strong>{" "}
                     7R arm (a <em>redundant</em> arm: seven joints for a six-dimensional task space, leaving a
                     one-dimensional self-motion for obstacle avoidance) has a particularly clean body-frame
-                    table — wrist axes close to <InlineMath math='\{b\}'/> get short{" "}
+                    table: wrist axes close to <InlineMath math='\{b\}'/> get short{" "}
                     <InlineMath math='v_i'/>'s:
                 </p>}
                 ko={<p>
                     Body Form은 툴 쪽에서 기술되는 팔에서 빛난다. Barrett 의 <strong>WAM</strong> 7R 팔
-                    (6차원 task 공간에 관절 일곱 — 장애물 회피에 쓸 1차원 자기운동이 남는 <em>redundant</em>{" "}
-                    팔)은 body 프레임 표가 특히 깔끔하다 — <InlineMath math='\{b\}'/> 에 가까운 손목 축일수록{" "}
+                    (6차원 task 공간에 관절이 일곱이라, 장애물 회피에 쓸 1차원 자기운동이 남는 <em>redundant</em>{" "}
+                    팔)은 body 프레임 표가 특히 깔끔하다. <InlineMath math='\{b\}'/> 에 가까운 손목 축일수록{" "}
                     <InlineMath math='v_i'/> 가 짧아진다:
                 </p>}
             />
@@ -337,8 +337,8 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
             <T
                 en={<p>
                     A <strong>URDF</strong> file is an XML description of a robot used across the robotics ecosystem.
-                    It lists the robot's <strong>links</strong> — each with mass, inertia, and visual/collision
-                    geometry — and the <strong>joints</strong> connecting them, each giving a type (revolute,
+                    It lists the robot's <strong>links</strong> (each with mass, inertia, and visual/collision
+                    geometry) and the <strong>joints</strong> connecting them, each giving a type (revolute,
                     prismatic, …), an axis, its parent and child links, and the transform between them.
                 </p>}
                 ko={<p>
@@ -350,18 +350,17 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
             />
             <T
                 en={<p>
-                    A URDF describes any robot whose links and joints form a <strong>tree</strong> — links are
-                    the nodes, joints the edges — which covers serial arms and robot hands but not closed
+                    A URDF describes any robot whose links and joints form a <strong>tree</strong> (links are
+                    the nodes, joints the edges), which covers serial arms and robot hands but not closed
                     loops like the Stewart–Gough platform. Frame orientations are written as roll–pitch–yaw
-                    angles, and together the entries supply exactly what the forward kinematics needs — the
-                    joint axes and the home configuration <InlineMath math='M'/> — plus the inertial data that
+                    angles, and together the entries supply exactly what the forward kinematics needs (the
+                    joint axes and the home configuration <InlineMath math='M'/>), plus the inertial data that
                     Chapter 8's dynamics will use.
                 </p>}
                 ko={<p>
-                    URDF 는 링크와 관절이 <strong>트리</strong>를 이루는 로봇 — 링크가 노드, 관절이 간선 — 을
-                    기술한다. 직렬 팔과 로봇 손은 되지만 Stewart–Gough 플랫폼 같은 닫힌 루프는 안 된다. 프레임
-                    방향은 roll–pitch–yaw 각으로 쓰며, 항목들이 모여 Forward Kinematics에 필요한 것 — 관절 축과
-                    홈 configuration <InlineMath math='M'/> — 과 8장의 Dynamics가 쓸 관성 데이터를 정확히
+                    URDF 는 링크와 관절이 <strong>트리</strong>를 이루는 로봇을 기술한다(링크가 노드, 관절이 간선이다). 직렬 팔과 로봇 손은 되지만 Stewart–Gough 플랫폼 같은 닫힌 루프는 안 된다. 프레임
+                    방향은 roll–pitch–yaw 각으로 쓰며, 항목들이 모여 Forward Kinematics에 필요한 것(관절 축과
+                    홈 configuration <InlineMath math='M'/>)과 8장의 Dynamics가 쓸 관성 데이터를 정확히
                     제공한다.
                 </p>}
             />
@@ -370,31 +369,31 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
                     The robot below is exactly such a tree: the light-gray tubes are the{" "}
                     <strong>links</strong> and the dark housings with blue rings are the three{" "}
                     <strong>revolute joints</strong> (yaw at the base, pitch at the shoulder and elbow), each
-                    rotating its whole subtree — the same nested parent-child structure the URDF on the right
-                    encodes.
+                    rotating its whole subtree. This is the same nested parent-child structure the URDF on
+                    the right encodes.
                 </p>}
                 ko={<p>
                     아래 로봇이 바로 그런 트리이다: 밝은 회색 튜브가 <strong>링크</strong>이고, 파란 링을 두른
                     어두운 하우징이 세 개의 <strong>revolute 관절</strong>(베이스 요, 어깨·팔꿈치 피치)이다. 각
-                    관절이 자신의 서브트리 전체를 회전시킨다 — 오른쪽 URDF 가 부호화하는 것과 동일한 중첩된
+                    관절이 자신의 서브트리 전체를 회전시킨다. 오른쪽 URDF 가 부호화하는 것과 동일한 중첩된
                     부모-자식 구조이다.
                 </p>}
             />
             <UrdfRobot/>
             <T
                 en={<p>
-                    And here is a production robot in the same format — the book's URDF for the{" "}
+                    And here is a production robot in the same format: the book's URDF for the{" "}
                     <strong>UR5</strong>. Read <code>joint1</code> … <code>joint6</code> against the screw-axis
                     table from the PoE section: each <code>origin</code> is the fixed offset to the next joint
-                    frame and each <code>axis</code> is the joint's rotation direction — exactly the data{" "}
+                    frame and each <code>axis</code> is the joint's rotation direction. This is exactly the data{" "}
                     <InlineMath math='M'/> and <InlineMath math='\mathcal{S}_i'/> are built from. The{" "}
                     <code>link</code> entries carry the masses and inertias that Chapter 8 will need:
                 </p>}
                 ko={<p>
-                    그리고 같은 형식으로 쓰인 실전 로봇 — 책에 실린 <strong>UR5</strong> 의 URDF 다.{" "}
+                    그리고 같은 형식으로 쓰인 실전 로봇이 여기 있다. 책에 실린 <strong>UR5</strong> 의 URDF 다.{" "}
                     <code>joint1</code> … <code>joint6</code> 을 PoE 절의 screw 축 표와 대조해 보라: 각{" "}
                     <code>origin</code> 은 다음 관절 프레임까지의 고정 오프셋이고 <code>axis</code> 는 관절의
-                    회전 방향 — 정확히 <InlineMath math='M'/> 과 <InlineMath math='\mathcal{S}_i'/> 를 만드는
+                    회전 방향이다. 정확히 <InlineMath math='M'/> 과 <InlineMath math='\mathcal{S}_i'/> 를 만드는
                     데이터다. <code>link</code> 항목들은 8장이 쓸 질량·관성을 담는다:
                 </p>}
             />

@@ -8,7 +8,7 @@ import {IChapterData} from "../../../types/global";
 const data: IChapterData[] = [
     {
         chapter: 1,
-        title: {en: "Preview", ko: "개관"},
+        title: {en: "Preview", ko: "Preview"},
         contents: lazy(() => import("./Chapter1")),
         sections: [
             {en: "What Is a Robot?", ko: "로봇이란 무엇인가?"},

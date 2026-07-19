@@ -189,10 +189,10 @@ const PoEScene = ({width, height}: SceneProps) => {
                 </div>
                 <div className="text-center">
                     {mode === "space"
-                        ? t("order 3 → 2 → 1: the farthest joint first, then inward — each factor screws everything outward of it",
-                            "순서 3 → 2 → 1: 가장 먼 관절부터 안쪽으로 — 각 인자는 자기 바깥의 전부를 screw 운동시킨다")
-                        : t("order 1 → 2 → 3: the nearest joint first, then outward — the final pose is the same",
-                            "순서 1 → 2 → 3: 가장 가까운 관절부터 바깥으로 — 최종 자세는 같다")}
+                        ? t("order 3 → 2 → 1: the farthest joint first, then inward. Each factor screws everything outward of it",
+                            "순서 3 → 2 → 1: 가장 먼 관절부터 안쪽으로. 각 인자는 자기 바깥의 전부를 screw 운동시킨다")
+                        : t("order 1 → 2 → 3: the nearest joint first, then outward. The final pose is the same",
+                            "순서 1 → 2 → 3: 가장 가까운 관절부터 바깥으로. 최종 자세는 같다")}
                 </div>
             </div>
         </div>
