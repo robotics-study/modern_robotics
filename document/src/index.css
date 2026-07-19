@@ -628,6 +628,19 @@ h3:hover .anchor {
     overflow-x: auto;
 }
 
+/* 본문 가운데에 콘텐츠 폭만큼만 놓이는 데이터 표 (기본 표는 전체 폭 + 좌측 정렬) */
+.content-inner table.table-center {
+    display: table;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content-inner table.table-center th,
+.content-inner table.table-center td {
+    text-align: center;
+}
+
 .content-inner th,
 .content-inner td {
     border: 1px solid var(--border);
