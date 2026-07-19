@@ -1,5 +1,6 @@
 import {useMemo, useState} from "react";
-import {Circle, Ellipse, Line, Text} from "react-konva";
+import {Arrow, Circle, Ellipse, Line, Text} from "react-konva";
+import type Konva from "konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {planarFk} from "../../../libs/planarArm";
@@ -7,16 +8,15 @@ import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
 import {massMatrix2R, TWO_R} from "./twoRModel";
 
-// 관성의 자세 의존성: 자세 θ 에서 단위 관절토크 원 {‖u‖=1} 을 M⁻¹ 로 사상하면 관절가속도 타원
-// {M⁻¹u} 이 된다. 둥근 타원 = 등방적(가속 쉬움), 늘어난 타원 = 방향 의존·커플링 강함.
-// 팔을 접으면(θ2→π) 타원이 둥글어지고 펴면(θ2→0) 가늘어진다.
+// "끝점을 잡고 밀면 얼마나 무겁게 느껴지나"를 물리 공간에서 직접 체험하게 한다.
+// 팁에 단위 힘 f (드래그)를 가하면 가속도는 ẍ = Λ⁻¹f = (J M⁻¹ Jᵀ) f. 모든 방향의 결과가
+// 팁에 그린 가속도 타원이고, 방향별 felt mass = 1/(f̂ᵀ Λ⁻¹ f̂) 가 실시간으로 나온다.
+// J M⁻¹ Jᵀ 형태를 쓰므로 J 를 뒤집지 않아, 특이 자세에서는 타원이 선으로 접히는 것까지 보인다.
 const {l1: L1, l2: L2} = TWO_R;
-// 확장 자세(θ2→0)에서 가속도 타원의 장축이 커지므로, 그때도 캔버스 안에 담기도록 축척을 잡는다.
-const RESOLUTION = 0.025;
-const SCALE = 1 / RESOLUTION;
-// 코너에 그리는 팔 자세 미니어처(가속도 평면과 좌표가 다르므로 픽셀 단위로 따로 그린다).
-const ARM_ORIGIN = {x: 42, y: 42};
-const ARM_SCALE = 15;
+const RESOLUTION = 0.02;
+const FORCE_R = 0.65;       // 팁 주위 단위 힘 원의 표시 반지름 (world 단위)
+const ACC_SCALE = 0.85;     // 가속도 → 표시 길이 배율
+const FORCE_COLOR = "#e0533d";
 
 const degrees = (rad: number) => Math.round((rad * 180) / Math.PI);
 
@@ -26,7 +26,7 @@ interface Eig {
     angle: number;
 }
 
-// 대칭 2×2 [[a,b],[b,c]] 의 고유분해. M⁻¹ 은 SPD 라 고윳값이 곧 반축 길이(원→타원 사상)다.
+// 대칭 2×2 [[a,b],[b,c]] 의 고유분해 (반축 길이 + 회전각).
 const symEig = (a: number, b: number, c: number): Eig => {
     const mid = (a + c) / 2;
     const half = Math.sqrt(Math.max(0, ((a - c) / 2) ** 2 + b * b));
@@ -42,26 +42,47 @@ const MassMatrixScene = ({width, height}: SceneProps) => {
     // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
     const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
-    const [theta, setTheta] = useState<[number, number]>([0.6, 1.6]);
+    const t = useTr();
+    const [theta, setTheta] = useState<[number, number]>([0.5, 1.5]);
+    // 미는 힘의 방향각 (world 기준).
+    const [phi, setPhi] = useState(0.4);
 
-    const {m11, m12, m22, eig, det} = useMemo(() => {
-        const [a, b, c] = massMatrix2R(theta[1]);
-        const det = a * c - b * b;
-        // M⁻¹ = (1/det)[[M22, −M12], [−M12, M11]] — 대칭. 이 행렬의 고유분해가 가속도 타원을 준다.
-        // 점질량 2R 은 항상 SPD 라 det>0 이지만, 0 근처에서의 NaN 을 막는 안전장치를 둔다.
+    const {tip, elbow, S, eig} = useMemo(() => {
+        const pts = planarFk(theta, [L1, L2]).points;
+        const [m11, m12, m22] = massMatrix2R(theta[1]);
+        const det = m11 * m22 - m12 * m12;
         const inv = Math.abs(det) < 1e-9 ? 0 : 1 / det;
-        return {m11: a, m12: b, m22: c, det, eig: symEig(c * inv, -b * inv, a * inv)};
+        const i11 = m22 * inv, i12 = -m12 * inv, i22 = m11 * inv;   // M⁻¹
+        // 평면 2R 의 위치 Jacobian.
+        const s1 = Math.sin(theta[0]), c1 = Math.cos(theta[0]);
+        const s12 = Math.sin(theta[0] + theta[1]), c12 = Math.cos(theta[0] + theta[1]);
+        const j11 = -L1 * s1 - L2 * s12, j12 = -L2 * s12;
+        const j21 = L1 * c1 + L2 * c12, j22 = L2 * c12;
+        // Λ⁻¹ = J M⁻¹ Jᵀ (대칭 2×2).
+        const a11 = j11 * (i11 * j11 + i12 * j12) + j12 * (i12 * j11 + i22 * j12);
+        const a12 = j21 * (i11 * j11 + i12 * j12) + j22 * (i12 * j11 + i22 * j12);
+        const a22 = j21 * (i11 * j21 + i12 * j22) + j22 * (i12 * j21 + i22 * j22);
+        const S = {a11, a12, a22};
+        return {tip: pts[2], elbow: pts[1], S, eig: symEig(a11, a12, a22)};
     }, [theta]);
 
-    const rotationDeg = (-eig.angle * 180) / Math.PI;
-    const center = {x: width / 2, y: height / 2};
-    const ratio = eig.minor > 1e-6 ? eig.major / eig.minor : Infinity;
+    // 단위 힘 f 와 그 결과 가속도 ẍ = Λ⁻¹ f, 방향별 felt mass = 1 / (f̂ᵀ Λ⁻¹ f̂).
+    const f = {x: Math.cos(phi), y: Math.sin(phi)};
+    const acc = {x: S.a11 * f.x + S.a12 * f.y, y: S.a12 * f.x + S.a22 * f.y};
+    const accMag = Math.hypot(acc.x, acc.y);
+    const quad = f.x * (S.a11 * f.x + S.a12 * f.y) + f.y * (S.a12 * f.x + S.a22 * f.y);
+    const feltMass = quad > 1e-9 ? 1 / quad : Infinity;
 
-    // 코너 미니어처 팔: 좌표 눈금과 무관한 자체 축척으로 자세만 보여준다.
-    const armPx = planarFk(theta, [L1, L2]).points.map((p) => ({
-        x: ARM_ORIGIN.x + p.x * ARM_SCALE,
-        y: ARM_ORIGIN.y - p.y * ARM_SCALE,
-    }));
+    const toPx = (p: {x: number; y: number}) => {
+        const scale = 1 / res;
+        return {x: width / 2 + p.x * scale, y: height / 2 - p.y * scale};
+    };
+    const scale = 1 / res;
+    const base = toPx({x: 0, y: 0});
+    const elbowPx = toPx(elbow);
+    const tipPx = toPx(tip);
+    const fTipPx = {x: tipPx.x + f.x * FORCE_R * scale, y: tipPx.y - f.y * FORCE_R * scale};
+    const accTipPx = {x: tipPx.x + acc.x * ACC_SCALE * scale, y: tipPx.y - acc.y * ACC_SCALE * scale};
 
     const setJoint = (i: number, v: number) =>
         setTheta((prev) => {
@@ -78,33 +99,52 @@ const MassMatrixScene = ({width, height}: SceneProps) => {
                 resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
-                {/* 입력: 단위 관절토크 원 ‖u‖=1 */}
-                <Circle x={center.x} y={center.y} radius={SCALE} stroke={colors.muted} strokeWidth={1.5}
-                        dash={[5, 4]}/>
-                {/* 출력: 관절가속도 타원 {M⁻¹u} */}
-                <Ellipse
-                    x={center.x}
-                    y={center.y}
-                    radiusX={Math.max(eig.major * SCALE, 1)}
-                    radiusY={Math.max(eig.minor * SCALE, 1)}
-                    rotation={rotationDeg}
-                    fill={colors.accent}
-                    opacity={0.28}
-                    stroke={colors.accent}
-                    strokeWidth={2}
-                />
-                <Text x={center.x + SCALE + 6} y={center.y - 4} text="θ̈₁" fontSize={13} fill={colors.muted}/>
-                <Text x={center.x + 6} y={center.y - SCALE - 16} text="θ̈₂" fontSize={13} fill={colors.muted}/>
+                {/* 팔 (실공간) */}
+                <Line points={[base.x, base.y, elbowPx.x, elbowPx.y, tipPx.x, tipPx.y]}
+                      stroke={colors.text} strokeWidth={5} lineCap="round" lineJoin="round" opacity={0.8}/>
+                <Circle x={base.x} y={base.y} radius={6} fill={colors.surface} stroke={colors.text}
+                        strokeWidth={2}/>
+                <Circle x={elbowPx.x} y={elbowPx.y} radius={5} fill={colors.surface} stroke={colors.text}
+                        strokeWidth={2}/>
 
-                {/* 코너 팔 자세 */}
-                {armPx.slice(0, -1).map((p, i) => (
-                    <Line key={`arm-${i}`} points={[p.x, p.y, armPx[i + 1].x, armPx[i + 1].y]}
-                          stroke={colors.text} strokeWidth={3} lineCap="round" opacity={0.6}/>
-                ))}
-                {armPx.map((p, i) => (
-                    <Circle key={`arm-j-${i}`} x={p.x} y={p.y} radius={3} fill={colors.text} opacity={0.6}/>
-                ))}
-                <Text x={ARM_ORIGIN.x - 12} y={ARM_ORIGIN.y - 30} text="posture" fontSize={11} fill={colors.muted}/>
+                {/* 팁의 가속도 타원: 모든 방향으로 1 N 씩 밀었을 때 나올 수 있는 가속도 전부 */}
+                <Ellipse
+                    x={tipPx.x} y={tipPx.y}
+                    radiusX={Math.max(eig.major * ACC_SCALE * scale, 1)}
+                    radiusY={Math.max(eig.minor * ACC_SCALE * scale, 1)}
+                    rotation={(-eig.angle * 180) / Math.PI}
+                    fill={colors.accent} opacity={0.2}
+                    stroke={colors.accent} strokeWidth={2}
+                />
+                {/* 단위 힘 원 (연하게) */}
+                <Circle x={tipPx.x} y={tipPx.y} radius={FORCE_R * scale} stroke={colors.muted}
+                        strokeWidth={1} dash={[4, 4]} opacity={0.6}/>
+
+                {/* 미는 힘 f (드래그) 와 그 결과 가속도 */}
+                <Arrow points={[tipPx.x, tipPx.y, fTipPx.x, fTipPx.y]} stroke={colors.muted}
+                       fill={colors.muted} strokeWidth={2.5} pointerLength={7} pointerWidth={7}/>
+                <Arrow points={[tipPx.x, tipPx.y, accTipPx.x, accTipPx.y]} stroke={FORCE_COLOR}
+                       fill={FORCE_COLOR} strokeWidth={3} pointerLength={8} pointerWidth={8}/>
+                <Circle
+                    x={fTipPx.x} y={fTipPx.y} radius={9}
+                    fill={colors.surface} stroke={colors.text} strokeWidth={2.5} draggable
+                    dragBoundFunc={(pos) => {
+                        // 핸들은 팁 주위 원 위에 묶는다 (미는 "방향"만 고른다).
+                        const dx = pos.x - tipPx.x, dy = pos.y - tipPx.y;
+                        const d = Math.hypot(dx, dy) || 1;
+                        return {
+                            x: tipPx.x + (dx / d) * FORCE_R * scale,
+                            y: tipPx.y + (dy / d) * FORCE_R * scale,
+                        };
+                    }}
+                    onDragMove={(e: Konva.KonvaEventObject<DragEvent>) => {
+                        setPhi(Math.atan2(tipPx.y - e.target.y(), e.target.x() - tipPx.x));
+                    }}
+                />
+                <Text x={fTipPx.x + 8} y={fTipPx.y - 6} text={t("push (1 N)", "밀기 (1 N)")} fontSize={11}
+                      fontStyle="bold" fill={colors.muted}/>
+                <Text x={accTipPx.x + 8} y={accTipPx.y - 6} text="ẍ" fontSize={13} fontStyle="bold"
+                      fill={FORCE_COLOR}/>
             </CoordinateSystem>
             <div className="w-full flex flex-col gap-1 text-xs text-muted">
                 {[0, 1].map((i) => (
@@ -123,13 +163,19 @@ const MassMatrixScene = ({width, height}: SceneProps) => {
                         <span className="w-12 shrink-0 text-right tabular-nums">{degrees(theta[i])}°</span>
                     </label>
                 ))}
-                <div className="flex items-center justify-between pt-1 tabular-nums">
-                    <span>
-                        M = [{m11.toFixed(2)}, {m12.toFixed(2)}; {m12.toFixed(2)}, {m22.toFixed(2)}]
+                <div className="text-center tabular-nums pt-1">
+                    {t("push the handle around the tip: this direction feels like",
+                        "팁 주위 핸들을 돌려 보라: 이 방향으로 팔은")}{" "}
+                    <span className="font-semibold" style={{color: FORCE_COLOR}}>
+                        {feltMass === Infinity ? "∞" : feltMass.toFixed(2)} kg
                     </span>
-                    <span>κ = {ratio === Infinity ? "∞" : ratio.toFixed(2)}</span>
+                    {t(", acceleration", " 처럼 무겁고, 가속도는")}{" "}
+                    <span className="font-semibold">{accMag.toFixed(2)} m/s²</span>
                 </div>
-                <div className="text-center">det&nbsp;M = {det.toFixed(2)}</div>
+                <div className="text-center">
+                    {t("ellipse: accelerations from a 1 N push in every direction. Fold/straighten the arm and it reshapes.",
+                        "타원: 모든 방향으로 1 N 씩 밀었을 때의 가속도 전부. 팔을 접거나 펴면 모양이 바뀐다.")}
+                </div>
             </div>
         </div>
     );
@@ -138,13 +184,16 @@ const MassMatrixScene = ({width, height}: SceneProps) => {
 const MassMatrixEllipse = () => {
     const t = useTr();
     return <CanvasFigure
-        label={t("acceleration ellipse · configuration-dependence of inertia", "가속도 타원 · 관성의 configuration 의존성")}
+        label={t(
+            "grab the tip and push: the same 1 N feels heavy in one direction and light in another",
+            "끝점을 잡고 밀어 보라: 같은 1 N 인데 어떤 방향은 무겁고 어떤 방향은 가볍다",
+        )}
         tight
         bodyClassName="w-fit"
         className="w-full"
         modal={<MassMatrixScene {...modalCanvasSize()}/>}
     >
-        <MassMatrixScene width={320} height={320}/>
+        <MassMatrixScene width={340} height={340}/>
     </CanvasFigure>;
 };
 

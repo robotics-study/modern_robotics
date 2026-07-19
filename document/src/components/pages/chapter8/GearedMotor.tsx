@@ -1,5 +1,5 @@
 import {useMemo, useState} from "react";
-import {Layer, Line, Rect, Stage, Text} from "react-konva";
+import {Circle, Layer, Line, Stage, Text} from "react-konva";
 import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
@@ -62,6 +62,21 @@ const GearedMotorScene = ({width, height}: SceneProps) => {
     const appInertia = g * g * I_ROTOR;
     const share = appInertia / (appInertia + I_LINK);
 
+    // 구체적인 payoff: 이 관절이 낼 수 있는 최대 가속도 α(G) = G·τmax / (I_link + G²·I_rotor).
+    // 분자는 G 에 선형, 분모의 반영 관성은 G² 로 자라서 최적 기어비 G* = √(I_link/I_rotor) 가 생긴다.
+    const alpha = (ratio: number) => (ratio * tauMax) / (I_LINK + ratio * ratio * I_ROTOR);
+    const gOpt = Math.sqrt(I_LINK / I_ROTOR);
+    const accPlot = useMemo(() => {
+        const W = width, H = Math.max(110, Math.round(width * 0.34));
+        const padL = 46, padB = 22, padT = 12, padR = 10;
+        const aMax = alpha(gOpt) * 1.1;
+        const X = (ratio: number) => padL + ((ratio - 1) / 99) * (W - padL - padR);
+        const Y = (a: number) => H - padB - (a / aMax) * (H - padB - padT);
+        const pts: number[] = [];
+        for (let k = 1; k <= 100; k++) pts.push(X(k), Y(alpha(k)));
+        return {W, H, padL, padB, X, Y, pts};
+    }, [width]);
+
     return (
         <div className="flex flex-col gap-2 items-center" style={{width}}>
             <Stage width={plot.W} height={plot.H}
@@ -118,6 +133,34 @@ const GearedMotorScene = ({width, height}: SceneProps) => {
                         I_link = {I_LINK.toFixed(3)} kg·m²
                     </span>
                 </div>
+
+                {/* payoff: 이 관절의 최대 가속도 α(G). 반영 관성 때문에 최적 기어비가 생긴다 */}
+                <Stage width={accPlot.W} height={accPlot.H}
+                       className="bg-surface border border-border rounded-lg overflow-hidden">
+                    <Layer>
+                        <Line points={[accPlot.padL, accPlot.H - accPlot.padB, accPlot.W - 6, accPlot.H - accPlot.padB]}
+                              stroke={colors.text} strokeWidth={1.5}/>
+                        <Line points={[accPlot.padL, accPlot.H - accPlot.padB, accPlot.padL, 6]}
+                              stroke={colors.text} strokeWidth={1.5}/>
+                        <Text x={accPlot.W - 30} y={accPlot.H - accPlot.padB + 5} text="G" fontSize={12}
+                              fill={colors.muted}/>
+                        <Text x={4} y={8} text={t("max accel. α", "최대 가속도 α")} fontSize={11}
+                              fill={colors.muted}/>
+                        <Line points={accPlot.pts} stroke={colors.accent} strokeWidth={2.5}
+                              lineCap="round" lineJoin="round"/>
+                        {/* 최적 기어비 G* (관성 매칭) */}
+                        <Line points={[accPlot.X(gOpt), accPlot.H - accPlot.padB, accPlot.X(gOpt), 10]}
+                              stroke={colors.muted} strokeWidth={1.5} dash={[4, 4]}/>
+                        <Text x={accPlot.X(gOpt) + 4} y={12}
+                              text={`G* = √(I_link/I_rotor) ≈ ${gOpt.toFixed(0)}`}
+                              fontSize={11} fill={colors.muted}/>
+                        {/* 현재 G */}
+                        <Circle x={accPlot.X(g)} y={accPlot.Y(alpha(g))} radius={5} fill={GEARED_COLOR}/>
+                        <Text x={accPlot.X(g) + 8} y={accPlot.Y(alpha(g)) - 6}
+                              text={`α = ${alpha(g).toFixed(1)} rad/s²`} fontSize={11}
+                              fontStyle="bold" fill={GEARED_COLOR}/>
+                    </Layer>
+                </Stage>
             </div>
         </div>
     );

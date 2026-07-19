@@ -103,6 +103,30 @@ const NewtonEulerScene = ({width, height}: SceneProps) => {
             ? t(`backward pass: mass ${6 - step} force → joint torque`, `역방향 패스: 질량 ${6 - step} 힘 → 관절 토크`)
             : t("done: all joint torques known", "완료: 모든 관절 토크 확보");
 
+    // 지금 스텝에서 실제로 계산된 수치를 문장으로 말해 준다.
+    const narration = (() => {
+        if (step <= 2) {
+            const i = step;
+            const a = sol.acc[i];
+            return t(
+                `a${i + 1} = parent's motion + joint ${i + 1}'s θ̇, θ̈ contribution = (${a.x.toFixed(1)}, ${a.y.toFixed(1)}) m/s²`,
+                `a${i + 1} = 부모의 운동 + 관절 ${i + 1} 의 θ̇, θ̈ 기여 = (${a.x.toFixed(1)}, ${a.y.toFixed(1)}) m/s²`,
+            );
+        }
+        if (step <= 5) {
+            const i = 5 - step;
+            const f = sol.forces[i];
+            return t(
+                `f${i + 1} = m${i + 1}(a${i + 1} − g) = (${f.x.toFixed(1)}, ${f.y.toFixed(1)}) N, its moment joins every joint inboard of it`,
+                `f${i + 1} = m${i + 1}(a${i + 1} − g) = (${f.x.toFixed(1)}, ${f.y.toFixed(1)}) N, 이 힘의 모멘트가 안쪽 모든 관절에 더해진다`,
+            );
+        }
+        return t(
+            `τ = (${sol.tau.map((v) => v.toFixed(1)).join(", ")}) N·m: the inverse dynamics answer for this (θ, θ̇, θ̈)`,
+            `τ = (${sol.tau.map((v) => v.toFixed(1)).join(", ")}) N·m: 이 (θ, θ̇, θ̈) 에 대한 inverse dynamics 의 답`,
+        );
+    })();
+
     return (
         <div className="flex flex-col gap-2 items-center" style={{width}}>
             <CoordinateSystem
@@ -153,6 +177,11 @@ const NewtonEulerScene = ({width, height}: SceneProps) => {
             </CoordinateSystem>
 
             <div className="w-full flex flex-col gap-1 text-xs text-muted">
+                <div className="text-center tabular-nums">
+                    {t("given motion", "주어진 운동")}: θ̇ = ({dth.join(", ")}) rad/s · θ̈ = ({ddth.join(", ")}) rad/s²
+                    {" → "}
+                    <span className="font-semibold">{t("wanted", "구하려는 것")}: τ = ?</span>
+                </div>
                 <div className="flex items-center justify-center gap-3">
                     <button
                         type="button"
@@ -173,6 +202,7 @@ const NewtonEulerScene = ({width, height}: SceneProps) => {
                     </button>
                     <span className="font-semibold">{phaseLabel}</span>
                 </div>
+                <div className="text-center tabular-nums">{narration}</div>
                 <div className="text-center">
                     <span style={{color: ACC_COLOR}} className="font-semibold">
                         → {t("mass acceleration (forward)", "질량 가속도 (순방향)")}

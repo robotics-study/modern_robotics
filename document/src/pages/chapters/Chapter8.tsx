@@ -253,16 +253,21 @@ g(\\theta) = \\begin{bmatrix} (m_1 + m_2) L_1 g \\cos\\theta_1 + m_2 g L_2 \\cos
                     <InlineMath math='M_{12} = m_2(L_1 L_2 \cos\theta_2 + L_2^2)'/> is generally nonzero: the joints
                     are <strong>inertially coupled</strong>, so an acceleration commanded at joint 1 exerts a reaction
                     torque at joint 2, and vice versa. The figure below integrates exactly these equations in real
-                    time. With torques at zero and gravity on, the arm is a <strong>double pendulum</strong>. Nudge the
-                    joint torques, toggle gravity, or switch on gravity compensation and watch the same model respond.
+                    time; the preset buttons walk through three tellings of the same model. Try{" "}
+                    <strong>&#9314; push joint 1 only</strong>: with gravity compensated and{" "}
+                    <InlineMath math='\tau_2 = 0'/>, joint 2 still accelerates. That is{" "}
+                    <InlineMath math='M_{12}'/> at work, and the readout shows{" "}
+                    <InlineMath math='\ddot\theta_2 \ne 0'/> live.
                 </p>}
                 ko={<p>
                     결정적으로 비대각 성분{" "}
                     <InlineMath math='M_{12} = m_2(L_1 L_2 \cos\theta_2 + L_2^2)'/>는 일반적으로 0이 아니다. 관절들이{" "}
                     <strong>관성적으로 결합</strong>되어 있어, 관절 1에 명령한 가속도가 관절 2에 반작용 토크를 만들고
-                    그 반대도 마찬가지다. 아래 그림은 바로 이 방정식을 실시간으로 적분한다. 토크가 0이고 중력이 켜져
-                    있으면 팔은 <strong>이중 진자</strong>다. 관절 토크를 살짝 건드리고, 중력을 토글하고, 중력 보상을
-                    켜서 같은 모델이 어떻게 반응하는지 보라.
+                    그 반대도 마찬가지다. 아래 그림은 바로 이 방정식을 실시간으로 적분하며, 프리셋 버튼이 같은 모델의
+                    세 가지 이야기를 차례로 보여준다. <strong>&#9314; 관절 1만 밀기</strong>를 눌러 보라. 중력을
+                    보상하고 <InlineMath math='\tau_2 = 0'/>인데도 관절 2가 가속한다. 그것이 바로{" "}
+                    <InlineMath math='M_{12}'/>가 하는 일이고, readout이{" "}
+                    <InlineMath math='\ddot\theta_2 \ne 0'/>을 실시간으로 보여준다.
                 </p>}
             />
             <TwoRDynamics/>
@@ -342,32 +347,29 @@ g(\\theta) = \\begin{bmatrix} (m_1 + m_2) L_1 g \\cos\\theta_1 + m_2 g L_2 \\cos
                     How should you <em>feel</em> the mass matrix? For a point mass, <InlineMath math='f = m\ddot x'/>{" "}
                     means acceleration is always parallel to force. With a matrix <InlineMath math='M(\theta)'/> that
                     is no longer true: the effective mass differs by direction, so{" "}
-                    <InlineMath math='\ddot\theta'/> is generally <em>not</em> parallel to <InlineMath math='\tau'/>.
-                    Mapping the unit circle of torques through <InlineMath math='M^{-1}'/> gives an{" "}
-                    <strong>acceleration ellipse</strong>; its principal axes are the eigenvectors of{" "}
-                    <InlineMath math='M(\theta)'/>, and only along those axes do torque and acceleration line up. Sweep{" "}
-                    <InlineMath math='\theta_2'/> below and watch the ellipse round out as the arm folds and stretch as
-                    it straightens:
+                    <InlineMath math='\ddot\theta'/> is generally <em>not</em> parallel to <InlineMath math='\tau'/>,
+                    and mapping a unit ball of torques through <InlineMath math='M^{-1}'/> gives an ellipsoid, round
+                    only along the eigenvectors of <InlineMath math='M(\theta)'/>.
                 </p>}
                 ko={<p>
                     Mass matrix는 어떻게 <em>체감</em>해야 할까? 점질량에서는 <InlineMath math='f = m\ddot x'/>라
                     가속도가 항상 힘과 평행하다. 행렬 <InlineMath math='M(\theta)'/>에서는 더 이상 그렇지 않다. 유효
                     질량이 방향마다 달라서 <InlineMath math='\ddot\theta'/>는 일반적으로{" "}
-                    <InlineMath math='\tau'/>와 평행하지 <em>않다</em>. 토크의 단위 원을{" "}
-                    <InlineMath math='M^{-1}'/>로 보내면 <strong>가속도 타원</strong>이 되고, 그 주축은{" "}
-                    <InlineMath math='M(\theta)'/>의 고유벡터이며, 그 축 위에서만 토크와 가속도가 나란해진다. 아래에서{" "}
-                    <InlineMath math='\theta_2'/>를 훑으며 팔이 접힐 때 타원이 둥글어지고 펴질 때 늘어나는 것을 보라:
+                    <InlineMath math='\tau'/>와 평행하지 <em>않고</em>, 토크의 단위 공을{" "}
+                    <InlineMath math='M^{-1}'/>로 보내면 <InlineMath math='M(\theta)'/>의 고유벡터 방향으로만 나란한
+                    타원이 된다.
                 </p>}
             />
-            <MassMatrixEllipse/>
             <T
                 en={<p>
-                    The same idea transfers to the end-effector. Kinetic energy cannot depend on the coordinates used,
-                    so with <InlineMath math='V = J(\theta)\dot\theta'/> (and <InlineMath math='J'/> invertible),
+                    The most tangible version of this lives at the <strong>end-effector</strong>. Kinetic energy cannot
+                    depend on the coordinates used, so with <InlineMath math='V = J(\theta)\dot\theta'/> (and{" "}
+                    <InlineMath math='J'/> invertible),
                 </p>}
                 ko={<p>
-                    같은 아이디어가 end-effector로 옮겨진다. 운동 에너지는 어떤 좌표로 쓰든 같아야 하므로,{" "}
-                    <InlineMath math='V = J(\theta)\dot\theta'/> (<InlineMath math='J'/> 가역)에 대해,
+                    이것을 가장 만질 수 있는 형태는 <strong>end-effector</strong>에 있다. 운동 에너지는 어떤 좌표로
+                    쓰든 같아야 하므로, <InlineMath math='V = J(\theta)\dot\theta'/> (<InlineMath math='J'/> 가역)에
+                    대해,
                 </p>}
             />
             <div className="overflow-x-auto">
@@ -378,18 +380,23 @@ g(\\theta) = \\begin{bmatrix} (m_1 + m_2) L_1 g \\cos\\theta_1 + m_2 g L_2 \\cos
             <T
                 en={<p>
                     <InlineMath math='\Lambda(\theta) = J^{-\mathsf T}M(\theta)J^{-1}'/> is the mass the world feels
-                    when it grabs the end-effector: grab the tip of a 2R arm and push in different directions, and
-                    unless <InlineMath math='\Lambda = cI'/> it feels lighter one way and heavier another. This
+                    when it grabs the end-effector. The figure below lets you do exactly that: drag the handle to push
+                    the tip with a fixed 1 N in different directions, and read off the acceleration and the felt mass.
+                    Unless <InlineMath math='\Lambda = cI'/> the arm feels lighter one way and heavier another, and
+                    near a straightened (singular) posture the acceleration ellipse collapses toward a line. This
                     configuration-dependent apparent mass is a real nuisance for haptic devices, which is one reason
                     their links are made light.
                 </p>}
                 ko={<p>
                     <InlineMath math='\Lambda(\theta) = J^{-\mathsf T}M(\theta)J^{-1}'/>가 세상이 end-effector를 잡았을
-                    때 느끼는 질량이다. 2R 팔의 끝을 잡고 여러 방향으로 밀어 보면,{" "}
-                    <InlineMath math='\Lambda = cI'/>가 아닌 한 어떤 방향은 가볍고 어떤 방향은 무겁게 느껴진다. 이
-                    configuration 의존 겉보기 질량은 햅틱 장치에 실제 골칫거리이고, 그래서 링크를 가볍게 만든다.
+                    때 느끼는 질량이다. 아래 그림에서 정확히 그걸 해 볼 수 있다. 핸들을 끌어 팁을 여러 방향으로 같은{" "}
+                    1 N으로 밀고, 가속도와 felt mass를 읽어 보라. <InlineMath math='\Lambda = cI'/>가 아닌 한 어떤
+                    방향은 가볍고 어떤 방향은 무겁게 느껴지고, 팔을 곧게 편 (특이) 자세 근처에서는 가속도 타원이 선으로
+                    접힌다. 이 configuration 의존 겉보기 질량은 햅틱 장치에 실제 골칫거리이고, 그래서 링크를 가볍게
+                    만든다.
                 </p>}
             />
+            <MassMatrixEllipse/>
 
             <T en={<h2>Dynamics of a Single Rigid Body</h2>} ko={<h2>단일 강체의 Dynamics</h2>}/>
             <T
@@ -957,8 +964,11 @@ w = \\frac{V}{k_t} - \\frac{R}{k_t^2}\\,\\tau`}/>
                     <InlineMath math='G'/> reaches typical values of 100 or more. That is not all bad: a joint
                     dominated by its own <InlineMath math='G^2 I_{\mathrm{rotor}}'/> hardly feels the
                     configuration-dependence and coupling of <InlineMath math='M(\theta)'/>, which simplifies control
-                    at the cost of speed, efficiency, and back-drivability. Sweep <InlineMath math='G'/> below and
-                    watch both effects at once:
+                    at the cost of speed, efficiency, and back-drivability. It also creates an optimum: the maximum
+                    joint acceleration <InlineMath math='\alpha(G) = G\tau_{\max}/(I_{\mathrm{link}} + G^2 I_{\mathrm{rotor}})'/>{" "}
+                    grows linearly in the numerator but quadratically in the denominator, and peaks at the
+                    inertia-matching ratio <InlineMath math='G^* = \sqrt{I_{\mathrm{link}}/I_{\mathrm{rotor}}}'/>.
+                    Sweep <InlineMath math='G'/> below and watch all three effects at once:
                 </p>}
                 ko={<p>
                     관절에서 보면 rotor 관성이 <InlineMath math='G^2'/>배가 된다. 이{" "}
@@ -966,8 +976,11 @@ w = \\frac{V}{k_t} - \\frac{R}{k_t^2}\\,\\tau`}/>
                     전체 관성과 맞먹거나 넘어선다. 나쁘기만 한 것은 아니다. 자기{" "}
                     <InlineMath math='G^2 I_{\mathrm{rotor}}'/>가 지배하는 관절은{" "}
                     <InlineMath math='M(\theta)'/>의 configuration 의존성과 결합을 거의 느끼지 못해 제어가 단순해진다.
-                    대신 속도, 효율, back-drivability를 내준다. 아래에서 <InlineMath math='G'/>를 훑으며 두 효과를
-                    동시에 보라:
+                    대신 속도, 효율, back-drivability를 내준다. 최적점도 생긴다. 최대 관절 가속도{" "}
+                    <InlineMath math='\alpha(G) = G\tau_{\max}/(I_{\mathrm{link}} + G^2 I_{\mathrm{rotor}})'/>는
+                    분자가 선형, 분모가 이차로 자라서, 관성 매칭 비{" "}
+                    <InlineMath math='G^* = \sqrt{I_{\mathrm{link}}/I_{\mathrm{rotor}}}'/>에서 꼭대기를 찍는다. 아래에서{" "}
+                    <InlineMath math='G'/>를 훑으며 세 효과를 동시에 보라:
                 </p>}
             />
             <GearedMotor/>
