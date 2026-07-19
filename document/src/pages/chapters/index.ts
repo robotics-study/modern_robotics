@@ -97,8 +97,11 @@ const data: IChapterData[] = [
         sections: [
             {en: "The Equations of Motion", ko: "운동 방정식"},
             {en: "Lagrangian Dynamics of a 2R Arm", ko: "2R 팔의 Lagrangian Dynamics"},
+            {en: "Dynamics of a Single Rigid Body", ko: "단일 강체의 Dynamics"},
             {en: "Newton–Euler Inverse Dynamics", ko: "Newton–Euler Inverse Dynamics"},
             {en: "Forward Dynamics and Simulation", ko: "Forward Dynamics와 시뮬레이션"},
+            {en: "Task Space and Constrained Dynamics", ko: "Task Space와 Constrained Dynamics"},
+            {en: "Motors, Gearing, and Friction", ko: "모터, 기어, 마찰"},
         ],
     },
     {
