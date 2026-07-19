@@ -34,11 +34,25 @@ interface SceneProps {
     canvasClassName: string;
 }
 
+// Rodrigues 공식 R = I + sinθ[ω̂] + (1−cosθ)[ω̂]² 를 그대로 계산해 숫자로 보여준다 —
+// 슬라이더의 θ 와 화면의 자세, 그리고 이 아홉 숫자가 같은 회전의 세 얼굴임을 잇는다.
+const rodrigues = (w: Vector3, theta: number): number[][] => {
+    const s = Math.sin(theta), c = 1 - Math.cos(theta);
+    const [x, y, z] = [w.x, w.y, w.z];
+    // [ω̂] 와 [ω̂]² 를 성분으로 전개한 결과.
+    return [
+        [1 + c * (-z * z - y * y), -s * z + c * x * y, s * y + c * x * z],
+        [s * z + c * x * y, 1 + c * (-z * z - x * x), -s * x + c * y * z],
+        [-s * y + c * x * z, s * x + c * y * z, 1 + c * (-y * y - x * x)],
+    ];
+};
+
 const ExpRotationScene = ({canvasClassName}: SceneProps) => {
     const t = useTr();
     const [theta, setTheta] = useState(Math.PI / 2);
     const nodeRef = useRef<TransformNode | null>(null);
     const pose = useMemo(() => Quaternion.RotationAxis(AXIS, theta), [theta]);
+    const R = useMemo(() => rodrigues(AXIS, theta), [theta]);
 
     useEffect(() => {
         if (nodeRef.current) nodeRef.current.rotationQuaternion = pose;
@@ -74,6 +88,18 @@ const ExpRotationScene = ({canvasClassName}: SceneProps) => {
                 />
                 <div className="text-xs text-muted text-center">
                     θ = {theta.toFixed(2)} rad ({(theta * 180 / Math.PI).toFixed(0)}°) · ω̂ {t("fixed", "고정")}
+                </div>
+                <div className="flex items-center justify-center gap-3 pt-1 text-xs text-muted">
+                    <span>R = e^[ω̂]θ =</span>
+                    <div className="grid grid-cols-3 gap-x-2 tabular-nums text-right font-mono
+                                    border-l border-r border-border px-2">
+                        {R.flat().map((v, i) => (
+                            <span key={i}>{(v === 0 ? 0 : v).toFixed(2)}</span>
+                        ))}
+                    </div>
+                    <span className="tabular-nums">
+                        ω̂θ = ({(AXIS.x * theta).toFixed(2)}, {(AXIS.y * theta).toFixed(2)}, {(AXIS.z * theta).toFixed(2)})
+                    </span>
                 </div>
             </div>
         </div>

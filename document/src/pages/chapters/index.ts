@@ -42,6 +42,7 @@ const data: IChapterData[] = [
             {en: "Exponential Coordinate Representation of Rotation", ko: "회전의 Exponential Coordinate 표현"},
             {en: "Homogeneous Transformation", ko: "Homogeneous Transformation"},
             {en: "Rigid-Body Motions and Twists", ko: "Rigid-Body Motion과 Twist"},
+            {en: "Wrenches", ko: "Wrench"},
         ],
     },
     {
