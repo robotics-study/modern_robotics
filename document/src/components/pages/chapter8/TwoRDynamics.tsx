@@ -169,6 +169,15 @@ const TwoRScene = ({width, height}: SceneProps) => {
         setRender({theta: [INIT_THETA[0], INIT_THETA[1]], dot: [0, 0]});
     };
 
+    // 이해를 돕는 시나리오 프리셋: 상태를 리셋하고 컨트롤을 한 번에 세팅한다.
+    const preset = (nTau: [number, number], nGravity: boolean, nComp: boolean) => {
+        reset();
+        setTau(nTau);
+        setGravity(nGravity);
+        setGravComp(nComp);
+        setRunning(true);
+    };
+
     const {points} = planarFk(render.theta, [L1, L2]);
     const px = points.map((p) => globalToMap(width, height, p.x, p.y, res));
     const trailPx = trailRef.current.flatMap((p) => {
@@ -177,6 +186,16 @@ const TwoRScene = ({width, height}: SceneProps) => {
     });
     const massRadius = (m: number) => 5 + Math.sqrt(m) * 5;
     const totalE = energy(render.theta, render.dot, gravity);
+    // 현재 순간의 관절가속도: 관성 결합을 수치로 보여준다 (τ₂=0 인데 θ̈₂≠0 등).
+    const [aNow1, aNow2] = (() => {
+        let t1 = tau[0], t2 = tau[1];
+        if (gravity && gravComp) {
+            const [g1, g2] = gravityVec(render.theta[0], render.theta[1], true);
+            t1 += g1;
+            t2 += g2;
+        }
+        return forwardDynamics(render.theta, render.dot, [t1, t2], gravity);
+    })();
 
     const setJointTau = (i: number, v: number) =>
         setTau((prev) => {
@@ -209,6 +228,21 @@ const TwoRScene = ({width, height}: SceneProps) => {
                 <Circle x={px[2].x} y={px[2].y} radius={massRadius(M2)} fill={colors.accent} opacity={0.85}/>
             </CoordinateSystem>
             <div className="w-full flex flex-col gap-1 text-xs text-muted">
+                {/* 시나리오 프리셋: 무엇을 보라는 건지 이름으로 말해 준다 */}
+                <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                    <button type="button" onClick={() => preset([0, 0], true, false)}
+                            className="px-2 py-0.5 rounded border border-border hover:bg-surface">
+                        {t("① drop it (double pendulum)", "① 놓아 보기 (이중 진자)")}
+                    </button>
+                    <button type="button" onClick={() => preset([0, 0], true, true)}
+                            className="px-2 py-0.5 rounded border border-border hover:bg-surface">
+                        {t("② gravity comp. (floats)", "② 중력 보상 (뜬다)")}
+                    </button>
+                    <button type="button" onClick={() => preset([5, 0], true, true)}
+                            className="px-2 py-0.5 rounded border border-border hover:bg-surface">
+                        {t("③ push joint 1 only", "③ 관절 1만 밀기")}
+                    </button>
+                </div>
                 <div className="flex items-center gap-2">
                     <button type="button" onClick={() => setRunning((r) => !r)}
                             className="px-3 py-1 rounded-md bg-[var(--accent)] text-white font-semibold">
@@ -253,7 +287,14 @@ const TwoRScene = ({width, height}: SceneProps) => {
                         ? <span className="text-[var(--accent)] font-semibold">{t("running", "실행 중")}</span>
                         : <span>{t("paused", "일시정지")}</span>}{" "}
                     · E = {totalE.toFixed(2)} J
+                    {" · "}θ̈ = ({aNow1.toFixed(1)}, {aNow2.toFixed(1)})
                 </div>
+                {tau[0] !== 0 && tau[1] === 0 && Math.abs(aNow2) > 0.05 && (
+                    <div className="text-center font-semibold" style={{color: "var(--accent)"}}>
+                        {t("coupling: τ₂ = 0, yet θ̈₂ ≠ 0 (off-diagonal M₁₂ at work)",
+                            "결합: τ₂ = 0 인데 θ̈₂ ≠ 0 (비대각 M₁₂ 가 하는 일)")}
+                    </div>
+                )}
             </div>
         </div>
     );
