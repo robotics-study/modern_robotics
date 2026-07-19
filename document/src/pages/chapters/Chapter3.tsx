@@ -8,6 +8,7 @@ import HomogeneousTransform from "../../components/pages/chapter3/HomogeneousTra
 import PlanarTwistCenter from "../../components/pages/chapter3/PlanarTwistCenter";
 import ScrewMotion from "../../components/pages/chapter3/ScrewMotion";
 import WrenchBalance from "../../components/pages/chapter3/WrenchBalance";
+import WrenchIntuition from "../../components/pages/chapter3/WrenchIntuition";
 
 const Chapter3 = () => {
     return (
@@ -708,18 +709,41 @@ T_{sb}T\;(\text{body frame})'/>
             <T en={<h2>Wrenches</h2>} ko={<h2>Wrench</h2>}/>
             <T
                 en={<p>
-                    Forces get the same packaging as velocities. A force <InlineMath math='f'/> acting at a
-                    point <InlineMath math='r'/> creates a moment <InlineMath math='m = r \times f'/> about the
-                    frame origin; together they form the <strong>wrench</strong>{" "}
-                    <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/>. Wrenches expressed in the same
-                    frame simply add; a wrench with <InlineMath math='f = 0'/> is a <em>pure moment</em>.
+                    Push a wrench (spanner) handle: the bolt at the pivot feels your push <em>and</em> a twist
+                    — and the farther from the bolt you push, the stronger the twist, even though your force
+                    never changed. So a single force <InlineMath math='f'/> is not enough to describe what a
+                    rigid body feels; <em>where</em> it acts matters. Instead of carrying the application
+                    point around, we record its turning effect about the frame origin, the{" "}
+                    <strong>moment</strong> <InlineMath math='m = r \times f'/>, and package the two as the{" "}
+                    <strong>wrench</strong> <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/> — the
+                    complete "what the body feels". The pair loses nothing: sliding the application point
+                    along the force's <em>line of action</em> changes neither <InlineMath math='f'/> nor{" "}
+                    <InlineMath math='m'/> (and indeed <InlineMath math='|m| = |f| \cdot d'/>, with{" "}
+                    <InlineMath math='d'/> the distance from the origin to that line). Try it:
                 </p>}
                 ko={<p>
-                    힘도 속도와 같은 방식으로 포장된다. 점 <InlineMath math='r'/> 에 작용하는 힘{" "}
-                    <InlineMath math='f'/> 는 프레임 원점에 대해 모멘트 <InlineMath math='m = r \times f'/> 를
-                    만들고, 둘을 묶은 것이 <strong>wrench</strong>{" "}
-                    <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/> 다. 같은 프레임으로 표현된
-                    wrench 는 그냥 더하면 되고, <InlineMath math='f = 0'/> 인 wrench 는 <em>순수 모멘트</em>다.
+                    스패너 손잡이를 밀어 보라: 축의 볼트는 미는 힘<em>과 함께</em> 비틀림을 느낀다 — 그리고
+                    같은 힘이라도 볼트에서 멀리 밀수록 비틀림은 세진다. 즉 힘 <InlineMath math='f'/> 하나로는
+                    강체가 느끼는 것을 다 말할 수 없다. <em>어디에</em> 작용하는지가 중요하다. 작용점을 들고
+                    다니는 대신 원점 기준의 회전 효과, 곧 <strong>모멘트</strong>{" "}
+                    <InlineMath math='m = r \times f'/> 를 기록하고, 둘을 묶은 것이 <strong>wrench</strong>{" "}
+                    <InlineMath math='\mathcal{F} = (m, f) \in \mathbb{R}^6'/> — "물체가 느끼는 것 전부"다. 이
+                    쌍은 정보를 잃지 않는다: 작용점을 힘의 <em>작용선</em>을 따라 미끄러뜨리면{" "}
+                    <InlineMath math='f'/> 도 <InlineMath math='m'/> 도 변하지 않는다 (실제로{" "}
+                    <InlineMath math='|m| = |f| \cdot d'/>, <InlineMath math='d'/> 는 원점에서 작용선까지의
+                    거리다). 직접 해 보자:
+                </p>}
+            />
+            <WrenchIntuition/>
+            <T
+                en={<p>
+                    Wrenches expressed in the same frame simply add, and a wrench with{" "}
+                    <InlineMath math='f = 0'/> is a <em>pure moment</em> (a twist with no net push — like
+                    turning a screwdriver between your fingertips).
+                </p>}
+                ko={<p>
+                    같은 프레임으로 표현된 wrench 는 그냥 더하면 되고, <InlineMath math='f = 0'/> 인 wrench 는{" "}
+                    <em>순수 모멘트</em>다 (알짜 밀기 없이 비틀기만 — 손끝으로 드라이버를 돌리는 것처럼).
                 </p>}
             />
             <T
@@ -747,16 +771,24 @@ T_{sb}T\;(\text{body frame})'/>
                 en={<p>
                     Note the direction of the subscripts: the <em>transpose</em> of the adjoint that carries
                     twists from <InlineMath math='\{b\}'/> to <InlineMath math='\{a\}'/> carries wrenches the
-                    other way. The classic example: a robot hand holding an apple. Gravity acts on the hand and
-                    on the apple at different distances from the force–torque sensor, and what the sensor reads
-                    is the two gravity wrenches transferred to its own frame and summed:
+                    other way. You already know this formula in your bones: hold a dumbbell at your chest,
+                    then at arm's length — it does not get heavier (same <InlineMath math='f'/>), yet your
+                    wrist suffers, because the <em>moment</em> grows with distance. A robot's wrist
+                    force–torque sensor feels exactly that. Below, the sensor <InlineMath math='\{f\}'/> holds
+                    a hand plus an apple; stretch <InlineMath math='L_2'/> and watch the two bars — the force
+                    bar stays frozen while the moment bar grows. What the sensor reads is each gravity wrench
+                    moved into its frame by <InlineMath math='[\mathrm{Ad}]^T'/> and summed:
                 </p>}
                 ko={<p>
                     아래첨자의 방향에 주목하라: twist 를 <InlineMath math='\{b\}'/> 에서{" "}
                     <InlineMath math='\{a\}'/> 로 보내는 adjoint 의 <em>전치</em>가 wrench 는 반대 방향으로
-                    보낸다. 고전적인 예: 사과를 든 로봇 손이다. 중력이 손과 사과에 — 힘–토크 센서로부터 서로
-                    다른 거리에서 — 작용하고, 센서가 읽는 값은 두 중력 wrench 를 센서 프레임으로 옮겨 더한
-                    것이다:
+                    보낸다. 이 공식은 사실 몸이 이미 알고 있다: 아령을 가슴에 붙여 들 때와 팔을 쭉 뻗어 들
+                    때 — 아령이 더 무거워지는 게 아닌데(같은 <InlineMath math='f'/>) 손목은 훨씬 힘들다.{" "}
+                    <em>모멘트</em>가 거리와 함께 자라기 때문이다. 로봇 손목의 힘–토크 센서가 느끼는 것이
+                    정확히 이것이다. 아래에서 센서 <InlineMath math='\{f\}'/> 가 손과 사과를 들고 있다:{" "}
+                    <InlineMath math='L_2'/> 를 늘리며 두 막대를 보라 — 힘 막대는 얼어붙어 있고 모멘트 막대만
+                    자란다. 센서가 읽는 값은 각 중력 wrench 를 <InlineMath math='[\mathrm{Ad}]^T'/> 로 센서
+                    프레임에 옮겨 더한 것이다:
                 </p>}
             />
             <WrenchBalance/>

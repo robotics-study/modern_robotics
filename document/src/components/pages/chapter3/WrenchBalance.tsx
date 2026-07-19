@@ -86,6 +86,22 @@ const WrenchScene = () => {
                         </span>
                     </label>
                 ))}
+                {/* 힘은 질량만으로, 모멘트는 질량×거리로 정해진다 — 팔을 뻗어도 |f| 는 그대로다 */}
+                <div className="flex flex-col gap-0.5 pt-1">
+                    {([
+                        ["|f|", Math.abs(fy), (M_HAND + 0.3) * G, "N", FORCE_COLOR],
+                        ["|m|", Math.abs(mz), (M_HAND * 0.2 + 0.3 * 0.45) * G, "N·m", MOMENT_COLOR],
+                    ] as const).map(([label, val, max, unit, color]) => (
+                        <div key={label} className="flex items-center gap-2">
+                            <span className="w-8 shrink-0 text-right">{label}</span>
+                            <div className="flex-1 h-2.5 rounded bg-surface border border-border overflow-hidden">
+                                <div className="h-full rounded"
+                                     style={{width: `${Math.min(100, val / max * 100)}%`, background: color}}/>
+                            </div>
+                            <span className="w-20 shrink-0 tabular-nums">{val.toFixed(2)} {unit}</span>
+                        </div>
+                    ))}
+                </div>
                 <div className="text-center pt-0.5 tabular-nums">
                     F<sub>f</sub> = (m, f) = ({mz.toFixed(2)} N·m, {fy.toFixed(1)} N) = [Ad<sub>Thf</sub>]ᵀF<sub>h</sub> + [Ad<sub>Taf</sub>]ᵀF<sub>a</sub>
                 </div>
@@ -98,8 +114,8 @@ const WrenchBalance = () => {
     const t = useTr();
     return <CanvasFigure
         label={t(
-            "the force–torque sensor reads one wrench: gravity wrenches moved to {f} and summed",
-            "힘–토크 센서가 읽는 것은 wrench 하나: 중력 wrench 들을 {f} 로 옮겨 더한 것",
+            "why an outstretched arm hurts: stretch L2 — the force |f| never changes, only the moment |m| grows",
+            "팔을 뻗으면 힘든 이유: L2 를 늘려 보라 — 힘 |f| 는 그대로, 모멘트 |m| 만 자란다",
         )}
         tight
         bodyClassName="w-fit"
