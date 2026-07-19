@@ -12,7 +12,7 @@ import {useTr} from "../../../libs/i18n";
 // 자세를 흔들면서 실시간 sᵢ 읽기로 체험하게 한다.
 const BASE_R = 2.2;
 const PLAT_R = 1.15;
-const HOME_H = 2.5;
+const HOME_H = 2.62;
 
 // 6-6 배치: 세 방향에 두 개씩 짝지은 부착점. 다리는 base[i]→plat[i] 로 엇갈리게 이어
 // 실제 SG 플랫폼처럼 삼각 트러스 형태가 된다.
@@ -34,25 +34,28 @@ const yTo = (dir: Vector3): Quaternion => {
     return Quaternion.RotationAxis(axis.normalize(), Math.acos(dot));
 };
 
-// 망원경식 다리: 아래쪽 굵은 sleeve + 위쪽 piston, 양 끝 spherical 관절 구.
+// 망원경식 다리: 고정 길이 2단 (아래 sleeve + 위 piston)이 실제 prismatic 처럼 미끄러진다.
+// 자세 경로의 다리 길이 범위(브라우저 실측 [약 2.5, 3.7])가 2단 스트로크 한계
+// [max(sleeve, piston), sleeve+piston−겹침] 안에 들도록 두 단 길이를 잡는다.
+const SLEEVE_LEN = 2.0;
+const PISTON_LEN = 2.0;
 const Leg = ({name, a, b}: {name: string; a: Vector3; b: Vector3}) => {
     const d = b.subtract(a);
     const len = d.length();
     const mid = a.add(d.scale(0.5));
     const q = yTo(d);
-    const sleeveLen = Math.min(len * 0.62, 1.9);
     return (
         <transformNode name={`${name}-root`} position={mid} rotationQuaternion={q}>
-            <cylinder name={`${name}-sleeve`} diameter={0.17} height={sleeveLen} tessellation={16}
-                      position={new Vector3(0, -(len - sleeveLen) / 2, 0)}>
+            <cylinder name={`${name}-sleeve`} diameter={0.17} height={SLEEVE_LEN} tessellation={16}
+                      position={new Vector3(0, (SLEEVE_LEN - len) / 2, 0)}>
                 <Metal name={`${name}-sleeve`} color={HOUSING_DARK}/>
             </cylinder>
-            {/* piston 은 양 끝 관절 구 너머까지 살짝 관통시켜, 짧은 자세에서도 상판과 끊겨 보이지 않게 한다 */}
-            <cylinder name={`${name}-piston`} diameter={0.11} height={len + 0.24} tessellation={12}>
+            <cylinder name={`${name}-piston`} diameter={0.11} height={PISTON_LEN} tessellation={12}
+                      position={new Vector3(0, (len - PISTON_LEN) / 2, 0)}>
                 <Metal name={`${name}-piston`} color={LINK_GRAY}/>
             </cylinder>
             {[-1, 1].map((s) => (
-                <sphere key={s} name={`${name}-ball${s}`} diameter={0.2} segments={12}
+                <sphere key={s} name={`${name}-ball${s}`} diameter={0.24} segments={12}
                         position={new Vector3(0, (s * len) / 2, 0)}>
                     <standardMaterial name={`${name}-ball${s}-mat`} diffuseColor={RING_ORANGE}
                                       emissiveColor={RING_ORANGE.scale(0.3)}/>
@@ -90,10 +93,11 @@ const SGScene = ({canvasClassName}: SceneProps) => {
     }, [playing]);
 
     // 6자유도를 전부 조금씩 흔드는 자세: 위치 p + 회전 (yaw, pitch, roll).
-    const p = new Vector3(0.35 * Math.sin(0.7 * time), HOME_H + 0.3 * Math.sin(1.1 * time),
-        0.35 * Math.sin(0.5 * time + 1.2));
+    // 진폭은 다리 길이가 [2.25, 3.55] (2단 스트로크 범위 안)에 머물도록 시뮬레이션으로 맞춘 값이다.
+    const p = new Vector3(0.25 * Math.sin(0.7 * time), HOME_H + 0.22 * Math.sin(1.1 * time),
+        0.25 * Math.sin(0.5 * time + 1.2));
     const q = Quaternion.RotationYawPitchRoll(
-        0.4 * Math.sin(0.45 * time), 0.16 * Math.sin(0.9 * time + 0.7), 0.16 * Math.sin(0.8 * time));
+        0.3 * Math.sin(0.45 * time), 0.1 * Math.sin(0.9 * time + 0.7), 0.1 * Math.sin(0.8 * time));
     const rot = new Matrix();
     q.toRotationMatrix(rot);
     const platWorld = PLAT_PTS.map((b) => Vector3.TransformCoordinates(b, rot).add(p));
