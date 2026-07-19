@@ -1,6 +1,7 @@
 import {BlockMath, InlineMath} from "../../components/math/Tex";
 import JacobianColumns from "../../components/pages/chapter5/JacobianColumns";
 import ManipulabilityEllipse from "../../components/pages/chapter5/ManipulabilityEllipse";
+import VelocityMapping from "../../components/pages/chapter5/VelocityMapping";
 import {T} from "../../libs/i18n";
 
 const Chapter5 = () => {
@@ -26,13 +27,28 @@ const Chapter5 = () => {
                 en={<p>
                     The matrix <InlineMath math='J(\theta)'/> is the <strong>Jacobian</strong>. It is the linear map
                     from joint velocities to end-effector velocity, and — because the trigonometric terms depend on the
-                    configuration — it changes as the robot moves.
+                    configuration — it changes as the robot moves. For the 2R planar chain, differentiate the forward
+                    kinematics <InlineMath math='x_1 = L_1\cos\theta_1 + L_2\cos(\theta_1{+}\theta_2)'/>,{" "}
+                    <InlineMath math='x_2 = L_1\sin\theta_1 + L_2\sin(\theta_1{+}\theta_2)'/> term by term and collect
+                    the <InlineMath math='\dot\theta'/>'s:
                 </p>}
                 ko={<p>
                     행렬 <InlineMath math='J(\theta)'/>가 <strong>Jacobian</strong>이다. 이는 관절 속도에서 end-effector
                     속도로의 선형 사상이며, 삼각 함수 항이 configuration에 의존하기 때문에 로봇이 움직임에 따라 변한다.
+                    2R 평면 체인이라면 Forward Kinematics{" "}
+                    <InlineMath math='x_1 = L_1\cos\theta_1 + L_2\cos(\theta_1{+}\theta_2)'/>,{" "}
+                    <InlineMath math='x_2 = L_1\sin\theta_1 + L_2\sin(\theta_1{+}\theta_2)'/> 를 항별로 미분해{" "}
+                    <InlineMath math='\dot\theta'/> 로 묶으면 된다:
                 </p>}
             />
+            <div className="overflow-x-auto">
+                <BlockMath math='\begin{bmatrix} \dot x_1 \\ \dot x_2 \end{bmatrix} =
+\underbrace{\begin{bmatrix}
+-L_1\sin\theta_1 - L_2\sin(\theta_1{+}\theta_2) & -L_2\sin(\theta_1{+}\theta_2) \\
+\;\;\,L_1\cos\theta_1 + L_2\cos(\theta_1{+}\theta_2) & L_2\cos(\theta_1{+}\theta_2)
+\end{bmatrix}}_{J(\theta) \,=\, [J_1(\theta)\;\; J_2(\theta)]}
+\begin{bmatrix} \dot\theta_1 \\ \dot\theta_2 \end{bmatrix}'/>
+            </div>
             <T
                 en={<p>
                     For the 2R planar chain the tip velocity is <InlineMath math='v_\text{tip} = J_1(\theta)\dot\theta_1 + J_2(\theta)\dot\theta_2'/>.
@@ -56,6 +72,23 @@ const Chapter5 = () => {
             <JacobianColumns/>
             <T
                 en={<p>
+                    Because <InlineMath math='J'/> is a <em>linear</em> map, whole sets of joint velocities map in
+                    one stroke: the square of joint-rate bounds maps to a parallelogram of achievable tip
+                    velocities, and the unit "iso-effort" circle maps to an ellipse — the{" "}
+                    <strong>manipulability ellipse</strong> we will meet again below. Drag the joint-velocity
+                    point and sweep the posture; as <InlineMath math='\theta_2 \to 0'/> watch both images
+                    flatten onto a line:
+                </p>}
+                ko={<p>
+                    <InlineMath math='J'/> 는 <em>선형</em> 사상이라 관절속도들의 집합이 통째로 사상된다: 관절 속도
+                    한계의 정사각형은 도달 가능한 팁 속도의 평행사변형으로, 등노력 단위원은 타원 — 아래에서 다시
+                    만날 <strong>조작성 타원</strong> — 으로 간다. 관절속도 점을 끌고 자세를 훑어 보라.{" "}
+                    <InlineMath math='\theta_2 \to 0'/> 이면 두 상(像)이 함께 선분으로 납작해진다:
+                </p>}
+            />
+            <VelocityMapping/>
+            <T
+                en={<p>
                     In the general spatial case the tip velocity is the six-dimensional twist{" "}
                     <InlineMath math='\mathcal{V}'/>, and the same idea holds: column <InlineMath math='i'/> of the
                     Jacobian is the screw axis of joint <InlineMath math='i'/>, expressed for the <em>current</em>{" "}
@@ -72,32 +105,99 @@ const Chapter5 = () => {
             <T
                 en={<p>
                     Just as a twist can be written in the fixed frame (<InlineMath math='\mathcal{V}_s'/>) or the
-                    end-effector frame (<InlineMath math='\mathcal{V}_b'/>), there are two Jacobians. The{" "}
-                    <strong>space Jacobian</strong> <InlineMath math='J_s(\theta)'/> satisfies{" "}
-                    <InlineMath math='\mathcal{V}_s = J_s(\theta)\dot\theta'/>, with columns
+                    end-effector frame (<InlineMath math='\mathcal{V}_b'/>), there are two Jacobians — and both
+                    fall straight out of the PoE formula. Differentiate{" "}
+                    <InlineMath math='T = e^{[\mathcal{S}_1]\theta_1}\cdots e^{[\mathcal{S}_n]\theta_n}M'/> with
+                    the product rule (each factor contributes{" "}
+                    <InlineMath math='[\mathcal{S}_i]\dot\theta_i\,e^{[\mathcal{S}_i]\theta_i}'/>) and multiply
+                    by <InlineMath math='T^{-1}'/> on the right — the trailing factors cancel term by term:
                 </p>}
                 ko={<p>
                     twist가 고정 프레임(<InlineMath math='\mathcal{V}_s'/>) 또는 end-effector 프레임
-                    (<InlineMath math='\mathcal{V}_b'/>)으로 쓰일 수 있듯이, 두 개의 Jacobian이 있다.{" "}
-                    <strong>Space Jacobian</strong> <InlineMath math='J_s(\theta)'/>는{" "}
-                    <InlineMath math='\mathcal{V}_s = J_s(\theta)\dot\theta'/>를 만족하며, 그 열은
+                    (<InlineMath math='\mathcal{V}_b'/>)으로 쓰일 수 있듯이 Jacobian도 둘인데, 둘 다 PoE 공식에서
+                    곧장 떨어져 나온다.{" "}
+                    <InlineMath math='T = e^{[\mathcal{S}_1]\theta_1}\cdots e^{[\mathcal{S}_n]\theta_n}M'/> 을
+                    곱셈 법칙으로 미분하고 (각 인자가{" "}
+                    <InlineMath math='[\mathcal{S}_i]\dot\theta_i\,e^{[\mathcal{S}_i]\theta_i}'/> 를 내놓는다)
+                    오른쪽에 <InlineMath math='T^{-1}'/> 을 곱하면 — 뒤쪽 인자들이 항마다 소거된다:
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='[\mathcal{V}_s] = \dot TT^{-1}
+= [\mathcal{S}_1]\dot\theta_1
++ e^{[\mathcal{S}_1]\theta_1}[\mathcal{S}_2]e^{-[\mathcal{S}_1]\theta_1}\dot\theta_2
++ e^{[\mathcal{S}_1]\theta_1}e^{[\mathcal{S}_2]\theta_2}[\mathcal{S}_3]e^{-[\mathcal{S}_2]\theta_2}e^{-[\mathcal{S}_1]\theta_1}\dot\theta_3 + \cdots'/>
+            </div>
+            <T
+                en={<p>
+                    Each term is a conjugation <InlineMath math='T[\mathcal{S}]T^{-1}'/> — exactly the adjoint
+                    map from Chapter 3. So <InlineMath math='\mathcal{V}_s'/> is a sum of columns times joint
+                    rates, <InlineMath math='\mathcal{V}_s = J_s(\theta)\dot\theta'/>, with
+                </p>}
+                ko={<p>
+                    각 항은 켤레 변환 <InlineMath math='T[\mathcal{S}]T^{-1}'/> — 정확히 3장의 adjoint 사상이다.
+                    따라서 <InlineMath math='\mathcal{V}_s'/> 는 열 벡터 곱하기 관절 속도의 합,{" "}
+                    <InlineMath math='\mathcal{V}_s = J_s(\theta)\dot\theta'/> 이 되고, 그 열은
                 </p>}
             />
             <BlockMath math={`J_{si}(\\theta) = \\big[\\mathrm{Ad}_{e^{[\\mathcal{S}_1]\\theta_1}\\cdots e^{[\\mathcal{S}_{i-1}]\\theta_{i-1}}}\\big]\\,\\mathcal{S}_i, \\qquad J_{s1} = \\mathcal{S}_1`}/>
             <T
                 en={<p>
-                    Each column is the joint screw axis <InlineMath math='\mathcal{S}_i'/> after it has been carried
-                    along by the first <InlineMath math='i-1'/> joints. The <strong>body Jacobian</strong>{" "}
-                    <InlineMath math='J_b(\theta)'/> satisfies <InlineMath math='\mathcal{V}_b = J_b(\theta)\dot\theta'/>,
-                    with columns built the same way from the body screw axes <InlineMath math='\mathcal{B}_i'/>, working
-                    inward from the last joint. The two are related by the adjoint map,
+                    Read it physically: <InlineMath math='J_{si}'/> is the screw axis of joint{" "}
+                    <InlineMath math='i'/> after the first <InlineMath math='i-1'/> joints have carried it to
+                    the current configuration — joints <em>beyond</em> <InlineMath math='i'/> cannot move axis{" "}
+                    <InlineMath math='i'/>, so they never appear. That is why the recipe is the same as reading
+                    off the <InlineMath math='\mathcal{S}_i'/> in Chapter 4, just at arbitrary{" "}
+                    <InlineMath math='\theta'/> instead of <InlineMath math='\theta = 0'/>. A worked example,
+                    the spatial RRRP chain (all revolute axes vertical, prismatic last):
                 </p>}
                 ko={<p>
-                    각 열은 처음 <InlineMath math='i-1'/>개의 관절에 의해 실려 옮겨진 뒤의 관절 screw 축{" "}
-                    <InlineMath math='\mathcal{S}_i'/>이다. <strong>Body Jacobian</strong>{" "}
-                    <InlineMath math='J_b(\theta)'/>는 <InlineMath math='\mathcal{V}_b = J_b(\theta)\dot\theta'/>를
-                    만족하며, 그 열은 물체 screw 축 <InlineMath math='\mathcal{B}_i'/>로부터 마지막 관절에서 안쪽으로
-                    같은 방식으로 만들어진다. 둘은 수반 사상으로 관계된다,
+                    물리적으로 읽으면: <InlineMath math='J_{si}'/> 는 앞의 <InlineMath math='i-1'/> 개 관절이 현재
+                    configuration까지 실어 나른 관절 <InlineMath math='i'/> 의 screw 축이다 —{" "}
+                    <InlineMath math='i'/> <em>뒤의</em> 관절들은 축 <InlineMath math='i'/> 를 움직일 수 없으니
+                    식에 나타나지 않는다. 그래서 레시피가 4장에서 <InlineMath math='\mathcal{S}_i'/> 를 읽던 것과
+                    같고, 다만 <InlineMath math='\theta = 0'/> 이 아니라 임의의 <InlineMath math='\theta'/> 에서
+                    읽는다는 점만 다르다. 예제로 공간 RRRP 체인(회전 축은 모두 수직, 마지막은 prismatic):
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='J_s(\theta) = \begin{bmatrix}
+0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \\ 1 & 1 & 1 & 0 \\
+0 & L_1 s_1 & L_1 s_1 + L_2 s_{12} & 0 \\
+0 & -L_1 c_1 & -L_1 c_1 - L_2 c_{12} & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}'/>
+            </div>
+            <T
+                en={<p>
+                    (each revolute column uses <InlineMath math='v_{si} = -\omega_{si}\times q_i'/> with{" "}
+                    <InlineMath math='q_i'/> the joint's current position, e.g.{" "}
+                    <InlineMath math='q_2 = (L_1c_1, L_1s_1, 0)'/>; the prismatic column is{" "}
+                    <InlineMath math='(0, v)'/>). The <strong>body Jacobian</strong>{" "}
+                    <InlineMath math='J_b(\theta)'/> comes from the same computation on{" "}
+                    <InlineMath math='[\mathcal{V}_b] = T^{-1}\dot T'/> with the body-form PoE: now the factors{" "}
+                    <em>after</em> joint <InlineMath math='i'/> survive,
+                </p>}
+                ko={<p>
+                    (각 revolute 열은 <InlineMath math='v_{si} = -\omega_{si}\times q_i'/>, 여기서{" "}
+                    <InlineMath math='q_i'/> 는 관절의 <em>현재</em> 위치 — 예컨대{" "}
+                    <InlineMath math='q_2 = (L_1c_1, L_1s_1, 0)'/>; prismatic 열은{" "}
+                    <InlineMath math='(0, v)'/>). <strong>Body Jacobian</strong>{" "}
+                    <InlineMath math='J_b(\theta)'/> 는 body-form PoE 에 같은 계산을{" "}
+                    <InlineMath math='[\mathcal{V}_b] = T^{-1}\dot T'/> 로 하면 나온다: 이번엔 관절{" "}
+                    <InlineMath math='i'/> <em>뒤의</em> 인자들이 살아남아,
+                </p>}
+            />
+            <BlockMath math={`J_{bi}(\\theta) = \\big[\\mathrm{Ad}_{e^{-[\\mathcal{B}_n]\\theta_n}\\cdots e^{-[\\mathcal{B}_{i+1}]\\theta_{i+1}}}\\big]\\,\\mathcal{B}_i, \\qquad J_{bn} = \\mathcal{B}_n`}/>
+            <T
+                en={<p>
+                    — the screw axis of joint <InlineMath math='i'/> seen from the <em>displaced end-effector
+                    frame</em>, unaffected by the joints closer to the base. The two Jacobians are related by
+                    the adjoint map,
+                </p>}
+                ko={<p>
+                    — 즉 <em>움직인 end-effector 프레임</em>에서 본 관절 <InlineMath math='i'/> 의 screw 축이며,
+                    베이스에 더 가까운 관절들의 영향을 받지 않는다. 두 Jacobian은 adjoint 사상으로 이어진다,
                 </p>}
             />
             <BlockMath math={`J_b(\\theta) = \\big[\\mathrm{Ad}_{T_{bs}}\\big] J_s(\\theta), \\qquad J_s(\\theta) = \\big[\\mathrm{Ad}_{T_{sb}}\\big] J_b(\\theta)`}/>
@@ -111,6 +211,49 @@ const Chapter5 = () => {
                     수반 사상은 항상 가역이므로, <InlineMath math='J_s(\theta)'/>와{" "}
                     <InlineMath math='J_b(\theta)'/>는 항상 <strong>같은 랭크</strong>를 갖는다 — Singularity는
                     configuration의 성질이지, 그것을 기술하기 위해 우리가 선택한 프레임의 성질이 아니다.
+                </p>}
+            />
+            <T
+                en={<p>
+                    Two side notes complete the picture. First, if the task is described by a minimal coordinate
+                    vector <InlineMath math='q'/> (say <InlineMath math='(x, y, \theta)'/> for a planar task, or
+                    position plus exponential coordinates <InlineMath math='r = \hat\omega\theta'/> in space)
+                    instead of a twist, the corresponding <strong>analytic Jacobian</strong>{" "}
+                    <InlineMath math='J_a'/> in <InlineMath math='\dot q = J_a(\theta)\dot\theta'/> is just the
+                    geometric one wearing a change of coordinates, e.g.
+                </p>}
+                ko={<p>
+                    보조 노트 둘이 그림을 완성한다. 첫째, task 를 twist 대신 최소 좌표 벡터{" "}
+                    <InlineMath math='q'/> (평면이면 <InlineMath math='(x, y, \theta)'/>, 공간이면 위치 +
+                    exponential 좌표 <InlineMath math='r = \hat\omega\theta'/>)로 기술한다면,{" "}
+                    <InlineMath math='\dot q = J_a(\theta)\dot\theta'/> 의 <strong>analytic Jacobian</strong>{" "}
+                    <InlineMath math='J_a'/> 는 기하 Jacobian에 좌표 변환을 입힌 것일 뿐이다. 예컨대
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='J_a(\theta) = \begin{bmatrix} A^{-1}(r) & 0 \\ 0 & R_{sb}(\theta) \end{bmatrix} J_b(\theta),
+\qquad \omega_b = A(r)\,\dot r'/>
+            </div>
+            <T
+                en={<p>
+                    Second, a preview of the inverse question — given a desired twist{" "}
+                    <InlineMath math='\mathcal{V}'/>, which <InlineMath math='\dot\theta'/> produces it? If{" "}
+                    <InlineMath math='n = 6'/> and <InlineMath math='J'/> is full rank,{" "}
+                    <InlineMath math='\dot\theta = J^{-1}\mathcal{V}'/>. With <InlineMath math='n < 6'/> some
+                    twists are simply unreachable; with <InlineMath math='n > 6'/> the robot is{" "}
+                    <strong>redundant</strong>: six constraints leave <InlineMath math='n - 6'/> freedoms of{" "}
+                    <em>internal motion</em> — plant your palm on a table and your elbow can still swing.
+                    Chapter 6 takes this up properly.
+                </p>}
+                ko={<p>
+                    둘째, 역질문의 예고 — 원하는 twist <InlineMath math='\mathcal{V}'/> 가 주어지면 어떤{" "}
+                    <InlineMath math='\dot\theta'/> 가 그것을 만드는가? <InlineMath math='n = 6'/> 이고{" "}
+                    <InlineMath math='J'/> 가 full rank 면{" "}
+                    <InlineMath math='\dot\theta = J^{-1}\mathcal{V}'/>. <InlineMath math='n < 6'/> 이면 어떤
+                    twist 는 아예 도달 불가능하고, <InlineMath math='n > 6'/> 이면 로봇은{" "}
+                    <strong>여유자유도(redundant)</strong>다: 제약 여섯을 빼고도 <InlineMath math='n - 6'/> 개의{" "}
+                    <em>내부 운동</em> 자유가 남는다 — 손바닥을 탁자에 붙여도 팔꿈치는 여전히 흔들 수 있다.
+                    6장이 이 질문을 본격적으로 다룬다.
                 </p>}
             />
 
@@ -148,6 +291,29 @@ const Chapter5 = () => {
                     쉽게 지탱하는 이유다 — 그 Singularity에서 하중이 관절을 곧바로 통과한다.
                 </p>}
             />
+            <T
+                en={<p>
+                    The joint count matters here too. If <InlineMath math='n = 6'/> and{" "}
+                    <InlineMath math='J^{\mathsf T}'/> is invertible, any wrench can be produced:{" "}
+                    <InlineMath math='\mathcal{F} = J^{-\mathsf T}\tau'/>. If <InlineMath math='n < 6'/>, the
+                    robot can <em>actively</em> generate wrenches only in an <InlineMath math='n'/>-dimensional
+                    subspace, yet it <em>resists</em> the remaining <InlineMath math='6-n'/> directions for
+                    free — a motorized door (<InlineMath math='n = 1'/>) can only push its knob along the
+                    circle of motion, but resists any other wrench without effort. And if{" "}
+                    <InlineMath math='n > 6'/>, even an end-effector cast in concrete leaves internal motions
+                    possible — statics alone no longer decides what happens, and dynamics must take over.
+                </p>}
+                ko={<p>
+                    여기서도 관절 수가 중요하다. <InlineMath math='n = 6'/> 이고{" "}
+                    <InlineMath math='J^{\mathsf T}'/> 가 가역이면 어떤 wrench 든 만들 수 있다:{" "}
+                    <InlineMath math='\mathcal{F} = J^{-\mathsf T}\tau'/>. <InlineMath math='n < 6'/> 이면
+                    로봇이 <em>능동적으로</em> 낼 수 있는 wrench 는 <InlineMath math='n'/>차원 부분공간뿐이지만,
+                    나머지 <InlineMath math='6-n'/> 방향은 공짜로 <em>버틴다</em> — 모터 달린 문
+                    (<InlineMath math='n = 1'/>)은 손잡이를 운동 원호 방향으로만 밀 수 있지만 다른 어떤 wrench 도
+                    힘들이지 않고 견딘다. 그리고 <InlineMath math='n > 6'/> 이면 end-effector 를 콘크리트에
+                    박아도 내부 운동이 남는다 — 정역학만으로는 결론이 나지 않고 동역학이 넘겨받아야 한다.
+                </p>}
+            />
 
             <T en={<h2>Singularities</h2>} ko={<h2>Singularity</h2>}/>
             <T
@@ -178,15 +344,35 @@ const Chapter5 = () => {
             />
             <T
                 en={<p>
-                    In every case two or more Jacobian columns become linearly dependent. Because{" "}
-                    <InlineMath math='J_s'/> and <InlineMath math='J_b'/> share their rank, and relocating the base or
-                    the end-effector frame leaves the Jacobian's rank unchanged, singularities are intrinsic to the
-                    mechanism's posture.
+                    In every case two or more Jacobian columns become linearly dependent. The collinear case
+                    shows how these are proved: with <InlineMath math='\omega_{s1} = \omega_{s2}'/> and both{" "}
+                    <InlineMath math='q_1, q_2'/> on the shared axis,{" "}
+                    <InlineMath math='\omega_{s1}\times(q_1 - q_2) = 0'/>, so
                 </p>}
                 ko={<p>
-                    모든 경우에 두 개 이상의 Jacobian 열이 선형 종속이 된다.{" "}
-                    <InlineMath math='J_s'/>와 <InlineMath math='J_b'/>가 랭크를 공유하고, 베이스나 end-effector 프레임을
-                    옮겨도 Jacobian의 랭크가 변하지 않기 때문에, Singularity는 메커니즘의 자세에 내재된 것이다.
+                    모든 경우에 두 개 이상의 Jacobian 열이 선형 종속이 된다. 공선 케이스가 증명 방식을 보여준다:{" "}
+                    <InlineMath math='\omega_{s1} = \omega_{s2}'/> 이고 <InlineMath math='q_1, q_2'/> 가 모두
+                    공유 축 위에 있으므로 <InlineMath math='\omega_{s1}\times(q_1 - q_2) = 0'/>, 따라서
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='J_{s1} = \begin{bmatrix} \omega_{s1} \\ -\omega_{s1}\times q_1 \end{bmatrix}
+= \begin{bmatrix} \omega_{s2} \\ -\omega_{s2}\times q_2 \end{bmatrix} = J_{s2}
+\quad\Longrightarrow\quad \operatorname{rank} J_s < 6'/>
+            </div>
+            <T
+                en={<p>
+                    Because <InlineMath math='J_s'/> and <InlineMath math='J_b'/> share their rank, and
+                    relocating the base (<InlineMath math="T' = PT"/>) or the end-effector frame{" "}
+                    (<InlineMath math="T' = TQ"/>) cancels out of <InlineMath math='T^{-1}\dot T'/> and{" "}
+                    <InlineMath math='\dot TT^{-1}'/> respectively, singularities are intrinsic to the
+                    mechanism's posture — not to any choice of frames.
+                </p>}
+                ko={<p>
+                    <InlineMath math='J_s'/>와 <InlineMath math='J_b'/>가 랭크를 공유하고, 베이스 이동
+                    (<InlineMath math="T' = PT"/>)은 <InlineMath math='T^{-1}\dot T'/> 에서, end-effector 프레임
+                    이동(<InlineMath math="T' = TQ"/>)은 <InlineMath math='\dot TT^{-1}'/> 에서 소거되므로,
+                    Singularity는 프레임 선택이 아니라 메커니즘의 자세에 내재된 것이다.
                 </p>}
             />
 
@@ -194,19 +380,54 @@ const Chapter5 = () => {
             <T
                 en={<p>
                     How close is a posture to a singularity, and in which directions is the arm nimble or clumsy? Map
-                    the unit circle of "iso-effort" joint velocities through the Jacobian: it becomes the{" "}
-                    <strong>manipulability ellipsoid</strong>, whose principal axes are the eigenvectors of{" "}
-                    <InlineMath math='J J^{\mathsf T}'/> and whose semi-axis lengths are the singular values{" "}
-                    <InlineMath math='\ell_i'/> of <InlineMath math='J'/>. A round ellipse means the tip moves equally
-                    well in all directions; a thin one means it is nearly singular; at a singularity it collapses to a
-                    line segment.
+                    the unit sphere of "iso-effort" joint velocities <InlineMath math='\|\dot\theta\| = 1'/>{" "}
+                    through the Jacobian. Substituting <InlineMath math='\dot\theta = J^{-1}\dot q'/>,
                 </p>}
                 ko={<p>
-                    어떤 자세가 Singularity에 얼마나 가까운지, 그리고 어느 방향으로 팔이 민첩하거나 둔한지? "등노력(iso-effort)"
-                    관절 속도의 단위 원을 Jacobian으로 사상하라: 그것은 <strong>Manipulability Ellipsoid</strong>가 되며, 그 주축은{" "}
-                    <InlineMath math='J J^{\mathsf T}'/>의 고유벡터이고 반축 길이는 <InlineMath math='J'/>의 특이값{" "}
-                    <InlineMath math='\ell_i'/>이다. 둥근 타원은 팁이 모든 방향으로 똑같이 잘 움직인다는 뜻이고, 가느다란
-                    타원은 거의 특이 상태라는 뜻이며, Singularity에서는 선분으로 붕괴한다.
+                    어떤 자세가 Singularity에 얼마나 가까운지, 그리고 어느 방향으로 팔이 민첩하거나 둔한지?
+                    "등노력(iso-effort)" 관절 속도 단위구 <InlineMath math='\|\dot\theta\| = 1'/> 를 Jacobian 으로
+                    사상해 보자. <InlineMath math='\dot\theta = J^{-1}\dot q'/> 를 대입하면,
+                </p>}
+            />
+            <div className="overflow-x-auto">
+                <BlockMath math='1 = \dot\theta^{\mathsf T}\dot\theta
+= \dot q^{\mathsf T}\,(JJ^{\mathsf T})^{-1}\dot q
+= \dot q^{\mathsf T}A^{-1}\dot q,
+\qquad A = JJ^{\mathsf T}'/>
+            </div>
+            <T
+                en={<p>
+                    — the equation of an ellipsoid: this is the <strong>manipulability ellipsoid</strong>. Its
+                    principal axes are the eigenvectors of <InlineMath math='A'/>, its semi-axis lengths the{" "}
+                    <InlineMath math='\sqrt{\lambda_i}'/> (the singular values <InlineMath math='\ell_i'/> of{" "}
+                    <InlineMath math='J'/>), and its volume is proportional to{" "}
+                    <InlineMath math='\sqrt{\det A}'/>. A round ellipse means the tip moves equally well in all
+                    directions; a thin one means nearly singular; at a singularity it collapses to a line
+                    segment.
+                </p>}
+                ko={<p>
+                    — 타원면의 방정식이다: 이것이 <strong>Manipulability Ellipsoid</strong>다. 주축은{" "}
+                    <InlineMath math='A'/> 의 고유벡터, 반축 길이는 <InlineMath math='\sqrt{\lambda_i}'/>{" "}
+                    (<InlineMath math='J'/> 의 특이값 <InlineMath math='\ell_i'/>), 부피는{" "}
+                    <InlineMath math='\sqrt{\det A}'/> 에 비례한다. 둥근 타원은 팁이 모든 방향으로 똑같이 잘
+                    움직인다는 뜻이고, 가느다란 타원은 거의 특이 상태라는 뜻이며, Singularity에서는 선분으로
+                    붕괴한다.
+                </p>}
+            />
+            <T
+                en={<p>
+                    Three scalar summaries are in common use — the axis ratio{" "}
+                    <InlineMath math='\mu_1 = \sqrt{\lambda_\text{max}/\lambda_\text{min}} \ge 1'/> (isotropy;
+                    1 is best), its square <InlineMath math='\mu_2'/> (the <em>condition number</em> of{" "}
+                    <InlineMath math='A'/>), and the volume measure{" "}
+                    <InlineMath math='\mu_3 = \sqrt{\det A}'/> (bigger is better).
+                </p>}
+                ko={<p>
+                    스칼라 요약으로는 셋이 흔히 쓰인다 — 축비{" "}
+                    <InlineMath math='\mu_1 = \sqrt{\lambda_\text{max}/\lambda_\text{min}} \ge 1'/> (등방성;
+                    1이 최선), 그 제곱 <InlineMath math='\mu_2'/> (<InlineMath math='A'/> 의{" "}
+                    <em>condition number</em>), 그리고 부피 지표{" "}
+                    <InlineMath math='\mu_3 = \sqrt{\det A}'/> (클수록 좋다).
                 </p>}
             />
             <T
@@ -228,6 +449,28 @@ const Chapter5 = () => {
                 </p>}
             />
             <ManipulabilityEllipse/>
+            <T
+                en={<p>
+                    The duality is exact: from <InlineMath math='\tau = J^{\mathsf T}\mathcal{F}'/>, the unit
+                    torque sphere <InlineMath math='\|\tau\| = 1'/> maps to the force ellipsoid{" "}
+                    <InlineMath math='f^{\mathsf T}B^{-1}f = 1'/> with{" "}
+                    <InlineMath math='B = (JJ^{\mathsf T})^{-1} = A^{-1}'/> — same eigenvectors as{" "}
+                    <InlineMath math='A'/>, reciprocal semi-axes <InlineMath math='1/\sqrt{\lambda_i}'/>. The
+                    product of the two ellipsoid volumes is therefore <em>constant</em> over all postures:
+                    tuning a posture for velocity manipulability pays for it in force capability, and vice
+                    versa — the suitcase carrier's bargain from the statics section.
+                </p>}
+                ko={<p>
+                    쌍대성은 정확하다: <InlineMath math='\tau = J^{\mathsf T}\mathcal{F}'/> 에서 단위 토크 구{" "}
+                    <InlineMath math='\|\tau\| = 1'/> 는 force ellipsoid{" "}
+                    <InlineMath math='f^{\mathsf T}B^{-1}f = 1'/>,{" "}
+                    <InlineMath math='B = (JJ^{\mathsf T})^{-1} = A^{-1}'/> 로 사상된다 —{" "}
+                    <InlineMath math='A'/> 와 고유벡터는 같고 반축은 역수 <InlineMath math='1/\sqrt{\lambda_i}'/>.
+                    따라서 두 타원면 부피의 곱은 어떤 자세에서도 <em>일정</em>하다: 속도 조작성을 좋게 잡은 자세는
+                    힘 능력에서 대가를 치르고, 그 반대도 마찬가지다 — 정역학 절의 여행 가방 이야기가 바로 이
+                    거래다.
+                </p>}
+            />
         </>
     )
 }
