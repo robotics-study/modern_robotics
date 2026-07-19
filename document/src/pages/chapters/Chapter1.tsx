@@ -1,18 +1,146 @@
 import {InlineMath} from "../../components/math/Tex";
-import {T} from "../../libs/i18n";
+import CSpacePreview2R from "../../components/pages/chapter1/CSpacePreview2R";
+import OpenVsClosedChain from "../../components/pages/chapter1/OpenVsClosedChain";
+import {T, useTr} from "../../libs/i18n";
+import {useChapterNav} from "../../libs/nav";
+import {Localized} from "../../../types/global";
+
+// 사이트에 페이지가 있는 챕터만 클릭 가능한 카드로, 책에만 있는 챕터는 목록으로 구분한다.
+// title 의 ko 는 pages/chapters/index.ts 의 챕터 ko 타이틀과 같은 표기를 쓴다.
+const ROADMAP: Array<{n: number; title: Localized<string>; blurb: Localized<string>}> = [
+    {
+        n: 2,
+        title: {en: "Configuration Space", ko: "Configuration 공간"},
+        blurb: {
+            en: "How many numbers describe a robot's pose? DOF of bodies and mechanisms, " +
+                "Grübler's formula, the shape (topology) of the C-space, task space and workspace.",
+            ko: "로봇의 자세는 숫자 몇 개로 정해질까? 강체와 메커니즘의 자유도, Grübler 공식, " +
+                "C-space의 모양(위상), task 공간과 작업 공간.",
+        },
+    },
+    {
+        n: 3,
+        title: {en: "Rigid-Body Motions", ko: "Rigid-Body Motion"},
+        blurb: {
+            en: "Rotation matrices SO(3) and transforms SE(3), exponential coordinates " +
+                "(rotate about ω̂ by θ), and screw theory: twists and wrenches.",
+            ko: "회전 행렬 SO(3)와 변환 SE(3), exponential 좌표(ω̂ 축으로 θ만큼 회전), " +
+                "그리고 screw 이론: twist와 wrench.",
+        },
+    },
+    {
+        n: 4,
+        title: {en: "Forward Kinematics", ko: "Forward Kinematics"},
+        blurb: {
+            en: "Joint values in, end-effector pose out — the product of exponentials (PoE) " +
+                "formula, needing only a base frame and an end-effector frame.",
+            ko: "관절값을 넣으면 end-effector 자세가 나온다 — base 프레임과 end-effector " +
+                "프레임만 있으면 되는 product of exponentials(PoE) 공식.",
+        },
+    },
+    {
+        n: 5,
+        title: {en: "Velocity Kinematics and Statics", ko: "Velocity Kinematics와 Statics"},
+        blurb: {
+            en: "The Jacobian maps joint rates to end-effector twists; singularities, " +
+                "manipulability ellipsoids, and static force analysis all follow from it.",
+            ko: "Jacobian은 관절 속도를 end-effector twist로 보낸다; singularity, " +
+                "manipulability ellipsoid, 정역학 힘 해석이 모두 여기서 나온다.",
+        },
+    },
+    {
+        n: 6,
+        title: {en: "Inverse Kinematics", ko: "Inverse Kinematics"},
+        blurb: {
+            en: "Desired pose in, joint values out. Closed-form solutions for special 6-DOF " +
+                "arms and Jacobian-based numerical iteration for everything else.",
+            ko: "원하는 자세를 넣으면 관절값이 나온다. 특수한 6자유도 팔의 닫힌형 해와, " +
+                "그 밖의 모든 경우를 위한 Jacobian 기반 수치 반복.",
+        },
+    },
+    {
+        n: 7,
+        title: {en: "Kinematics of Closed Chains", ko: "Closed Chain의 Kinematics"},
+        blurb: {
+            en: "Mechanisms with loops (five-bar, Stewart–Gough): multiple forward-kinematics " +
+                "solutions, passive joints, and richer singularity behavior.",
+            ko: "루프를 가진 메커니즘(5절 링크, Stewart–Gough): 여러 개의 forward kinematics 해, " +
+                "수동 관절, 더 풍부한 singularity 거동.",
+        },
+    },
+    {
+        n: 8,
+        title: {en: "Dynamics of Open Chains", ko: "Open Chain의 Dynamics"},
+        blurb: {
+            en: "The forces and torques behind the motion: Lagrangian and recursive " +
+                "Newton–Euler formulations of the equations of motion.",
+            ko: "움직임 뒤의 힘과 토크: 운동 방정식의 Lagrangian 정식화와 재귀적 " +
+                "Newton–Euler 정식화.",
+        },
+    },
+    {
+        n: 9,
+        title: {en: "Trajectory Generation", ko: "Trajectory Generation"},
+        blurb: {
+            en: "Turning a path into a motion: polynomial and trapezoidal time scalings and " +
+                "smooth trajectories through timed via points.",
+            ko: "경로를 움직임으로 바꾸기: 다항식·trapezoidal time scaling과 시각이 지정된 " +
+                "via point를 지나는 매끄러운 trajectory.",
+        },
+    },
+];
+
+const BOOK_ONLY: Array<{n: number; title: string; blurb: Localized<string>}> = [
+    {
+        n: 10, title: "Motion Planning",
+        blurb: {
+            en: "collision-free paths: grids, sampling, potential fields",
+            ko: "충돌 없는 경로: 그리드, 샘플링, potential field",
+        },
+    },
+    {
+        n: 11, title: "Robot Control",
+        blurb: {
+            en: "motion, force, hybrid, and impedance control",
+            ko: "motion·force·hybrid·impedance 제어",
+        },
+    },
+    {
+        n: 12, title: "Grasping and Manipulation",
+        blurb: {
+            en: "contact models, form and force closure",
+            ko: "접촉 모델, form closure와 force closure",
+        },
+    },
+    {
+        n: 13, title: "Wheeled Mobile Robots",
+        blurb: {
+            en: "nonholonomic constraints, odometry, mobile manipulation",
+            ko: "nonholonomic 제약, odometry, mobile manipulation",
+        },
+    },
+];
 
 const Chapter1 = () => {
+    const {go} = useChapterNav();
+    const t = useTr();
     return (
         <>
             <T
                 en={<p>
                     This book is about the <strong>mechanics</strong>, <strong>planning</strong>, and{" "}
-                    <strong>control</strong> of robot mechanisms. This chapter previews the ideas that the
+                    <strong>control</strong> of robot mechanisms — robot arms, wheeled vehicles, and arms
+                    mounted on wheeled vehicles. Robotics also draws on artificial intelligence and computer
+                    perception, but the essential feature of a robot is that it <em>moves in the physical
+                    world</em>; that is where these notes stay focused. This chapter previews the ideas the
                     following chapters build on.
                 </p>}
                 ko={<p>
-                    이 책은 로봇 메커니즘의 <strong>역학</strong>, <strong>계획</strong>, <strong>제어</strong>를
-                    다룬다. 이 장은 이후 장들이 딛고 설 아이디어를 미리 훑어본다.
+                    이 책은 로봇 메커니즘 — 로봇 팔, 바퀴 달린 이동체, 그리고 그 위에 얹힌 로봇 팔 — 의{" "}
+                    <strong>역학(mechanics)</strong>, <strong>계획(planning)</strong>,{" "}
+                    <strong>제어(control)</strong>를 다룬다. 로보틱스는 인공지능과 컴퓨터 인식도 아우르지만,
+                    로봇의 본질은 <em>물리 세계 안에서 움직인다</em>는 것이며 이 노트는 거기에 집중한다. 이
+                    장은 이후 장들이 딛고 설 아이디어를 미리 훑어본다.
                 </p>}
             />
 
@@ -32,97 +160,163 @@ const Chapter1 = () => {
             />
             <T
                 en={<p>
-                    The links may be arranged in a serial <strong>open chain</strong> (a familiar robot arm, where
-                    every joint is actuated) or they may form <strong>closed loops</strong> (such as the
-                    Stewart–Gough platform, where only some joints are actuated).
+                    The links may be arranged in a serial <strong>open chain</strong> — the familiar robot arm,
+                    where <em>every</em> joint is actuated — or they may form <strong>closed loops</strong>, as in
+                    the Stewart–Gough platform used in flight simulators, where only a subset of the joints is
+                    actuated and the rest are <strong>passive</strong>: their motion is dictated by the
+                    requirement that every loop stay closed. Watch the difference below — the serial arm's three
+                    joints move independently, while the four-bar loop on the right is driven entirely by its
+                    one actuated crank.
                 </p>}
                 ko={<p>
-                    링크들은 직렬 <strong>Open Chain</strong>(모든 관절이 구동되는 익숙한 로봇 팔)으로 배치될 수도 있고,{" "}
-                    <strong>닫힌 루프</strong>(일부 관절만 구동되는 스튜어트–고프 플랫폼 등)를 이룰 수도 있다.
+                    링크들은 직렬 <strong>open chain</strong> — <em>모든</em> 관절이 구동되는 익숙한 로봇 팔 — 으로
+                    배치될 수도 있고, 비행 시뮬레이터에 쓰이는 Stewart–Gough 플랫폼처럼{" "}
+                    <strong>닫힌 루프</strong>를 이룰 수도 있다. 닫힌 루프에서는 일부 관절만 구동되고 나머지는{" "}
+                    <strong>수동(passive)</strong> 관절로, 모든 루프가 닫힌 채 유지되어야 한다는 조건이 그 움직임을
+                    결정한다. 아래에서 차이를 보자 — 직렬 팔의 세 관절은 제각기 독립적으로 움직이지만, 오른쪽 4절
+                    링크 루프는 구동되는 크랭크 하나가 전체를 이끈다.
+                </p>}
+            />
+            <OpenVsClosedChain/>
+            <T
+                en={<p>
+                    Real links flex, and real joints have elasticity, backlash, friction, and hysteresis.
+                    Throughout this book we ignore those effects and treat every link as a perfect{" "}
+                    <strong>rigid body</strong> — an assumption that makes the elegant geometry of the coming
+                    chapters possible.
+                </p>}
+                ko={<p>
+                    실제 링크는 휘고, 실제 관절에는 탄성·백래시·마찰·히스테리시스가 있다. 이 책 전반에서 우리는
+                    그런 효과를 무시하고 모든 링크를 완벽한 <strong>강체</strong>로 취급한다 — 이 가정 덕분에 이후
+                    장들의 우아한 기하학이 가능해진다.
+                </p>}
+            />
+
+            <T en={<h2>Actuators, Transmissions, and Sensors</h2>} ko={<h2>구동기, 동력 전달 장치, 센서</h2>}/>
+            <T
+                en={<p>
+                    A quick look at the technology the theory will command. Joints are moved by{" "}
+                    <strong>actuators</strong> — most often DC or AC electric motors, but also stepper motors,
+                    pneumatic or hydraulic cylinders, and shape-memory alloys. An ideal motor would be light,
+                    spin slowly (hundreds of RPM), and produce large torque; real motors do the opposite, so a{" "}
+                    <strong>transmission</strong> (gears, cable drives, belts and pulleys) provides speed
+                    reduction and torque amplification. A good transmission has little slippage and little{" "}
+                    <strong>backlash</strong> — the free play at the output when the input is held still.
+                </p>}
+                ko={<p>
+                    이론이 부리게 될 기술을 잠깐 살펴보자. 관절은 <strong>구동기</strong>가 움직인다 — 대개 DC·AC
+                    전기 모터이고, 스테퍼 모터, 공압·유압 실린더, 형상기억합금도 쓰인다. 이상적인 모터는 가볍고,
+                    천천히 돌고(수백 RPM), 큰 토크를 내야 하지만 실제 모터는 그 반대라서,{" "}
+                    <strong>동력 전달 장치</strong>(기어, 케이블 드라이브, 벨트·풀리)가 감속과 토크 증폭을 맡는다.
+                    좋은 전달 장치는 미끄러짐과 <strong>백래시</strong> — 입력을 고정했을 때 출력단에 남는 유격 —
+                    가 작아야 한다.
                 </p>}
             />
             <T
                 en={<p>
-                    Real links flex and real joints have elasticity, backlash, and friction. Throughout this book we
-                    ignore those effects and treat every link as a perfect <strong>rigid body</strong>.
+                    To be controlled, a robot must also sense its own motion: <strong>encoders</strong>,
+                    potentiometers, or resolvers measure displacement at each revolute or prismatic joint, and
+                    tachometers measure velocity. Force–torque sensors read the loads at the joints or at the
+                    end-effector, while cameras, RGB-D sensors, and laser range finders localize the robot and
+                    the objects around it.
                 </p>}
                 ko={<p>
-                    실제 링크는 휘고, 실제 관절에는 탄성·백래시·마찰이 있다. 이 책 전반에서 우리는 그런 효과를 무시하고
-                    모든 링크를 완벽한 <strong>강체</strong>로 취급한다.
+                    제어를 하려면 로봇이 자신의 움직임을 감지해야 한다: 각 회전(revolute)·직동(prismatic) 관절의
+                    변위는 <strong>엔코더</strong>·포텐셔미터·리졸버가, 속도는 타코미터가 측정한다. 힘–토크 센서는
+                    관절이나 end-effector에 걸리는 하중을 읽고, 카메라·RGB-D 센서·레이저 거리계는 로봇과 주변
+                    물체의 위치를 파악한다.
                 </p>}
             />
 
             <T en={<h2>Configuration and Degrees of Freedom</h2>} ko={<h2>Configuration과 자유도</h2>}/>
             <T
                 en={<p>
-                    The <strong>configuration</strong> of a robot is a specification of the position of every one of
-                    its points. A rigid body in the plane needs three numbers to pin down — two for position and one
-                    for orientation <InlineMath math='(x, y, \theta)'/> — while a rigid body in space needs six
-                    (three for position, three for orientation).
+                    The <strong>configuration</strong> of a robot is a specification of the position of{" "}
+                    <em>every one of its points</em>. For rigid bodies this takes remarkably few numbers: a body
+                    confined to the plane needs three <InlineMath math='(x, y, \theta)'/>, and a body in space
+                    needs six (three for position, three for orientation).
                 </p>}
                 ko={<p>
-                    로봇의 <strong>configuration</strong>은 로봇의 모든 점의 위치를 지정하는 것이다. 평면 위의 강체는
-                    세 개의 수 — 위치를 나타내는 둘과 방향을 나타내는 하나{" "}
-                    <InlineMath math='(x, y, \theta)'/> — 로 정해지고, 공간 안의 강체는 여섯 개(위치 셋, 방향 셋)가
-                    필요하다.
+                    로봇의 <strong>configuration</strong>은 로봇의 <em>모든 점</em>의 위치를 지정하는 것이다.
+                    강체라면 놀랄 만큼 적은 수로 충분하다: 평면에 갇힌 강체는 세 개{" "}
+                    <InlineMath math='(x, y, \theta)'/>, 공간 안의 강체는 여섯 개(위치 셋, 방향 셋)면 된다.
                 </p>}
             />
             <T
                 en={<p>
-                    That count is the number of <strong>degrees of freedom</strong> (DOF), which is also the
-                    dimension of the <strong>configuration space</strong> (C-space) — the set of all configurations
-                    the body can take. A robot's DOF is the sum of its links' freedoms minus the constraints imposed
-                    by its joints.
+                    The minimum number of coordinates needed is the number of{" "}
+                    <strong>degrees of freedom</strong> (DOF), and the set of all configurations is the{" "}
+                    <strong>configuration space</strong> (C-space); the DOF is its dimension. For the 2R arm
+                    below, two joint angles pin down every point of both links, so the C-space is
+                    two-dimensional: the square of all pairs <InlineMath math='(\theta_1, \theta_2)'/>. Since
+                    each axis is really a circle (<InlineMath math='\pm 180^\circ'/> are the same angle), the
+                    square's opposite edges glue together — the C-space is a <strong>torus</strong>, a first
+                    hint that C-spaces have <em>shapes</em>, not just dimensions.
                 </p>}
                 ko={<p>
-                    이 개수가 바로 <strong>자유도</strong>(DOF)이며, 이는 곧 <strong>configuration 공간</strong>(C-space,
-                    강체가 취할 수 있는 모든 configuration의 집합)의 차원이기도 하다. 로봇의 자유도는 링크들이 가진
-                    자유도의 합에서 관절이 부과하는 제약을 뺀 값이다.
+                    필요한 좌표의 최소 개수가 <strong>자유도</strong>(DOF)이고, 모든 configuration의 집합이{" "}
+                    <strong>configuration 공간</strong>(C-space)이며, 자유도는 그 차원이다. 아래 2R 팔에서는
+                    관절각 두 개가 두 링크의 모든 점을 결정하므로 C-space는 2차원 — 모든 쌍{" "}
+                    <InlineMath math='(\theta_1, \theta_2)'/>의 정사각형 — 이다. 각 축은 사실 원이므로
+                    (<InlineMath math='\pm 180^\circ'/>는 같은 각), 정사각형의 마주보는 변이 서로 이어붙는다 —
+                    즉 C-space는 <strong>torus</strong>다. C-space가 차원뿐 아니라 <em>모양</em>을 갖는다는 첫
+                    힌트다.
+                </p>}
+            />
+            <CSpacePreview2R/>
+            <T
+                en={<p>
+                    A robot's DOF is the sum of its links' freedoms minus the constraints imposed by its joints
+                    — for open chains this is simply the number of joints, while for closed chains the loop
+                    constraints remove freedoms (the four-bar above has four joints but only <em>one</em> DOF).
+                    Making this bookkeeping precise is where the next chapter begins.
+                </p>}
+                ko={<p>
+                    로봇의 자유도는 링크들이 가진 자유도의 합에서 관절이 부과하는 제약을 뺀 값이다 — open
+                    chain에서는 그저 관절 수이지만, closed chain에서는 루프 제약이 자유도를 앗아간다(위 4절
+                    링크는 관절이 넷이지만 자유도는 <em>하나</em>다). 이 셈을 엄밀하게 만드는 데서 다음 장이
+                    시작된다.
                 </p>}
             />
 
             <T en={<h2>Chapter Roadmap</h2>} ko={<h2>챕터 로드맵</h2>}/>
             <T
-                en={<p>The rest of these notes follow the book's development:</p>}
-                ko={<p>이 노트의 나머지는 책의 전개를 따라간다:</p>}
+                en={<p>
+                    The notes follow the book's development. Chapters 2 and 3 lay the foundations
+                    (configurations and rigid-body motions), Chapters 4–7 build kinematics on top of them,
+                    Chapter 8 adds dynamics, and Chapter 9 turns motions into executable trajectories. Click a
+                    card to jump in.
+                </p>}
+                ko={<p>
+                    이 노트는 책의 전개를 따른다. 2·3장이 토대(configuration과 rigid-body motion)를 놓고,
+                    4–7장이 그 위에 kinematics를 쌓으며, 8장이 dynamics를 더하고, 9장이 움직임을 실행 가능한
+                    trajectory로 바꾼다. 카드를 눌러 바로 이동해 보자.
+                </p>}
             />
+            <div className="card-grid">
+                {ROADMAP.map(({n, title, blurb}) => (
+                    <div key={n} className="doc-card clickable" role="button" tabIndex={0}
+                         onClick={() => go(n)}
+                         onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && go(n)}>
+                        <div className="dc-head">
+                            <span className="dc-num">{n}</span>
+                            <span className="dc-title">{t(title.en, title.ko)}</span>
+                        </div>
+                        <p className="text-sm text-muted m-0">{t(blurb.en, blurb.ko)}</p>
+                    </div>
+                ))}
+            </div>
             <T
-                en={<ul className="list-disc pl-6 space-y-1">
-                    <li>
-                        <strong>Ch.2 · Configuration Space</strong> — DOF of bodies and robots, Grübler's formula,
-                        the topology and representation of the C-space, task space and workspace.
-                    </li>
-                    <li>
-                        <strong>Ch.3 · Rigid-Body Motions</strong> — rotation matrices{" "}
-                        <InlineMath math='SO(3)'/>, angular velocity, the exponential-coordinate (screw) description
-                        of rotations, homogeneous transforms <InlineMath math='SE(3)'/>, and twists.
-                    </li>
-                    <li>
-                        <strong>Ch.4 · Forward Kinematics</strong> — computing the end-effector pose from the joint
-                        values with the product of exponentials (PoE) formula.
-                    </li>
-                    <li className="text-muted">
-                        <strong>Coming soon</strong> — Ch.5 Velocity Kinematics &amp; Statics (the Jacobian), Ch.6
-                        Inverse Kinematics.
-                    </li>
-                </ul>}
-                ko={<ul className="list-disc pl-6 space-y-1">
-                    <li>
-                        <strong>2장 · configuration 공간</strong> — 강체와 로봇의 자유도, 그뤼블러 공식, C-space 의
-                        위상과 표현, task 공간과 작업 공간.
-                    </li>
-                    <li>
-                        <strong>3장 · Rigid-Body Motion</strong> — 회전 행렬 <InlineMath math='SO(3)'/>, 각속도, 회전의
-                        Exponential Coordinates(screw) 표현, Homogeneous Transformation <InlineMath math='SE(3)'/>, 그리고 twist.
-                    </li>
-                    <li>
-                        <strong>4장 · Forward Kinematics</strong> — Product of Exponentials(PoE) 공식으로 관절 값에서 end-effector 자세를 계산한다.
-                    </li>
-                    <li className="text-muted">
-                        <strong>준비 중</strong> — 5장 Velocity Kinematics와 Statics(Jacobian), 6장 Inverse Kinematics.
-                    </li>
-                </ul>}
+                en={<p>The book continues with four chapters not (yet) covered by these notes:</p>}
+                ko={<p>책은 이 노트가 아직 다루지 않는 네 개의 장으로 이어진다:</p>}
             />
+            <ul className="list-disc pl-6 space-y-1 text-muted">
+                {BOOK_ONLY.map(({n, title, blurb}) => (
+                    <li key={n}>
+                        <strong>Ch.{n} · {title}</strong> — {t(blurb.en, blurb.ko)}.
+                    </li>
+                ))}
+            </ul>
         </>
     )
 }

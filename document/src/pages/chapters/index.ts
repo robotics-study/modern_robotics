@@ -12,6 +12,7 @@ const data: IChapterData[] = [
         contents: lazy(() => import("./Chapter1")),
         sections: [
             {en: "What Is a Robot?", ko: "로봇이란 무엇인가?"},
+            {en: "Actuators, Transmissions, and Sensors", ko: "구동기, 동력 전달 장치, 센서"},
             {en: "Configuration and Degrees of Freedom", ko: "Configuration과 자유도"},
             {en: "Chapter Roadmap", ko: "챕터 로드맵"},
         ],

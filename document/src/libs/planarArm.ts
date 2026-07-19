@@ -57,6 +57,25 @@ export function manipulabilityEllipse(j1: Vec2, j2: Vec2): Ellipse2 {
     };
 }
 
+// 원(c1,r1)·원(c2,r2)의 교점. 폐연쇄(four-bar 등)의 loop-closure 를 푸는 기본 연산으로,
+// sign 이 두 교점(조립 모드) 중 하나를 고른다. h 는 중심선에서 교점까지의 수직 오프셋 —
+// h=0 이면 두 모드가 합쳐지는 특이 배치다. 두 원이 만나지 않으면 null.
+export function circleCircleIntersect(
+    c1: Vec2,
+    r1: number,
+    c2: Vec2,
+    r2: number,
+    sign: number,
+): {p: Vec2; h: number} | null {
+    const dx = c2.x - c1.x, dy = c2.y - c1.y;
+    const d = Math.hypot(dx, dy);
+    if (d > r1 + r2 + 1e-9 || d < Math.abs(r1 - r2) - 1e-9 || d < 1e-9) return null;
+    const ell = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+    const h = Math.sqrt(Math.max(0, r1 * r1 - ell * ell));
+    const bx = c1.x + (ell / d) * dx, by = c1.y + (ell / d) * dy;
+    return {p: {x: bx + sign * (h / d) * -dy, y: by + sign * (h / d) * dx}, h};
+}
+
 export interface IkSolution {
     theta1: number;
     theta2: number;

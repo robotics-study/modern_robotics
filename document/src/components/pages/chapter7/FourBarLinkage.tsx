@@ -3,6 +3,7 @@ import {Circle, Circle as KCircle, Layer, Line, Line as KLine, Rect, Stage, Text
 import CoordinateSystem from "../../2d/CoordinateCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
+import {circleCircleIntersect} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
 
@@ -39,17 +40,10 @@ interface Solution {
 // 원(A,COUPLER) 과 원(P3,ROCKER) 의 교점. sign 이 두 조립 모드를 고른다.
 const solveFourBar = (theta: number, sign: number): Solution => {
     const A = {x: P0.x + CRANK * Math.cos(theta), y: P0.y + CRANK * Math.sin(theta)};
-    const dx = P3.x - A.x, dy = P3.y - A.y;
-    const D = Math.hypot(dx, dy);
     // 두 원이 만나지 않으면(너무 멀거나 한쪽이 다른쪽 안) 그 θ 에서는 조립 불가.
-    if (D > COUPLER + ROCKER + 1e-9 || D < Math.abs(COUPLER - ROCKER) - 1e-9 || D < 1e-9) {
-        return {reachable: false, B: A, psi: 0, h: 0};
-    }
-    const ell = (COUPLER * COUPLER - ROCKER * ROCKER + D * D) / (2 * D);
-    const h = Math.sqrt(Math.max(0, COUPLER * COUPLER - ell * ell));
-    const bx = A.x + (ell / D) * dx, by = A.y + (ell / D) * dy;
-    const B = {x: bx + sign * (h / D) * -dy, y: by + sign * (h / D) * dx};
-    return {reachable: true, B, psi: Math.atan2(B.y - P3.y, B.x - P3.x), h};
+    const hit = circleCircleIntersect(A, COUPLER, P3, ROCKER, sign);
+    if (!hit) return {reachable: false, B: A, psi: 0, h: 0};
+    return {reachable: true, B: hit.p, psi: Math.atan2(hit.p.y - P3.y, hit.p.x - P3.x), h: hit.h};
 };
 
 // C-space 미니플롯 좌표계.
