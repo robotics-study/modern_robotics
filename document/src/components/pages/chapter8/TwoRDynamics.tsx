@@ -6,7 +6,7 @@ import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
-import {massMatrix2R, TWO_R} from "./twoRModel";
+import {coriolis2R, gravity2R, massMatrix2R, TWO_R} from "./twoRModel";
 
 // 2R 팔의 순방향 동역학 실시간 시뮬레이터(이 장의 대표 그림). 책의 점질량 모델을 그대로 쓴다:
 // τ = M(θ)θ̈ + c(θ,θ̇) + g(θ) 를 θ̈ = M⁻¹(τ − c − g) 로 풀어 준-암시적(symplectic) Euler 로 적분한다.
@@ -21,24 +21,9 @@ const TRAIL_MAX = 90;
 // 초기 자세: 수직에서 약간 벗어나 있어 중력만으로도 흔들리기 시작한다.
 const INIT_THETA: [number, number] = [Math.PI / 2 + 0.4, 0.3];
 
-// 원심(θ̇ᵢ²)·코리올리(θ̇ᵢθ̇ⱼ) 항.
-const coriolis = (t2: number, d1: number, d2: number): [number, number] => {
-    const s2 = Math.sin(t2);
-    return [
-        -M2 * L1 * L2 * s2 * (2 * d1 * d2 + d2 * d2),
-        M2 * L1 * L2 * d1 * d1 * s2,
-    ];
-};
-
-// 중력항 g(θ). 중력이 꺼져 있으면 0.
-const gravityVec = (t1: number, t2: number, on: boolean): [number, number] => {
-    if (!on) return [0, 0];
-    const c1 = Math.cos(t1), c12 = Math.cos(t1 + t2);
-    return [
-        (M1 + M2) * L1 * G * c1 + M2 * G * L2 * c12,
-        M2 * G * L2 * c12,
-    ];
-};
+// 중력항: 중력이 꺼져 있으면 0. (동역학 항 자체는 공용 twoRModel 의 것을 쓴다.)
+const gravityVec = (t1: number, t2: number, on: boolean): [number, number] =>
+    on ? gravity2R(t1, t2) : [0, 0];
 
 // θ̈ = M⁻¹(τ − c − g). det≈0 이면(수치적 안전장치) 가속도 0 을 반환한다.
 const forwardDynamics = (
@@ -48,7 +33,7 @@ const forwardDynamics = (
     gravity: boolean,
 ): [number, number] => {
     const [m11, m12, m22] = massMatrix2R(theta[1]);
-    const [c1, c2] = coriolis(theta[1], dot[0], dot[1]);
+    const [c1, c2] = coriolis2R(theta[1], dot[0], dot[1]);
     const [g1, g2] = gravityVec(theta[0], theta[1], gravity);
     const r1 = tau[0] - c1 - g1;
     const r2 = tau[1] - c2 - g2;

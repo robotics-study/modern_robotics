@@ -113,6 +113,7 @@ const data: IChapterData[] = [
             {en: "Polynomial Time Scaling", ko: "다항식 Time Scaling"},
             {en: "Trapezoidal and S-Curve Profiles", ko: "Trapezoidal·S-Curve 프로파일"},
             {en: "Via Point Trajectories", ko: "Via Point Trajectory"},
+            {en: "Time-Optimal Time Scaling", ko: "시간 최적 Time Scaling"},
         ],
     },
 ]
