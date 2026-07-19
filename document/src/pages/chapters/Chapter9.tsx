@@ -206,7 +206,7 @@ R(s) = R_{\\mathrm{start}}\\exp\\big(\\log(R_{\\mathrm{start}}^{\\mathsf T}R_{\\
                     가운데서 빠르고 양 끝에서 느리다. 그러나 가속도 <InlineMath math='\ddot s'/> 는{" "}
                     <strong>끝점에서 0 이 아니며</strong>, <InlineMath math='t=0'/> 에서 0 에서{" "}
                     <InlineMath math='6/T^2'/> 로 불연속적으로 튄다(<InlineMath math='t=T'/> 에서 다시 돌아온다). 이
-                    가속도의 계단은 <strong>무한 저크</strong>(저크는 <InlineMath math='da/dt'/>)이며, 팔에 구조적
+                    가속도의 계단은 <strong>무한 jerk</strong>(jerk는 <InlineMath math='da/dt'/>)이며, 팔에 구조적
                     진동을 일으킨다.
                 </p>}
             />
@@ -230,7 +230,7 @@ R(s) = R_{\\mathrm{start}}\\exp\\big(\\log(R_{\\mathrm{start}}^{\\mathsf T}R_{\\
                     as a faint dashed reference so the difference in the <InlineMath math='\ddot s'/> plot is visible.
                 </p>}
                 ko={<p>
-                    이 스케일링의 가속도는 정지 상태로 부드럽게 들고 나며 저크 스파이크를 없앤다. 그 대가는 더 높은
+                    이 스케일링의 가속도는 정지 상태로 부드럽게 들고 나며 jerk 스파이크를 없앤다. 그 대가는 더 높은
                     최대 속도 <InlineMath math='\dot s_\text{max} = \tfrac{15}{8T}'/> 와 최대 가속도{" "}
                     <InlineMath math='\tfrac{10}{\sqrt 3\,T^2}'/> 이다. 더 완만한 출발과 정지를 보상하려면 팔이
                     가운데서 조금 더 빨리 움직여야 한다. 위 그림에서 <em>quintic</em> 을 선택하면 cubic 이 흐린 점선
@@ -310,7 +310,7 @@ s(t) = \\begin{cases} \\tfrac12 a t^2 \\\\[2pt] vt - \\tfrac{v^2}{2a} \\\\[2pt] 
                     직선 운동이다. 정속 구간은 <InlineMath math='v^2/a \le 1'/> 일 때만 존재한다;{" "}
                     <InlineMath math='v^2/a > 1'/> 이면 사다리꼴은 평평한 윗변을 잃고, 전반부에는 가속하고 후반부에는
                     감속하는 삼각형 <strong>bang-bang</strong> 프로파일로 퇴화한다. 어느 쪽이든 가속도는 전환 순간에{" "}
-                    <strong>불연속</strong>이다. 유한하지만 각 모서리에서 저크가 무한하다. 사다리꼴 그림에서{" "}
+                    <strong>불연속</strong>이다. 유한하지만 각 모서리에서 jerk가 무한하다. 사다리꼴 그림에서{" "}
                     <InlineMath math='v'/> 를 움직여 정속 구간이 넓어졌다가 사라지는 것을 지켜보라.
                 </p>}
             />
@@ -322,9 +322,9 @@ s(t) = \\begin{cases} \\tfrac12 a t^2 \\\\[2pt] vt - \\tfrac{v^2}{2a} \\\\[2pt] 
                     is the standard choice in motor control precisely because the bounded jerk avoids exciting vibration.
                 </p>}
                 ko={<p>
-                    <strong>S-Curve</strong> 프로파일은 일정 <em>저크</em> 램프를 끼워 이 모서리들을 매끄럽게 만들어,
-                    가속도 자체가 계단이 아니라 선형으로 오르내리게 한다. 이는 운동을 일곱 단계(저크 상승, 등가속, 저크
-                    하강, 정속, 그리고 감속하는 동안의 거울상)로 나누며, 유계 저크가 진동 유발을 피하기 때문에 모터
+                    <strong>S-Curve</strong> 프로파일은 일정 <em>jerk</em> ramp를 끼워 이 모서리들을 매끄럽게 만들어,
+                    가속도 자체가 계단이 아니라 선형으로 오르내리게 한다. 이는 운동을 일곱 단계(jerk 상승, 등가속, jerk
+                    하강, 정속, 그리고 감속하는 동안의 거울상)로 나누며, bounded jerk가 진동 유발을 피하기 때문에 모터
                     제어에서 표준 선택이 된다.
                 </p>}
             />
