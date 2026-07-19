@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Group, Line, Rect} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -61,6 +61,8 @@ interface SceneProps {
 }
 
 const RollingCoinScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [q, setQ] = useState<Q>(Q0);
@@ -76,7 +78,7 @@ const RollingCoinScene = ({width, height}: SceneProps) => {
     rateRef.current = {thetaDot, phiDot};
     const demoRef = useRef<{segs: Segment[]; idx: number; left: number} | null>(null);
 
-    const lim = (width / 2) * RESOLUTION - 1;
+    const lim = (width / 2) * res - 1;
 
     useEffect(() => {
         if (!playing) {
@@ -132,16 +134,16 @@ const RollingCoinScene = ({width, height}: SceneProps) => {
     // 자취는 q 갱신에 맞춰 누적한다 (같은 프레임의 파생 상태라 effect 로 분리).
     useEffect(() => {
         setTrace((prev) => {
-            const m = globalToMap(width, height, q.x, q.y, RESOLUTION);
+            const m = globalToMap(width, height, q.x, q.y, res);
             const next = [...prev, m.x, m.y];
             // 오래된 자취는 잘라 성능/가독을 유지한다.
             return next.length > 1200 ? next.slice(next.length - 1200) : next;
         });
     }, [q.x, q.y, width, height]);
 
-    const c = globalToMap(width, height, q.x, q.y, RESOLUTION);
-    const start = globalToMap(width, height, Q0.x, Q0.y, RESOLUTION);
-    const px = (v: number) => v / RESOLUTION;
+    const c = globalToMap(width, height, q.x, q.y, res);
+    const start = globalToMap(width, height, Q0.x, Q0.y, res);
+    const px = (v: number) => v / res;
     // 시연 중에는 스크립트 구간의 순간 입력(워프 적용)을 그대로 노출한다 — 슬라이더와
     // 앞바퀴가 함께 부드럽게 움직여 "지금 어떤 (θ̇, φ̇) 를 넣고 있는지"를 보여준다.
     const demo = demoOn ? demoRef.current : null;
@@ -173,12 +175,12 @@ const RollingCoinScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 목표 주차칸(점선) + 앞뒤로 주차된 차 — 시연이 "평행 주차"로 읽히게 한다 */}
                 {(() => {
-                    const spot = globalToMap(width, height, SPOT.x, SPOT.y, RESOLUTION);
+                    const spot = globalToMap(width, height, SPOT.x, SPOT.y, res);
                     const sw = px(CAR_L + 0.6), sh = px(CAR_W + 0.5);
                     return <>
                         <Rect x={spot.x - sw / 2} y={spot.y - sh / 2} width={sw} height={sh}
@@ -300,7 +302,7 @@ const RollingCoin = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<RollingCoinScene width={460} height={460}/>}
+        modal={<RollingCoinScene {...modalCanvasSize()}/>}
     >
         <RollingCoinScene width={320} height={320}/>
     </CanvasFigure>;

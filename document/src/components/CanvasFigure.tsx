@@ -16,6 +16,17 @@ interface CanvasFigureProps {
     tight?: boolean;
 }
 
+// 모달 확대 캔버스의 픽셀 크기. 모달 헤더/패딩과 캔버스 아래 컨트롤·레전드 몫을 빼고
+// 뷰포트에 맞춰 최대한 크게 잡는다. 모달 인스턴스는 열릴 때 fresh mount 되므로 호출 시점 값으로 충분하다.
+export const modalCanvasSize = (aspect = 1) => {
+    // 모바일은 모달이 풀스크린 + 얇은 패딩이라 여백 몫이 훨씬 작다.
+    const chrome = window.innerWidth <= 640 ? 36 : 120;
+    const maxW = Math.min(window.innerWidth - chrome, 1300);
+    const maxH = window.innerHeight * 0.94 - 190;
+    const width = Math.max(300, Math.round(Math.min(maxW, maxH * aspect)));
+    return {width, height: Math.round(width / aspect)};
+};
+
 const ZoomIcon = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
          strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -37,7 +48,7 @@ const CanvasFigure = ({label, children, modal, className, bodyClassName, tight}:
             </div>
             <span className="text-xs text-muted">{label}</span>
             <Modal open={open} onClose={() => setOpen(false)} title={label}>
-                <div className={cn("mx-auto", bodyClassName ?? "w-[min(80vmin,560px)] aspect-square")}>
+                <div className={cn("mx-auto", bodyClassName ?? "w-[min(86vw,78vh,1000px)] aspect-square")}>
                     {/* 열렸을 때만 확대 인스턴스를 마운트한다 (불필요한 WebGL 컨텍스트 방지). */}
                     {open ? (modal ?? children) : null}
                 </div>

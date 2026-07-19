@@ -11,11 +11,18 @@ interface AxisTriadProps {
     onReady?: (node: TransformNode) => void;
 }
 
+// RViz 관례의 축 색. 관절 회전 링 등 다른 곳에서도 같은 색을 쓰도록 export 한다.
+export const AXIS_COLORS = {
+    x: new Color3(0.9, 0.25, 0.25),
+    y: new Color3(0.3, 0.8, 0.35),
+    z: new Color3(0.3, 0.45, 0.95),
+} as const;
+
 // Babylon cylinder 기본 축은 +Y. 각 축은 회전으로 +Y 를 목표 방향에 맞추고, position 으로 축을 따라 민다.
 const AXES = [
-    {key: "x", color: new Color3(0.9, 0.25, 0.25), rotation: new Vector3(0, 0, -Math.PI / 2), dir: new Vector3(1, 0, 0)},
-    {key: "y", color: new Color3(0.3, 0.8, 0.35), rotation: new Vector3(0, 0, 0), dir: new Vector3(0, 1, 0)},
-    {key: "z", color: new Color3(0.3, 0.45, 0.95), rotation: new Vector3(Math.PI / 2, 0, 0), dir: new Vector3(0, 0, 1)},
+    {key: "x", color: AXIS_COLORS.x, rotation: new Vector3(0, 0, -Math.PI / 2), dir: new Vector3(1, 0, 0)},
+    {key: "y", color: AXIS_COLORS.y, rotation: new Vector3(0, 0, 0), dir: new Vector3(0, 1, 0)},
+    {key: "z", color: AXIS_COLORS.z, rotation: new Vector3(Math.PI / 2, 0, 0), dir: new Vector3(0, 0, 1)},
 ] as const;
 
 const AxisTriad = ({name, size = 5, radius = 0.12, onReady}: AxisTriadProps) => {

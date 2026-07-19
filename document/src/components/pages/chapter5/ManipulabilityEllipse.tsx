@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Circle, Ellipse, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {jacobian2R, manipulabilityEllipse, planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -26,6 +26,8 @@ interface SceneProps {
 }
 
 const ManipulabilityScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [theta, setTheta] = useState<[number, number]>([0.5, 1.1]);
@@ -37,11 +39,11 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
         return {world: points, ell: manipulabilityEllipse(j1, j2)};
     }, [theta]);
 
-    const px = world.map((p) => globalToMap(width, height, p.x, p.y, RESOLUTION));
+    const px = world.map((p) => globalToMap(width, height, p.x, p.y, res));
     const tipPx = px[px.length - 1];
     // Konva 회전은 시계방향(+y 아래)이므로 수학적 반시계 각도를 부호 반전한다.
     const rotationDeg = (-ell.angle * 180) / Math.PI;
-    const scale = 1 / RESOLUTION;
+    const scale = 1 / res;
     const ratio = ell.minor > 1e-4 ? ell.major / ell.minor : Infinity;
     // 타원 축 끝 라벨 위치: 긴 축 = 움직이기 쉬운 방향, 짧은 축 = 어려운 방향.
     const axisEnd = (len: number, ang: number) => ({
@@ -63,7 +65,7 @@ const ManipulabilityScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* force 타원: 주축 반지름이 조작성 타원의 역수 — 잘 움직이는 방향이 힘내기 어려운 방향. */}
@@ -160,7 +162,7 @@ const ManipulabilityEllipse = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<ManipulabilityScene width={460} height={460}/>}
+        modal={<ManipulabilityScene {...modalCanvasSize()}/>}
     >
         <ManipulabilityScene width={320} height={320}/>
     </CanvasFigure>;

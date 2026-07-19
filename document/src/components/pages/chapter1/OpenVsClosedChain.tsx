@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import {Circle, Layer, Line, Stage, Text} from "react-konva";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {circleCircleIntersect, planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -151,7 +151,7 @@ const OpenVsClosedChain = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<OpenVsClosedScene width={560} height={380}/>}
+        modal={<OpenVsClosedScene {...modalCanvasSize(560 / 380)}/>}
     >
         <OpenVsClosedScene width={360} height={250}/>
     </CanvasFigure>;

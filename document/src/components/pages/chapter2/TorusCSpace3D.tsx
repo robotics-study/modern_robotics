@@ -103,7 +103,7 @@ const TorusCSpace3D = () => {
             "2R 팔의 C-space 는 torus · θ1 은 큰 원을, θ2 는 튜브 둘레를 돈다",
         )}
         className="w-full sm:w-2/3 mx-auto"
-        bodyClassName="w-[min(80vmin,520px)]"
+        bodyClassName="w-[min(100%,76vh)]"
         modal={<TorusScene canvasClassName="aspect-square w-full rounded-lg"/>}
     >
         <TorusScene canvasClassName="aspect-square w-full rounded-lg"/>

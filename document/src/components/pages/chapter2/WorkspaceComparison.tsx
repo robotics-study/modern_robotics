@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Circle, Line} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {planarFk} from "../../../libs/planarArm";
@@ -19,13 +19,15 @@ interface ArmPanelProps {
 }
 
 const ArmPanel = ({links, label, width}: ArmPanelProps) => {
+    // 큰 모달 패널에서는 world 스케일도 함께 키운다 (330px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 330 / width);
     const colors = useCanvasColors();
     const [theta, setTheta] = useState<number[]>(links.map((_, i) => 0.7 - 0.3 * i));
     const reach = links.reduce((a, b) => a + b, 0);
 
     const world = useMemo(() => planarFk(theta, links).points, [theta, links]);
-    const px = world.map((p) => globalToMap(width, width, p.x, p.y, RESOLUTION));
-    const origin = globalToMap(width, width, 0, 0, RESOLUTION);
+    const px = world.map((p) => globalToMap(width, width, p.x, p.y, res));
+    const origin = globalToMap(width, width, 0, 0, res);
 
     const setJoint = (i: number, v: number) =>
         setTheta((prev) => prev.map((x, j) => (j === i ? v : x)));
@@ -35,11 +37,11 @@ const ArmPanel = ({links, label, width}: ArmPanelProps) => {
             <CoordinateSystem
                 width={width}
                 height={width}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 작업 공간: 도달 가능한 tip 위치 전체 (등길이 링크라 원판) */}
-                <Circle x={origin.x} y={origin.y} radius={reach / RESOLUTION} fill={colors.accent}
+                <Circle x={origin.x} y={origin.y} radius={reach / res} fill={colors.accent}
                         opacity={0.13} stroke={colors.accent} strokeWidth={1.5} dash={[7, 6]}/>
                 {px.slice(0, -1).map((p, i) => (
                     <Line key={`link-${i}`} points={[p.x, p.y, px[i + 1].x, px[i + 1].y]}
@@ -95,7 +97,7 @@ const WorkspaceComparison = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<WorkspaceScene panel={330}/>}
+        modal={<WorkspaceScene panel={Math.floor(modalCanvasSize(2.1).width / 2) - 16}/>}
     >
         <WorkspaceScene panel={265}/>
     </CanvasFigure>;

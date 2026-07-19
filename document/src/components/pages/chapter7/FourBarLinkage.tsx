@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Circle, Circle as KCircle, Layer, Line, Line as KLine, Rect, Stage, Text, Text as KText} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {globalToMap} from "../../../libs/konvaUtils";
 import {circleCircleIntersect} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
@@ -76,6 +76,8 @@ interface SceneProps {
 }
 
 const FourBarScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [theta, setTheta] = useState(1.1);
@@ -94,7 +96,7 @@ const FourBarScene = ({width, height}: SceneProps) => {
         return pts;
     }, []);
 
-    const toPx = (p: P) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: P) => globalToMap(width, height, p.x, p.y, res);
     const p0 = toPx(P0), p3 = toPx(P3);
     const A = {x: P0.x + CRANK * Math.cos(theta), y: P0.y + CRANK * Math.sin(theta)};
     const aPx = toPx(A);
@@ -109,7 +111,7 @@ const FourBarScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 지면 P0—P3 */}
@@ -218,7 +220,7 @@ const FourBarLinkage = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<FourBarScene width={460} height={460}/>}
+        modal={<FourBarScene {...modalCanvasSize()}/>}
     >
         <FourBarScene width={320} height={320}/>
     </CanvasFigure>;

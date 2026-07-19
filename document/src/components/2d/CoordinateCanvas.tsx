@@ -39,11 +39,16 @@ const CoordinateSystem = ({
     ];
 
     // 눈금 그리기
+    const FONT = 11;
     const renderTicks = (axis: 'x' | 'y', tickCount: number) => {
+        // 두 자리 수 라벨이 이웃 눈금과 겹치지 않도록, 눈금 간격이 좁으면 라벨을 건너뛴다.
+        const maxLabelW = (String(tickCount).length + 1) * FONT * 0.62;
+        const labelStep = Math.max(1, Math.ceil((maxLabelW + 6) / tickInterval));
         const ticks = [];
         for (let i = -tickCount; i <= tickCount; i++) {
             let x = originX;
             let y = originY;
+            const labeled = i !== 0 && i % labelStep === 0;
 
             if (axis === 'x') {
                 x = originX + i * tickInterval;
@@ -54,14 +59,14 @@ const CoordinateSystem = ({
                         stroke={colors.text}
                     />
                 );
-                if (i !== 0) {
+                if (labeled) {
                     ticks.push(
                         <Text
                             key={`tick-label-x-${i}`}
                             text={i.toString()}
-                            x={x + 5}
-                            y={originY + 5}
-                            fontSize={tickCount}
+                            x={x + 3}
+                            y={originY + 6}
+                            fontSize={FONT}
                             fill={colors.text}
                         />
                     );
@@ -75,14 +80,14 @@ const CoordinateSystem = ({
                         stroke={colors.text}
                     />
                 );
-                if (i !== 0) {
+                if (labeled) {
                     ticks.push(
                         <Text
                             key={`tick-label-y-${i}`}
                             text={(-i).toString()}
-                            x={originX + tickCount}
-                            y={y - 5}
-                            fontSize={tickCount}
+                            x={originX + tickLength / 2 + 3}
+                            y={y - FONT / 2}
+                            fontSize={FONT}
                             fill={colors.text}
                         />
                     );

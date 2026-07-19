@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Arrow, Circle, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {Vec2} from "../../../libs/planarArm";
@@ -21,6 +21,8 @@ interface SceneProps {
 }
 
 const WrenchIntuitionScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const t = useTr();
     const [r, setR] = useState<Vec2>({x: 2.6, y: 0.9});
@@ -30,7 +32,7 @@ const WrenchIntuitionScene = ({width, height}: SceneProps) => {
     const m = r.x * f.y - r.y * f.x;               // 평면 모멘트 (z 성분)
     const d = Math.abs(m) / F_MAG;                 // 원점 ↔ 작용선 수직 거리
 
-    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, RESOLUTION);
+    const toPx = (p: Vec2) => globalToMap(width, height, p.x, p.y, res);
     const origin = toPx({x: 0, y: 0});
     const rPx = toPx(r);
     // 작용선: r 를 지나고 방향 f̂ 인 직선 (양쪽으로 길게)
@@ -55,7 +57,7 @@ const WrenchIntuitionScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 작용선과, 원점에서 내린 수직 거리 d */}
@@ -88,7 +90,7 @@ const WrenchIntuitionScene = ({width, height}: SceneProps) => {
                         y: Math.max(20, Math.min(height - 20, pos.y)),
                     })}
                     onDragMove={(e) => {
-                        setR(mapToGlobal(width, height, e.target.x(), e.target.y(), RESOLUTION));
+                        setR(mapToGlobal(width, height, e.target.x(), e.target.y(), res));
                     }}
                 />
                 <Text x={rPx.x + 10} y={rPx.y - 6} text="r" fontSize={14} fontStyle="bold"
@@ -131,7 +133,7 @@ const WrenchIntuition = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<WrenchIntuitionScene width={460} height={460}/>}
+        modal={<WrenchIntuitionScene {...modalCanvasSize()}/>}
     >
         <WrenchIntuitionScene width={320} height={320}/>
     </CanvasFigure>;

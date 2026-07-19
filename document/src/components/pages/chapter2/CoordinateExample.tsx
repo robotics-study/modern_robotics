@@ -4,7 +4,7 @@ import {useEffect, useMemo, useRef} from "react";
 import Konva from "konva";
 import {globalToMap, mapToGlobal} from "../../../libs/konvaUtils";
 import {useCanvasColors} from "../../../libs/useTheme";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useTr} from "../../../libs/i18n";
 
 interface CoordinateExampleProps {
@@ -21,6 +21,8 @@ interface CoordinateStageProps {
 
 // 드래그 가능한 좌표계 씬. 인라인 썸네일과 모달 확대본이 서로 다른 픽셀 크기로 두 번 렌더된다.
 const CoordinateStage = ({width, height, className}: CoordinateStageProps) => {
+    // 큰 모달 캔버스에서는 world 스케일도 함께 키운다 (520px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 520 / width);
     const colors = useCanvasColors()
     const objectRef = useRef<Konva.Rect | null>(null)
     const transformerRef = useRef<Konva.Transformer | null>(null);
@@ -36,7 +38,7 @@ const CoordinateStage = ({width, height, className}: CoordinateStageProps) => {
         }
     }, []);
     return <CoordinateSystem
-        resolution={RESOLUTION}
+        resolution={res}
         className={className}
         width={width}
         height={height}
@@ -129,7 +131,7 @@ const CoordinateExample = ({className}: CoordinateExampleProps) => {
         label={t("coordinate", "좌표계")}
         tight
         bodyClassName="w-fit"
-        modal={<CoordinateStage width={520} height={520}
+        modal={<CoordinateStage {...modalCanvasSize()}
                                 className="bg-surface border border-border rounded-lg"/>}
     >
         <CoordinateStage width={300} height={300} className={className}/>

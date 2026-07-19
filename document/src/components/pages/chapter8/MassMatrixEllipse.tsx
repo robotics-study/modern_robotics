@@ -1,7 +1,7 @@
 import {useMemo, useState} from "react";
 import {Circle, Ellipse, Line, Text} from "react-konva";
 import CoordinateSystem from "../../2d/CoordinateCanvas";
-import CanvasFigure from "../../CanvasFigure";
+import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {planarFk} from "../../../libs/planarArm";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
@@ -39,6 +39,8 @@ interface SceneProps {
 }
 
 const MassMatrixScene = ({width, height}: SceneProps) => {
+    // 큰 모달 캔버스에서는 world 스케일(resolution)도 함께 키운다 (460px 기준 유지).
+    const res = RESOLUTION * Math.min(1, 460 / width);
     const colors = useCanvasColors();
     const [theta, setTheta] = useState<[number, number]>([0.6, 1.6]);
 
@@ -73,7 +75,7 @@ const MassMatrixScene = ({width, height}: SceneProps) => {
             <CoordinateSystem
                 width={width}
                 height={height}
-                resolution={RESOLUTION}
+                resolution={res}
                 className="bg-surface border border-border rounded-lg"
             >
                 {/* 입력: 단위 관절토크 원 ‖u‖=1 */}
@@ -140,7 +142,7 @@ const MassMatrixEllipse = () => {
         tight
         bodyClassName="w-fit"
         className="w-full"
-        modal={<MassMatrixScene width={460} height={460}/>}
+        modal={<MassMatrixScene {...modalCanvasSize()}/>}
     >
         <MassMatrixScene width={320} height={320}/>
     </CanvasFigure>;
