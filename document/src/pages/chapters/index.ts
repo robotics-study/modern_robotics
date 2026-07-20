@@ -150,7 +150,7 @@ const data: IChapterData[] = [
         title: {en: "Grasping and Manipulation", ko: "Grasping과 Manipulation"},
         contents: lazy(() => import("./Chapter12")),
         sections: [
-            {en: "Overview and Mathematical Preliminaries", ko: "개관과 수학 준비"},
+            {en: "Overview and Mathematical Preliminaries", ko: "Overview and Mathematical Preliminaries"},
             {en: "Contact Kinematics", ko: "Contact Kinematics"},
             {en: "Planar Twists as Rotation Centers", ko: "평면 twist 와 CoR"},
             {en: "Form Closure", ko: "Form Closure"},

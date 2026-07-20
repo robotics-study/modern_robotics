@@ -11,7 +11,7 @@ import {T} from "../../libs/i18n";
 const Chapter12 = () => {
     return (
         <>
-            <T en={<h2>Overview and Mathematical Preliminaries</h2>} ko={<h2>개관과 수학 준비</h2>}/>
+            <T en={<h2>Overview and Mathematical Preliminaries</h2>} ko={<h2>Overview and Mathematical Preliminaries</h2>}/>
             <T
                 en={<p>
                     Until now the focus has been the robot itself. This chapter moves the spotlight to the{" "}
