@@ -1,12 +1,12 @@
 import Physics3DCanvas from "../../3d/Physics3DCanvas";
 import CanvasFigure from "../../CanvasFigure";
-import {Animation, Color3, IAnimationKey, TransformNode, Vector3} from "@babylonjs/core";
+import {Animation, IAnimationKey, TransformNode, Vector3} from "@babylonjs/core";
 import {useScene} from "react-babylonjs";
 import {ReactNode} from "react";
 import {InlineMath} from "../../math/Tex";
 import CodeFigure from "../../CodeFigure";
 import {T, useTr} from "../../../libs/i18n";
-import {HOUSING_DARK, Housing, LINK_GRAY, Metal, RING_BLUE, TOOL_RED, Tube} from "../../3d/CobotParts";
+import {HOUSING_DARK, Housing, LINK_GRAY, Metal, TOOL_RED, Tube} from "../../3d/CobotParts";
 
 // URDF 가 기술하는 것: link(질량·형상) 들이 joint(타입·축·부모/자식) 로 이어진 트리.
 // base → joint → link 를 3단 중첩 부모관계로 세우고 관절을 회전시켜 정방향 기구학을 보인다.

@@ -5,7 +5,7 @@ import Physics3DCanvas from "../../3d/Physics3DCanvas";
 import CanvasFigure from "../../CanvasFigure";
 import AxisTriad, {AXIS_COLORS} from "../../3d/AxisTriad";
 import {useTr} from "../../../libs/i18n";
-import {HOUSING_DARK, Housing, LINK_GRAY, Metal, TOOL_RED, Tube} from "../../3d/CobotParts";
+import {HOUSING_DARK, Housing, Metal, TOOL_RED, Tube} from "../../3d/CobotParts";
 
 // 해석적 IK 가 풀리는 두 구조를 관절 축 중심으로 보여주는 "구조 모식도"다 (실제 제품 외형이 아니다).
 // RViz2 interactive marker 처럼 관절을 그린다: revolute 는 노란 축봉 + 사선 줄무늬 회전 링(색 = 도는

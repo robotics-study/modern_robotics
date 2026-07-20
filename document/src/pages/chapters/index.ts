@@ -116,6 +116,20 @@ const data: IChapterData[] = [
             {en: "Time-Optimal Time Scaling", ko: "시간 최적 Time Scaling"},
         ],
     },
+    {
+        chapter: 10,
+        title: {en: "Motion Planning", ko: "Motion Planning"},
+        contents: lazy(() => import("./Chapter10")),
+        sections: [
+            {en: "Overview of Motion Planning", ko: "Motion Planning 개관"},
+            {en: "Configuration Space Obstacles", ko: "C-space 장애물"},
+            {en: "Graph Search: A*", ko: "그래프 탐색: A*"},
+            {en: "Grid Methods", ko: "Grid 방법"},
+            {en: "Sampling Methods: RRT and PRM", ko: "Sampling 방법: RRT와 PRM"},
+            {en: "Virtual Potential Fields", ko: "Virtual Potential Field"},
+            {en: "Nonlinear Optimization and Smoothing", ko: "최적화와 Smoothing"},
+        ],
+    },
 ]
 
 export default data.sort((a, b) => a.chapter - b.chapter)

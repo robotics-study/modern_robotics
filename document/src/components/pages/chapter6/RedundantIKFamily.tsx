@@ -26,7 +26,7 @@ const solveAt = (goal: Vec2, psi: number): Solution | null => {
     const w: Vec2 = {x: goal.x - L3 * Math.cos(psi), y: goal.y - L3 * Math.sin(psi)};
     const s = ik2R(w.x, w.y, L1, L2);
     if (!s.reachable || !s.righty) return null;
-    const {theta1, theta2} = s.righty;
+    const {theta1} = s.righty;
     const j2: Vec2 = {x: L1 * Math.cos(theta1), y: L1 * Math.sin(theta1)};
     return {psi, joints: [{x: 0, y: 0}, j2, w, goal]};
 };
