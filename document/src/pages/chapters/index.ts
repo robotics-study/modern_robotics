@@ -150,13 +150,27 @@ const data: IChapterData[] = [
         title: {en: "Grasping and Manipulation", ko: "Grasping과 Manipulation"},
         contents: lazy(() => import("./Chapter12")),
         sections: [
-            {en: "Overview and Mathematical Preliminaries", ko: "개관과 수학 준비"},
+            {en: "Overview and Mathematical Preliminaries", ko: "Overview and Mathematical Preliminaries"},
             {en: "Contact Kinematics", ko: "Contact Kinematics"},
             {en: "Planar Twists as Rotation Centers", ko: "평면 twist 와 CoR"},
             {en: "Form Closure", ko: "Form Closure"},
             {en: "Friction and Wrench Cones", ko: "마찰과 Wrench Cone"},
             {en: "Force Closure", ko: "Force Closure"},
             {en: "Manipulation", ko: "Manipulation"},
+        ],
+    },
+    {
+        chapter: 13,
+        title: {en: "Wheeled Mobile Robots", ko: "Wheeled Mobile Robot"},
+        contents: lazy(() => import("./Chapter13")),
+        sections: [
+            {en: "Types of Wheeled Mobile Robots", ko: "Wheeled Mobile Robot 의 종류"},
+            {en: "Omnidirectional Robots", ko: "Omnidirectional 로봇"},
+            {en: "Modeling Nonholonomic Robots", ko: "Nonholonomic 로봇의 모델링"},
+            {en: "Controllability and the Lie Bracket", ko: "Controllability 와 Lie Bracket"},
+            {en: "Shortest Paths: Dubins and Reeds–Shepp", ko: "Dubins 와 Reeds–Shepp 최단 경로"},
+            {en: "Trajectory Tracking Control", ko: "궤적 추종 제어"},
+            {en: "Odometry and Mobile Manipulation", ko: "Odometry 와 Mobile Manipulation"},
         ],
     },
 ]

@@ -32,12 +32,16 @@ const Sidebar = ({open: mobileOpen, onNavigate}: { open?: boolean; onNavigate?: 
                 </a>
             ))}
 
-            <h4>{t("Coming soon", "준비 중")} <span className="soon">soon</span></h4>
-            {planned.map((c) => (
-                <span key={c.chapter} className="planned">
-                    <span className="num">{c.chapter}</span>{pick(lang, c.title)}
-                </span>
-            ))}
+            {planned.length > 0 && (
+                <>
+                    <h4>{t("Coming soon", "준비 중")} <span className="soon">soon</span></h4>
+                    {planned.map((c) => (
+                        <span key={c.chapter} className="planned">
+                            <span className="num">{c.chapter}</span>{pick(lang, c.title)}
+                        </span>
+                    ))}
+                </>
+            )}
         </aside>
     )
 }

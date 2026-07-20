@@ -31,7 +31,7 @@ const Chapter3 = () => {
                     configuration 표현·기준 프레임 변경·강체 이동의 세 가지 일을 해낸다. 속도는 더 좋다:
                     C-space 는 굽어 있어도 속도는 평평한 <InlineMath math='\mathbb{R}^6'/> 에 산다.
                     각속도+선속도가 <strong>twist</strong>, 모멘트+힘이 <strong>wrench</strong> 가 되고, 모든
-                    강체 운동은 <strong>screw motion</strong> 임이 드러난다. 책 전체를 떠받치는 기하다.
+                    강체 운동은 <strong>screw motion</strong> 임이 드러난다. 이후 모든 장을 떠받치는 기하다.
                 </p>}
             />
 
@@ -414,7 +414,7 @@ const Chapter3 = () => {
                     rotation by <InlineMath math='\|r\|'/> about <InlineMath math='r/\|r\|'/>, and antipodal
                     surface points are the <em>same</em> rotation (the <InlineMath math='\theta = \pi'/>{" "}
                     ambiguity above). Singularities like this are the fate of <em>every</em> three-parameter
-                    representation (Euler angles included), which is precisely why the book computes with{" "}
+                    representation (Euler angles included), which is precisely why we compute with{" "}
                     <InlineMath math='R'/> itself.
                 </p>}
                 ko={<p>
@@ -423,7 +423,7 @@ const Chapter3 = () => {
                     그릴 수 있다: 공 안의 점 <InlineMath math='r'/> 은 축 <InlineMath math='r/\|r\|'/> 둘레{" "}
                     <InlineMath math='\|r\|'/> 회전이고, 표면의 대척점 쌍은 <em>같은</em> 회전이다. 위의{" "}
                     <InlineMath math='\theta = \pi'/> 모호성이 그것이다. 이런 특이점은 <em>모든</em> 세-파라미터
-                    표현(오일러 각 포함)의 숙명이고, 그래서 이 책은 <InlineMath math='R'/> 자체로 계산한다.
+                    표현(오일러 각 포함)의 숙명이고, 그래서 여기서는 <InlineMath math='R'/> 자체로 계산한다.
                 </p>}
             />
 

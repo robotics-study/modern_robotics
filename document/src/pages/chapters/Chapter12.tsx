@@ -11,7 +11,7 @@ import {T} from "../../libs/i18n";
 const Chapter12 = () => {
     return (
         <>
-            <T en={<h2>Overview and Mathematical Preliminaries</h2>} ko={<h2>개관과 수학 준비</h2>}/>
+            <T en={<h2>Overview and Mathematical Preliminaries</h2>} ko={<h2>Overview and Mathematical Preliminaries</h2>}/>
             <T
                 en={<p>
                     Until now the focus has been the robot itself. This chapter moves the spotlight to the{" "}
@@ -388,7 +388,7 @@ const Chapter12 = () => {
                     왜 <InlineMath math='k > 0'/>이고 <InlineMath math='Fk = 0'/>이면 closure 일까? 그런{" "}
                     <InlineMath math='k'/>가 있다는 것은 wrench 들이 모든 계수에 여유를 남긴 채 서로 균형을
                     이룬다는 뜻이라, 조합을 조금씩 기울이면 주변의 어떤 wrench 든 만들 수 있고, rank 가 차 있으면
-                    그것이 <InlineMath math='\mathbb{R}^n'/> 전체에 닿는다. 책의 예제로 확인하자. 사각 구멍에
+                    그것이 <InlineMath math='\mathbb{R}^n'/> 전체에 닿는다. 예제로 확인하자. 사각 구멍에
                     손가락 두 개를 넣어 네 모서리에 대면
                 </p>}
             />

@@ -808,6 +808,22 @@ h3:hover .anchor {
     flex-wrap: wrap;
 }
 
+/* 히어로 키워드 chip 줄 */
+.lander-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 620px;
+    margin: 0 auto 26px;
+}
+
+.lander-chips .chip {
+    padding: 6px 13px;
+    font-size: .8rem;
+    color: var(--muted);
+}
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -885,6 +901,38 @@ h3:hover .anchor {
     gap: 9px;
 }
 
+/* 파트 헤더: 로마 숫자 배지 + 제목 + 한 줄 설명 */
+.part-head {
+    margin-bottom: 16px;
+}
+
+.part-head h3 {
+    font-size: 1.12rem;
+    margin: 0 0 5px;
+    letter-spacing: -.01em;
+}
+
+.part-head .part-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 7px;
+    border-radius: 8px;
+    font-size: .78rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent-grad);
+    letter-spacing: .02em;
+}
+
+.part-head .part-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: .9rem;
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -937,6 +985,18 @@ h3:hover .anchor {
     font-weight: 600;
     font-size: 1.05rem;
     line-height: 1.3;
+}
+
+/* 카드 한 줄 소개 */
+.doc-card .dc-blurb {
+    margin: 0;
+    color: var(--muted);
+    font-size: .85rem;
+    line-height: 1.55;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .chips {

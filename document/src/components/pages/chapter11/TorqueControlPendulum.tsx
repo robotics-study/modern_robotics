@@ -289,8 +289,8 @@ const TorqueControlPendulum = () => {
     const t = useTr();
     return <CanvasFigure
         label={t(
-            "the book's single link: PD stalls just short of the goal and PID finishes the lift (until Ki crosses its bound); with the same wrong model, computed torque tracks far better than feedforward or feedback alone",
-            "책의 단일 링크: PD 는 목표 직전에 멈추고 PID 가 마저 들어 올린다 (Ki 가 한계를 넘기 전까지). 같은 틀린 모델이라도 computed torque 가 feedforward 단독·feedback 단독보다 훨씬 잘 따라간다",
+            "a single link fighting gravity: PD stalls just short of the goal and PID finishes the lift (until Ki crosses its bound); with the same wrong model, computed torque tracks far better than feedforward or feedback alone",
+            "중력을 받는 단일 링크: PD 는 목표 직전에 멈추고 PID 가 마저 들어 올린다 (Ki 가 한계를 넘기 전까지). 같은 틀린 모델이라도 computed torque 가 feedforward 단독·feedback 단독보다 훨씬 잘 따라간다",
         )}
         tight
         bodyClassName="w-fit"

@@ -8,17 +8,34 @@ import Footer from "./components/Footer";
 import Home from "./pages/home/Home";
 import ChapterContents from "./components/ChapterContents";
 import {BASE_PATH} from "./libs/url";
-import {useSearchParams, BrowserRouter, Routes, Route} from "react-router-dom";
+import {useSearchParams, useNavigate, BrowserRouter, Routes, Route} from "react-router-dom";
+import {useChapterNav} from "./libs/nav";
 import cn from "./libs/cn";
 import {LangProvider, useLang} from "./libs/i18n";
 
 const PageSelector = () => {
     const [searchParam] = useSearchParams()
+    const navigate = useNavigate()
     const {lang} = useLang()
+    const {current: chapter} = useChapterNav()
     const [menuOpen, setMenuOpen] = useState(false)
     const closeMenu = useCallback(() => setMenuOpen(false), [])
 
-    const chapter = useMemo(() => parseInt(searchParam.get("chapter") ?? ""), [searchParam])
+    // 예전 ?chapter=N 쿼리 링크는 경로 기반 URL 로 정리해 준다 (lang·해시 유지).
+    useEffect(() => {
+        const legacy = parseInt(searchParam.get("chapter") ?? "")
+        if (legacy > 0) {
+            const sp = new URLSearchParams(searchParam)
+            sp.delete("chapter")
+            const search = sp.toString()
+            navigate({
+                pathname: `/chapter/${legacy}`,
+                search: search ? `?${search}` : "",
+                hash: window.location.hash,
+            }, {replace: true})
+        }
+    }, [searchParam, navigate])
+
     const current = useMemo(
         () => chapters.find((item) => item.chapter === chapter && item.contents),
         [chapter],
@@ -61,6 +78,8 @@ const App = () => {
         <LangProvider>
             <Routes>
                 <Route path={"/"} element={<PageSelector/>}/>
+                <Route path={"/chapter/:n"} element={<PageSelector/>}/>
+                <Route path={"*"} element={<PageSelector/>}/>
             </Routes>
         </LangProvider>
     </BrowserRouter>
