@@ -13,9 +13,7 @@ import {useCanvasColors} from "../../../libs/useTheme";
 // 지도에 그려지고, 왼쪽 팔이 그 반복을 한 스텝씩 따라가며 실제로 해에 붙는 모습을 보여준다.
 const L1 = 2, L2 = 1.5;
 const RESOLUTION = 0.06;
-const ARM_W = 250;
 const GRID = 96;
-const BASIN_W = 250;
 const MAX_ITER = 30;
 const TOL = 1e-3;
 const MAX_STEP = 1.0;
