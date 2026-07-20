@@ -39,7 +39,7 @@
     "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
     "fs": "^0.0.1-security",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.10",
     "tailwind-merge": "^2.5.5",
     "tailwindcss": "^3.4.16",
     "ts-node": "^10.9.2",
