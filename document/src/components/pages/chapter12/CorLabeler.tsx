@@ -110,8 +110,31 @@ const CorScene = ({panel = 340}: SceneProps) => {
         [BODY.x0, BODY.y0], [BODY.x1, BODY.y0], [BODY.x1, BODY.y1], [BODY.x0, BODY.y1],
     ].map(([x, y]) => rot(x, y));
 
+    const presets: Array<{name: {en: string; ko: string}; c: [number, number]; s: number}> = [
+        {name: {en: "tip over the right corner", ko: "오른쪽 모서리로 넘어뜨리기"}, c: [1, 0], s: -1},
+        {name: {en: "tip over the left corner", ko: "왼쪽 모서리로 넘어뜨리기"}, c: [-1, 0], s: 1},
+        {name: {en: "lift it away", ko: "들어서 빼내기"}, c: [-2.6, 3.4], s: 1},
+        {name: {en: "spin in place", ko: "제자리에서 돌리기"}, c: [0, 1], s: 1},
+    ];
+
     return (
         <div className="flex flex-col gap-2 items-center">
+            <div className="flex flex-row flex-wrap gap-1.5 justify-center">
+                {presets.map((p) => (
+                    <button key={p.name.en}
+                            onClick={() => {
+                                setSel(p.c);
+                                setSigma(p.s);
+                            }}
+                            className={`px-2.5 py-1 rounded-md text-xs font-semibold border transition-colors ${
+                                sel && sel[0] === p.c[0] && sel[1] === p.c[1] && sigma === p.s
+                                    ? "border-[var(--accent)] text-[var(--accent)] bg-[var(--accent)]/10"
+                                    : "border-border text-muted hover:text-[var(--text)]"
+                            }`}>
+                        {t(p.name.en, p.name.ko)}
+                    </button>
+                ))}
+            </div>
             <div className="flex flex-row gap-1.5">
                 {[1, -1].map((s) => (
                     <button key={s} onClick={() => setSigma(s)}
