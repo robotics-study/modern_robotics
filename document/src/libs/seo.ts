@@ -54,13 +54,28 @@ function clamp(text: string, max = 155): string {
     return text.length <= max ? text : text.slice(0, max - 1).trimEnd() + "…"
 }
 
-// 해시·잡다한 파라미터를 뺀 정규화 URL. 언어 변형은 ?lang=ko 로만 표현한다.
+// 해시·잡다한 파라미터를 뺀 정규화 URL. 챕터는 /chapter/N/ 경로, 언어 변형은 ?lang=ko.
 export function pageUrl(lang: Lang, chapter?: number): string {
-    const params = new URLSearchParams()
-    if (chapter !== undefined) params.set("chapter", String(chapter))
-    if (lang === "ko") params.set("lang", "ko")
-    const qs = params.toString()
-    return `${ORIGIN}${BASE_PATH}${qs ? `?${qs}` : ""}`
+    const path = chapter !== undefined ? `chapter/${chapter}/` : ""
+    const qs = lang === "ko" ? "?lang=ko" : ""
+    return `${ORIGIN}${BASE_PATH}${path}${qs}`
+}
+
+declare global {
+    interface Window {
+        gtag?: (...args: unknown[]) => void
+    }
+}
+
+// SPA 라우트 변경마다 GA4 page_view 를 직접 보낸다 (index.html 은 send_page_view: false).
+// 로컬 개발 트래픽은 집계를 오염시키므로 배포 호스트에서만 보낸다.
+function trackPageView(title: string) {
+    if (!window.location.hostname.endsWith("github.io")) return
+    window.gtag?.("event", "page_view", {
+        page_title: title,
+        page_location: window.location.href,
+        page_path: window.location.pathname + window.location.search,
+    })
 }
 
 export interface PageMeta {
@@ -83,6 +98,7 @@ export function applyPageMeta({title, description, lang, chapter}: PageMeta) {
     upsertMeta("name", "twitter:title", title)
     upsertMeta("name", "twitter:description", desc)
     upsertLink("canonical", canonical)
+    trackPageView(title)
     // 언어별 대체 URL: 같은 챕터의 en/ko 쌍.
     upsertLink("alternate", pageUrl("en", chapter?.chapter), "en")
     upsertLink("alternate", pageUrl("ko", chapter?.chapter), "ko")

@@ -14,11 +14,9 @@ const chapters = [...indexTs.matchAll(/chapter:\s*(\d+)/g)].map((m) => parseInt(
 if (chapters.length === 0) throw new Error("no chapters found in pages/chapters/index.ts");
 
 const url = (lang, chapter) => {
-    const params = new URLSearchParams();
-    if (chapter !== undefined) params.set("chapter", String(chapter));
-    if (lang === "ko") params.set("lang", "ko");
-    const qs = params.toString();
-    return `${ORIGIN}${BASE}${qs ? `?${qs}` : ""}`;
+    const path = chapter !== undefined ? `chapter/${chapter}/` : "";
+    const qs = lang === "ko" ? "?lang=ko" : "";
+    return `${ORIGIN}${BASE}${path}${qs}`;
 };
 
 const esc = (s) => s.replaceAll("&", "&amp;");
