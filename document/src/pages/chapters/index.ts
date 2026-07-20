@@ -130,6 +130,21 @@ const data: IChapterData[] = [
             {en: "Nonlinear Optimization and Smoothing", ko: "최적화와 Smoothing"},
         ],
     },
+    {
+        chapter: 11,
+        title: {en: "Robot Control", ko: "Robot Control"},
+        contents: lazy(() => import("./Chapter11")),
+        sections: [
+            {en: "Control System Overview", ko: "제어 시스템 개관"},
+            {en: "Error Dynamics", ko: "오차 동역학"},
+            {en: "Motion Control with Velocity Inputs", ko: "속도 입력 Motion Control"},
+            {en: "Motion Control with Torque Inputs", ko: "토크 입력 Motion Control"},
+            {en: "Force Control", ko: "Force Control"},
+            {en: "Hybrid Motion–Force Control", ko: "Hybrid Motion–Force Control"},
+            {en: "Impedance Control", ko: "Impedance Control"},
+            {en: "Low-Level Torque Control and Other Topics", ko: "저수준 토크 제어와 기타 주제"},
+        ],
+    },
 ]
 
 export default data.sort((a, b) => a.chapter - b.chapter)
