@@ -315,7 +315,7 @@ const Chapter2 = () => {
                     orientation freedoms.
                 </p>}
                 ko={<p>
-                    다른 해결책이자 이 책이 택하는 쪽은 <strong>암시적 표현</strong>이다: 공간을 더 높은 차원의
+                    다른 해결책이자 여기서 택하는 쪽은 <strong>암시적 표현</strong>이다: 공간을 더 높은 차원의
                     유클리드 공간에 넣고 제약을 거는 것으로, 단위 구면을 <InlineMath math='(x, y, z)'/> 와{" "}
                     <InlineMath math='x^2 + y^2 + z^2 = 1'/> 로 나타내는 식이다. 숫자는 늘지만 특이점이{" "}
                     <em>없고</em>, 차트 하나로 공간 전체를 덮는다. 그리고 closed chain 에서는 루프 방정식이 이미

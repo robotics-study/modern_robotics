@@ -5,7 +5,7 @@ import {T, useTr} from "../../libs/i18n";
 import {useChapterNav} from "../../libs/nav";
 import {Localized} from "../../../types/global";
 
-// 사이트에 페이지가 있는 챕터만 클릭 가능한 카드로, 책에만 있는 챕터는 목록으로 구분한다.
+// 모든 챕터를 클릭 가능한 카드로 나열한다.
 // title 의 ko 는 pages/chapters/index.ts 의 챕터 ko 타이틀과 같은 표기를 쓴다.
 const ROADMAP: Array<{n: number; title: Localized<string>; blurb: Localized<string>}> = [
     {
@@ -88,38 +88,47 @@ const ROADMAP: Array<{n: number; title: Localized<string>; blurb: Localized<stri
                 "via point를 지나는 매끄러운 trajectory.",
         },
     },
+    {
+        n: 10,
+        title: {en: "Motion Planning", ko: "Motion Planning"},
+        blurb: {
+            en: "Collision-free paths: grid search, sampling planners (RRT, PRM), " +
+                "and virtual potential fields.",
+            ko: "충돌 없는 경로: grid 탐색, sampling planner (RRT, PRM), " +
+                "그리고 virtual potential field.",
+        },
+    },
+    {
+        n: 11,
+        title: {en: "Robot Control", ko: "Robot Control"},
+        blurb: {
+            en: "Motion, force, hybrid, and impedance control, from error dynamics " +
+                "to computed torque.",
+            ko: "오차 동역학에서 computed torque 까지, motion·force·hybrid·impedance 제어.",
+        },
+    },
+    {
+        n: 12,
+        title: {en: "Grasping and Manipulation", ko: "Grasping과 Manipulation"},
+        blurb: {
+            en: "Contact kinematics, friction cones, form and force closure, " +
+                "and manipulation beyond grasping.",
+            ko: "접촉 kinematics, friction cone, form closure 와 force closure, " +
+                "그리고 잡기 너머의 manipulation.",
+        },
+    },
+    {
+        n: 13,
+        title: {en: "Wheeled Mobile Robots", ko: "Wheeled Mobile Robot"},
+        blurb: {
+            en: "Omnidirectional and nonholonomic bases, Lie brackets, shortest paths, " +
+                "odometry, and mobile manipulation.",
+            ko: "omnidirectional·nonholonomic 베이스, Lie bracket, 최단 경로, " +
+                "odometry, mobile manipulation.",
+        },
+    },
 ];
 
-const BOOK_ONLY: Array<{n: number; title: string; blurb: Localized<string>}> = [
-    {
-        n: 10, title: "Motion Planning",
-        blurb: {
-            en: "collision-free paths: grids, sampling, potential fields",
-            ko: "충돌 없는 경로: 그리드, 샘플링, potential field",
-        },
-    },
-    {
-        n: 11, title: "Robot Control",
-        blurb: {
-            en: "motion, force, hybrid, and impedance control",
-            ko: "motion·force·hybrid·impedance 제어",
-        },
-    },
-    {
-        n: 12, title: "Grasping and Manipulation",
-        blurb: {
-            en: "contact models, form and force closure",
-            ko: "접촉 모델, form closure와 force closure",
-        },
-    },
-    {
-        n: 13, title: "Wheeled Mobile Robots",
-        blurb: {
-            en: "nonholonomic constraints, odometry, mobile manipulation",
-            ko: "nonholonomic 제약, odometry, mobile manipulation",
-        },
-    },
-];
 
 const Chapter1 = () => {
     const {go} = useChapterNav();
@@ -128,7 +137,7 @@ const Chapter1 = () => {
         <>
             <T
                 en={<p>
-                    This book is about the <strong>mechanics</strong>, <strong>planning</strong>, and{" "}
+                    These notes are about the <strong>mechanics</strong>, <strong>planning</strong>, and{" "}
                     <strong>control</strong> of robot mechanisms: robot arms, wheeled vehicles, and arms
                     mounted on wheeled vehicles. Robotics also draws on artificial intelligence and computer
                     perception, but the essential feature of a robot is that it <em>moves in the physical
@@ -136,7 +145,7 @@ const Chapter1 = () => {
                     following chapters build on.
                 </p>}
                 ko={<p>
-                    이 책은 로봇 메커니즘의 <strong>역학(mechanics)</strong>, <strong>계획(planning)</strong>,{" "}
+                    이 노트는 로봇 메커니즘의 <strong>역학(mechanics)</strong>, <strong>계획(planning)</strong>,{" "}
                     <strong>제어(control)</strong>를 다룬다. 로봇 팔, 바퀴 달린 이동체, 그리고 그 위에 얹힌
                     로봇 팔이 모두 여기에 속한다. 로보틱스는 인공지능과 컴퓨터 인식도 아우르지만,
                     로봇의 본질은 <em>물리 세계 안에서 움직인다</em>는 것이며 이 노트는 거기에 집중한다. 이
@@ -186,7 +195,7 @@ const Chapter1 = () => {
                     coming chapters possible.
                 </p>}
                 ko={<p>
-                    실제 링크는 휘고, 실제 관절에는 탄성·백래시·마찰·히스테리시스가 있다. 이 책 전반에서 우리는
+                    실제 링크는 휘고, 실제 관절에는 탄성·백래시·마찰·히스테리시스가 있다. 이 노트 전반에서 우리는
                     그런 효과를 무시하고 모든 링크를 완벽한 <strong>강체</strong>로 취급한다. 이 가정 덕분에 이후
                     장들의 우아한 기하학이 가능해진다.
                 </p>}
@@ -282,15 +291,17 @@ const Chapter1 = () => {
             <T en={<h2>Chapter Roadmap</h2>} ko={<h2>챕터 로드맵</h2>}/>
             <T
                 en={<p>
-                    The notes follow the book's development. Chapters 2 and 3 lay the foundations
+                    The notes run in order. Chapters 2 and 3 lay the foundations
                     (configurations and rigid-body motions), Chapters 4–7 build kinematics on top of them,
-                    Chapter 8 adds dynamics, and Chapter 9 turns motions into executable trajectories. Click a
+                    Chapter 8 adds dynamics, Chapter 9 turns motions into executable trajectories, and
+                    Chapters 10–13 cover planning, control, manipulation, and mobile robots. Click a
                     card to jump in.
                 </p>}
                 ko={<p>
-                    이 노트는 책의 전개를 따른다. 2·3장이 토대(configuration과 rigid-body motion)를 놓고,
+                    차례는 이렇다. 2·3장이 토대(configuration과 rigid-body motion)를 놓고,
                     4–7장이 그 위에 kinematics를 쌓으며, 8장이 dynamics를 더하고, 9장이 움직임을 실행 가능한
-                    trajectory로 바꾼다. 카드를 눌러 바로 이동해 보자.
+                    trajectory로 바꾸며, 10–13장이 planning·제어·manipulation·모바일 로봇을 다룬다.
+                    카드를 눌러 바로 이동해 보자.
                 </p>}
             />
             <div className="card-grid">
@@ -306,17 +317,6 @@ const Chapter1 = () => {
                     </div>
                 ))}
             </div>
-            <T
-                en={<p>The book continues with four chapters not (yet) covered by these notes:</p>}
-                ko={<p>책은 이 노트가 아직 다루지 않는 네 개의 장으로 이어진다:</p>}
-            />
-            <ul className="list-disc pl-6 space-y-1 text-muted">
-                {BOOK_ONLY.map(({n, title, blurb}) => (
-                    <li key={n}>
-                        <strong>Ch.{n} · {title}</strong> — {t(blurb.en, blurb.ko)}.
-                    </li>
-                ))}
-            </ul>
         </>
     )
 }

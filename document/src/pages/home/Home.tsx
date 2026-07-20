@@ -87,14 +87,16 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div className="lander-cat">
-                    <h3>{t("Roadmap", "로드맵")} <span className="soon">soon</span></h3>
-                    <div className="chips">
-                        {planned.map((c) => (
-                            <span key={c.chapter} className="dim">Ch.{c.chapter} · {pick(lang, c.title)}</span>
-                        ))}
+                {planned.length > 0 && (
+                    <div className="lander-cat">
+                        <h3>{t("Roadmap", "로드맵")} <span className="soon">soon</span></h3>
+                        <div className="chips">
+                            {planned.map((c) => (
+                                <span key={c.chapter} className="dim">Ch.{c.chapter} · {pick(lang, c.title)}</span>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </main>
     )

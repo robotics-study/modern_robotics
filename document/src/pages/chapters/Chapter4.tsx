@@ -211,14 +211,14 @@ const Chapter4 = () => {
             ]}/>
             <T
                 en={<p>
-                    A spatial example (the book's Example 4.1): a 3R chain whose first axis is vertical{" "}
+                    A spatial example: a 3R chain whose first axis is vertical{" "}
                     (<InlineMath math='\omega_1 = (0,0,1)'/> through the origin), second axis along{" "}
                     <InlineMath math='-\hat{\mathrm{y}}'/> at height offset <InlineMath math='q_2 = (L_1, 0, 0)'/>,
                     third along <InlineMath math='\hat{\mathrm{x}}'/> through{" "}
                     <InlineMath math='q_3 = (0, 0, -L_2)'/>:
                 </p>}
                 ko={<p>
-                    공간 예제 하나(책 예제 4.1): 첫 축이 수직{" "}
+                    공간 예제 하나: 첫 축이 수직{" "}
                     (<InlineMath math='\omega_1 = (0,0,1)'/>, 원점 통과), 둘째 축이{" "}
                     <InlineMath math='-\hat{\mathrm{y}}'/> 방향으로 <InlineMath math='q_2 = (L_1, 0, 0)'/> 를
                     지나고, 셋째 축이 <InlineMath math='\hat{\mathrm{x}}'/> 방향으로{" "}
@@ -382,7 +382,7 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
             <UrdfRobot/>
             <T
                 en={<p>
-                    And here is a production robot in the same format: the book's URDF for the{" "}
+                    And here is a production robot in the same format: the URDF for the{" "}
                     <strong>UR5</strong>. Read <code>joint1</code> … <code>joint6</code> against the screw-axis
                     table from the PoE section: each <code>origin</code> is the fixed offset to the next joint
                     frame and each <code>axis</code> is the joint's rotation direction. This is exactly the data{" "}
@@ -390,7 +390,7 @@ T(\theta) &= e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_{n-1}]\theta_{n-
                     <code>link</code> entries carry the masses and inertias that Chapter 8 will need:
                 </p>}
                 ko={<p>
-                    그리고 같은 형식으로 쓰인 실전 로봇이 여기 있다. 책에 실린 <strong>UR5</strong> 의 URDF 다.{" "}
+                    그리고 같은 형식으로 쓰인 실전 로봇이 여기 있다. <strong>UR5</strong> 의 URDF 다.{" "}
                     <code>joint1</code> … <code>joint6</code> 을 PoE 절의 screw 축 표와 대조해 보라: 각{" "}
                     <code>origin</code> 은 다음 관절 프레임까지의 고정 오프셋이고 <code>axis</code> 는 관절의
                     회전 방향이다. 정확히 <InlineMath math='M'/> 과 <InlineMath math='\mathcal{S}_i'/> 를 만드는
