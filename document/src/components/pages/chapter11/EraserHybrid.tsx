@@ -45,11 +45,12 @@ interface SimState {
     x: number; dx: number;          // 보드와 나란한 방향 (motion 제어)
     z: number; dz: number;          // 보드를 파고드는 방향 (force 제어)
     boardZ: number; integ: number; time: number;
+    phase: number;                  // 왕복 궤적의 위상 (속도 슬라이더가 바뀌어도 연속)
     quality: number[];              // 칸별 지워진 정도 0..1
 }
 
 const freshState = (): SimState => ({
-    x: 0.5, dx: 0, z: 0.66, dz: 0, boardZ: 0.7, integ: 0, time: 0,
+    x: 0.5, dx: 0, z: 0.66, dz: 0, boardZ: 0.7, integ: 0, time: 0, phase: 0,
     quality: new Array(N_BINS).fill(0),
 });
 
@@ -88,12 +89,16 @@ const EraserScene = ({panel = 340}: SceneProps) => {
                 const uz = p.fd + 1.5 * fe + 30 * s.integ - 40 * s.dz;
                 s.dz += (uz - fc) * DT;
                 s.z = Math.max(0.5, Math.min(s.boardZ + 0.05, s.z + s.dz * DT));
-                // x: motion 제어. 왕복 궤적을 PD 로 추종한다.
-                const xd = 0.5 + 0.38 * Math.sin(p.speed * s.time);
-                const dxd = 0.38 * p.speed * Math.cos(p.speed * s.time);
+                // x: motion 제어. 왕복 궤적을 PD 로 추종한다. 위상을 누적해 두면
+                // 속도 슬라이더를 움직여도 목표 위치가 점프하지 않는다.
+                s.phase += p.speed * DT;
+                const xd = 0.5 + 0.38 * Math.sin(s.phase);
+                const dxd = 0.38 * p.speed * Math.cos(s.phase);
                 const ux = 400 * (xd - s.x) + 40 * (dxd - s.dx);
                 s.dx += ux * DT;
-                s.x = Math.max(0.03, Math.min(0.97, s.x + s.dx * DT));
+                const nx = s.x + s.dx * DT;
+                if (nx < 0.03 || nx > 0.97) s.dx = 0;
+                s.x = Math.max(0.03, Math.min(0.97, nx));
                 s.time += DT;
                 // 지우개 폭 아래 칸들이 "그 순간의 힘 × 머문 시간"만큼 지워진다.
                 const strength = Math.min(1, fc / p.fd);
