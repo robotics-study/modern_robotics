@@ -44,13 +44,13 @@ const makeScribbles = () => {
 interface SimState {
     x: number; dx: number;          // 보드와 나란한 방향 (motion 제어)
     z: number; dz: number;          // 보드를 파고드는 방향 (force 제어)
-    boardZ: number; integ: number; time: number;
+    boardZ: number; boardTarget: number; integ: number; time: number;
     phase: number;                  // 왕복 궤적의 위상 (속도 슬라이더가 바뀌어도 연속)
     quality: number[];              // 칸별 지워진 정도 0..1
 }
 
 const freshState = (): SimState => ({
-    x: 0.5, dx: 0, z: 0.66, dz: 0, boardZ: 0.7, integ: 0, time: 0, phase: 0,
+    x: 0.5, dx: 0, z: 0.66, dz: 0, boardZ: 0.7, boardTarget: 0.7, integ: 0, time: 0, phase: 0,
     quality: new Array(N_BINS).fill(0),
 });
 
@@ -80,6 +80,9 @@ const EraserScene = ({panel = 340}: SceneProps) => {
             const p = paramsRef.current;
             const steps = Math.max(1, Math.round(real / DT));
             for (let i = 0; i < steps; i++) {
+                // 보드는 목표 위치로 부드럽게 이동한다. 순간이동시키면 복귀 순간에
+                // 지우개를 때리면서 튀는 모션이 생긴다.
+                s.boardZ += (s.boardTarget - s.boardZ) * Math.min(1, DT * 6);
                 // z: force 제어. 접촉힘을 재서 PI 로 Fd 에 붙인다.
                 const pen = Math.max(0, s.z - s.boardZ);
                 const fc = K_ENV * pen;
@@ -148,9 +151,9 @@ const EraserScene = ({panel = 340}: SceneProps) => {
             <div className="flex flex-row flex-wrap gap-1.5 justify-center">
                 <button onClick={() => {
                     const st = stateRef.current;
-                    st.boardZ = 0.72;
+                    st.boardTarget = 0.72;
                     window.setTimeout(() => {
-                        st.boardZ = 0.7;
+                        st.boardTarget = 0.7;
                     }, 1200);
                 }}
                         className="px-2.5 py-1 rounded-md text-xs font-semibold border border-border text-muted hover:text-[var(--text)] transition-colors">
