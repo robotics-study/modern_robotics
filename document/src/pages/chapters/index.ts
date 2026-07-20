@@ -145,6 +145,20 @@ const data: IChapterData[] = [
             {en: "Low-Level Torque Control and Other Topics", ko: "저수준 토크 제어와 기타 주제"},
         ],
     },
+    {
+        chapter: 12,
+        title: {en: "Grasping and Manipulation", ko: "Grasping과 Manipulation"},
+        contents: lazy(() => import("./Chapter12")),
+        sections: [
+            {en: "Overview and Mathematical Preliminaries", ko: "개관과 수학 준비"},
+            {en: "Contact Kinematics", ko: "Contact Kinematics"},
+            {en: "Planar Twists as Rotation Centers", ko: "평면 twist 와 CoR"},
+            {en: "Form Closure", ko: "Form Closure"},
+            {en: "Friction and Wrench Cones", ko: "마찰과 Wrench Cone"},
+            {en: "Force Closure", ko: "Force Closure"},
+            {en: "Manipulation", ko: "Manipulation"},
+        ],
+    },
 ]
 
 export default data.sort((a, b) => a.chapter - b.chapter)
