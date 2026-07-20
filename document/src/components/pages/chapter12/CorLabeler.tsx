@@ -131,13 +131,16 @@ const CorScene = ({panel = 340}: SceneProps) => {
                        if (pos) setSel([invx(pos.x), invy(pos.y)]);
                    }}>
                 <Layer>
-                    {/* 허용 CoR 타일: + 는 파랑, − 는 주황, 둘 다면 겹침 */}
-                    {tiles.map((tl, i) => (
-                        <Rect key={i} x={sx(tl.x) - tileW / 2} y={sy(tl.y) - tileH / 2}
-                              width={tileW + 0.5} height={tileH + 0.5}
-                              fill={tl.plus && tl.minus ? colors.accent : tl.plus ? colors.accent : "#e0a33d"}
-                              opacity={tl.plus && tl.minus ? 0.34 : 0.16}/>
-                    ))}
+                    {/* 지금 고른 회전 방향으로 돌아도 안 뚫리는 경첩 위치만 칠한다 */}
+                    {tiles.map((tl, i) => {
+                        const ok = sigma === 1 ? tl.plus : tl.minus;
+                        if (!ok) return null;
+                        return (
+                            <Rect key={i} x={sx(tl.x) - tileW / 2} y={sy(tl.y) - tileH / 2}
+                                  width={tileW + 0.5} height={tileH + 0.5}
+                                  fill={colors.accent} opacity={0.2}/>
+                        );
+                    })}
                     {/* 테이블 */}
                     <Line points={[0, sy(0), W, sy(0)]} stroke={colors.text} strokeWidth={2.5}/>
                     {Array.from({length: 16}, (_, i) => (
@@ -151,7 +154,7 @@ const CorScene = ({panel = 340}: SceneProps) => {
                     {/* 손가락 */}
                     <Line points={[sx(-1), sy(1.2), sx(-1.7), sy(1.5), sx(-1.7), sy(0.9)]} closed
                           fill={colors.text} opacity={0.75}/>
-                    {/* 접촉 normal 화살표 */}
+                    {/* 접촉 normal 화살표 + 현재 라벨을 접촉점 옆에 바로 표시 */}
                     {CONTACTS.map((c, i) => (
                         <Arrow key={i}
                                points={[sx(c.p[0]), sy(c.p[1]),
@@ -159,31 +162,41 @@ const CorScene = ({panel = 340}: SceneProps) => {
                                stroke={colors.muted} fill={colors.muted} strokeWidth={2}
                                pointerLength={7} pointerWidth={6}/>
                     ))}
-                    {/* 선택한 CoR */}
+                    {analysis && CONTACTS.map((c, i) => (
+                        <Text key={`lb${i}`}
+                              x={sx(c.p[0]) + (c.n[0] === 0 ? 10 : -34)}
+                              y={sy(c.p[1]) + (c.n[1] === 0 ? -22 : 10)}
+                              text={analysis.labels[i] === "!" ? "✗" : analysis.labels[i]}
+                              fontSize={14} fontStyle="bold"
+                              fill={analysis.labels[i] === "!" ? "#e0533d" : "var(--accent)"}/>
+                    ))}
+                    {/* 선택한 경첩 */}
                     {sel && (
-                        <Circle x={sx(sel[0])} y={sy(sel[1])} radius={7}
-                                fill={analysis?.penetrating ? "#e0533d" : colors.text}/>
+                        <>
+                            <Circle x={sx(sel[0])} y={sy(sel[1])} radius={8}
+                                    fill={analysis?.penetrating ? "#e0533d" : colors.text}/>
+                            <Circle x={sx(sel[0])} y={sy(sel[1])} radius={3.5}
+                                    fill={colors.border}/>
+                        </>
                     )}
                     <Text x={6} y={6}
-                          text={t("click anywhere to pick a CoR", "아무 점이나 클릭해 CoR 로 삼아 보라")}
+                          text={t("click anywhere: put a hinge there and the body rotates about it",
+                              "아무 점이나 클릭해 보라. 그 자리에 경첩을 박고 몸을 돌려 본다")}
                           fontSize={11} fill={colors.muted}/>
                 </Layer>
             </Stage>
             <div className="text-xs text-muted text-center tabular-nums">
-                {analysis && sel ? (
+                {t("shaded = hinge positions that work for the chosen direction",
+                    "칠해진 곳 = 지금 고른 방향으로 돌려도 안 뚫리는 경첩 위치")}
+                {analysis && sel && (
                     analysis.penetrating
                         ? <span className="font-semibold" style={{color: "#e0533d"}}>
-                            {t("this rotation penetrates a contact", "이 회전은 접촉을 뚫고 들어간다")}
-                            {" · "}{analysis.labels.join(" ")}
+                            {" · "}{t("here it digs into a contact (✗)", "여기서는 접촉을 뚫는다 (✗)")}
                         </span>
                         : <span>
-                            {t("feasible: contact mode", "허용됨: 접촉 모드")}{" "}
-                            <span className="font-semibold" style={{color: "var(--accent)"}}>
-                                {analysis.labels.join("")}
-                            </span>
-                            {" "}({t("table L, table R, finger", "테이블 왼쪽 · 테이블 오른쪽 · 손가락 순")})
+                            {" · "}{t("feasible, labels shown at each contact", "가능. 라벨은 각 접촉점 옆에 표시")}
                         </span>
-                ) : t("shaded area = CoRs that do not violate any contact", "칠해진 곳 = 어떤 접촉도 어기지 않는 CoR")}
+                )}
             </div>
         </div>
     );
@@ -193,8 +206,8 @@ const CorLabeler = () => {
     const t = useTr();
     return <CanvasFigure
         label={t(
-            "a planar twist is just a rotation center: click a CoR and watch the body rock about it, with contact labels B/Sl/Sr/R attached live",
-            "평면 twist 는 회전 중심 하나로 요약된다. CoR 를 클릭하면 몸체가 그 점을 중심으로 흔들리고, 접촉 라벨 B/Sl/Sr/R 이 실시간으로 붙는다",
+            "every planar motion is a rotation about some hinge point (the CoR): click to place the hinge and see whether the body can swing, with labels B/Sl/Sr/R at each contact",
+            "평면 운동은 결국 어딘가에 경첩(CoR)을 박고 도는 회전이다. 경첩 자리를 클릭하면 몸이 돌 수 있는지, 각 접촉이 B/Sl/Sr/R 중 무엇이 되는지 바로 보인다",
         )}
         tight
         bodyClassName="w-fit"

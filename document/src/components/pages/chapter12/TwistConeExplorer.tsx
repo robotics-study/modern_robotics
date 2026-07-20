@@ -1,13 +1,13 @@
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {Arrow, Circle, Layer, Line, Stage, Text} from "react-konva";
 import CanvasFigure, {modalCanvasSize} from "../../CanvasFigure";
 import {useCanvasColors} from "../../../libs/useTheme";
 import {useTr} from "../../../libs/i18n";
 
-// 평행이동만 하는 육각형을 손가락들이 막는 상황 (책 예제 12.3). 왼쪽은 실제 장면, 오른쪽은
-// 속도 (vx, vy) 공간이다. 손가락 하나는 반평면, 둘은 부채꼴, 셋이 모두 대기하면 원점 하나만
-// 남는다 (form closure 의 예고편). 속도 점을 끌면 각 접촉의 라벨 B/S/R 이 실시간으로 붙고,
-// 허용 영역 밖으로 나가면 관통이라고 알려 준다.
+// 평행이동만 하는 육각형을 손가락들이 막는 상황 (책 예제 12.3). 오른쪽 속도 공간에서 점을
+// 끌어 속도를 고르면, 왼쪽에서 육각형이 실제로 그 속도로 흘러가는 것이 보인다. 손가락을
+// 뚫는 속도를 고르면 겹치는 순간 빨갛게 표시된다. 손가락 하나는 속도 공간을 반으로 자르고,
+// 둘이면 부채꼴, 셋이 모두 대기하면 원점 하나만 남는다 (form closure 의 예고편).
 type Finger3 = "none" | "hold" | "retreat";
 
 const N1: [number, number] = [0.5, -0.866];   // 왼쪽 위 손가락의 안쪽 normal
@@ -42,6 +42,22 @@ const TwistScene = ({panel = 300}: SceneProps) => {
     const [nFingers, setNFingers] = useState(1);
     const [finger3, setFinger3] = useState<Finger3>("none");
     const [vel, setVel] = useState<[number, number]>([0.5, 0.25]);
+    const [phase, setPhase] = useState(0);
+    const rafRef = useRef<number>();
+
+    // 고른 속도대로 육각형(과 움직이는 손가락)을 실제로 흘려보낸다 (0→1 반복, 페이드).
+    useEffect(() => {
+        let start: number | null = null;
+        const loop = (ts: number) => {
+            if (start === null) start = ts;
+            setPhase((((ts - start) / 1800) % 1));
+            rafRef.current = requestAnimationFrame(loop);
+        };
+        rafRef.current = requestAnimationFrame(loop);
+        return () => {
+            if (rafRef.current !== undefined) cancelAnimationFrame(rafRef.current);
+        };
+    }, []);
 
     const contacts = useMemo(() => {
         const list: Array<{n: [number, number]; v: [number, number]; name: string}> = [
@@ -71,22 +87,29 @@ const TwistScene = ({panel = 300}: SceneProps) => {
         return same ? "R" : "S";
     });
     const penetrating = labels.includes("!");
-    const mode = labels.join("");
+    const mode = labels.map((l, i) => `${contacts[i].name}:${l === "!" ? "관통" : l}`).join("  ");
 
     const W = panel, H = panel;
-    // 왼쪽 장면: 육각형 + 손가락.
     const cx = W / 2, cy = H / 2, R = panel * 0.27;
-    const hexPts: number[] = [];
-    for (let i = 0; i < 6; i++) {
-        const a = (Math.PI / 180) * (30 + 60 * i);
-        hexPts.push(cx + R * Math.cos(a), cy - R * Math.sin(a));
-    }
+    const S2 = panel / 2.4;
+    // 애니메이션 이동량 (화면 픽셀). 속도 방향으로 조금씩 흘러갔다가 되돌아온다.
+    const drift = 0.55 * phase;
+    const hexShift: [number, number] = [vel[0] * S2 * drift, -vel[1] * S2 * drift];
+
+    const hexPts = (dx: number, dy: number) => {
+        const pts: number[] = [];
+        for (let i = 0; i < 6; i++) {
+            const a = (Math.PI / 180) * (30 + 60 * i);
+            pts.push(cx + dx + R * Math.cos(a), cy + dy - R * Math.sin(a));
+        }
+        return pts;
+    };
     const fingerAt = (n: [number, number], enabled: boolean, moving: boolean) => {
-        // normal 반대쪽(바깥)에서 접촉점으로 향하는 작은 삼각형 손가락.
-        const px = cx - n[0] * R * 0.92, py = cy + n[1] * R * 0.92;
+        const shift = moving ? V3_RETREAT[0] * S2 * drift : 0;
+        const px = cx - n[0] * R * 0.92 + shift, py = cy + n[1] * R * 0.92;
         const bx = px - n[0] * R * 0.55, by = py + n[1] * R * 0.55;
         const tx = -n[1], ty = n[0];
-        return {px, py, tri: [px, py, bx + tx * R * 0.3, by - ty * R * 0.3, bx - tx * R * 0.3, by + ty * R * 0.3], enabled, moving};
+        return {px, py, tri: [px, py, bx + tx * R * 0.3, by - ty * R * 0.3, bx - tx * R * 0.3, by + ty * R * 0.3], enabled};
     };
     const fingers = [
         fingerAt(N1, true, false),
@@ -94,8 +117,6 @@ const TwistScene = ({panel = 300}: SceneProps) => {
         fingerAt(N3, finger3 !== "none", finger3 === "retreat"),
     ];
 
-    // 오른쪽 속도 공간.
-    const S2 = panel / 2.4;
     const vx2px = (v: [number, number]): [number, number] => [W / 2 + v[0] * S2, H / 2 - v[1] * S2];
 
     const btn = (active: boolean, label: string, onClick: () => void) => (
@@ -134,36 +155,37 @@ const TwistScene = ({panel = 300}: SceneProps) => {
                 })}
             </div>
             <div className="flex flex-row flex-wrap gap-3 items-start justify-center">
-                {/* 장면 */}
+                {/* 장면: 육각형이 고른 속도대로 실제로 움직인다 */}
                 <div className="flex flex-col items-center gap-0.5">
                     <Stage width={W} height={H}
                            className="bg-surface border border-border rounded-lg overflow-hidden">
                         <Layer>
-                            <Line points={hexPts} closed stroke={colors.text} strokeWidth={2}
-                                  fill={colors.accent} opacity={0.9}/>
+                            {/* 원래 자리 (점선) */}
+                            <Line points={hexPts(0, 0)} closed stroke={colors.muted} strokeWidth={1.5}
+                                  dash={[5, 4]}/>
+                            {/* 흘러가는 육각형 */}
+                            <Line points={hexPts(hexShift[0], hexShift[1])} closed
+                                  stroke={penetrating ? "#e0533d" : colors.text} strokeWidth={2}
+                                  fill={penetrating ? "#e0533d" : colors.accent}
+                                  opacity={penetrating ? 0.55 : 0.85}/>
                             {fingers.map((f, i) => f.enabled && (
-                                <Line key={i} points={f.tri} closed fill={colors.text} opacity={0.75}/>
+                                <Line key={i} points={f.tri} closed fill={colors.text} opacity={0.8}/>
                             ))}
-                            {/* 물러나는 손가락의 속도 화살표 */}
                             {finger3 === "retreat" && (
-                                <Arrow points={[fingers[2].px, fingers[2].py,
-                                    fingers[2].px + V3_RETREAT[0] * S2 * 0.9, fingers[2].py]}
+                                <Arrow points={[fingers[2].px + 8, fingers[2].py,
+                                    fingers[2].px + 8 + V3_RETREAT[0] * S2 * 0.7, fingers[2].py]}
                                        stroke="#e0a33d" fill="#e0a33d" strokeWidth={2.5}
                                        pointerLength={8} pointerWidth={7}/>
                             )}
-                            {/* 육각형의 현재 속도 화살표 */}
-                            {(Math.abs(vel[0]) > 0.03 || Math.abs(vel[1]) > 0.03) && (
-                                <Arrow points={[cx, cy, cx + vel[0] * S2 * 0.8, cy - vel[1] * S2 * 0.8]}
-                                       stroke={penetrating ? "#e0533d" : colors.text}
-                                       fill={penetrating ? "#e0533d" : colors.text}
-                                       strokeWidth={2.5} pointerLength={9} pointerWidth={8}/>
-                            )}
                             <Text x={6} y={6}
-                                  text={t("hexagon can only translate", "육각형은 평행이동만 한다")}
-                                  fontSize={11} fill={colors.muted}/>
+                                  text={penetrating
+                                      ? t("it punches into a finger!", "손가락을 뚫고 들어간다!")
+                                      : t("the hexagon drifts with your chosen velocity",
+                                          "고른 속도대로 육각형이 흘러간다")}
+                                  fontSize={11} fill={penetrating ? "#e0533d" : colors.muted}/>
                         </Layer>
                     </Stage>
-                    <span className="text-xs text-muted">{t("the scene", "장면")}</span>
+                    <span className="text-xs text-muted">{t("scene (translation only)", "장면 (평행이동만)")}</span>
                 </div>
                 {/* 속도 공간 */}
                 <div className="flex flex-col items-center gap-0.5">
@@ -180,7 +202,6 @@ const TwistScene = ({panel = 300}: SceneProps) => {
                             {feasible.length < 3 && finger3 === "hold" && (
                                 <Circle x={W / 2} y={H / 2} radius={5} fill={colors.accent}/>
                             )}
-                            {/* 속도 점 */}
                             <Circle x={vx2px(vel)[0]} y={vx2px(vel)[1]} radius={9}
                                     fill={penetrating ? "#e0533d" : colors.accent} draggable
                                     onDragMove={(e) => {
@@ -190,23 +211,26 @@ const TwistScene = ({panel = 300}: SceneProps) => {
                                   text={t("velocity space (vx, vy): drag the dot",
                                       "속도 공간 (vx, vy): 점을 끌어 보라")}
                                   fontSize={11} fill={colors.muted}/>
+                            <Text x={6} y={20}
+                                  text={t("shaded = velocities that hit nothing", "칠해진 곳 = 아무것도 안 뚫는 속도")}
+                                  fontSize={11} fill={colors.accent}/>
                         </Layer>
                     </Stage>
                     <span className="text-xs text-muted">
-                        {t("feasible velocities are shaded", "허용되는 속도 영역이 칠해져 있다")}
+                        {t("each finger cuts this space in half", "손가락 하나가 이 공간을 반씩 자른다")}
                     </span>
                 </div>
             </div>
             <div className="text-xs text-muted text-center tabular-nums">
                 {penetrating
                     ? <span className="font-semibold" style={{color: "#e0533d"}}>
-                        {t("penetration! this velocity pushes into a finger", "관통! 이 속도는 손가락을 뚫고 들어간다")}
+                        {t("infeasible: pick a velocity inside the shaded region", "불가능한 속도다. 칠해진 영역 안에서 골라 보라")}
                     </span>
                     : <span>
-                        {t("contact mode", "접촉 모드")}{" "}
+                        {t("contact labels", "접촉 라벨")}{" "}
                         <span className="font-semibold" style={{color: "var(--accent)"}}>{mode}</span>
-                        {finger3 === "hold" && feasible.length < 3 && (
-                            <span> · {t("only v = 0 is left: nothing can move", "남은 속도는 v = 0 뿐이다. 아무 데도 못 간다")}</span>
+                        {finger3 === "hold" && (
+                            <span> · {t("with three holding fingers only v = 0 remains", "셋이 모두 대기하면 v = 0 만 남는다")}</span>
                         )}
                     </span>}
             </div>
@@ -218,8 +242,8 @@ const TwistConeExplorer = () => {
     const t = useTr();
     return <CanvasFigure
         label={t(
-            "each finger cuts the velocity space in half: one finger leaves a half-plane, two leave a cone, and three holding fingers leave only v = 0",
-            "손가락 하나가 속도 공간을 반으로 자른다. 하나면 반평면, 둘이면 부채꼴, 셋이 모두 대기하면 v = 0 만 남는다",
+            "pick a velocity on the right and watch the hexagon actually move on the left: fingers slice the velocity space in half, one half-plane each",
+            "오른쪽에서 속도를 고르면 왼쪽에서 육각형이 실제로 그렇게 움직인다. 손가락 하나마다 속도 공간이 반씩 잘려 나간다",
         )}
         tight
         bodyClassName="w-fit"

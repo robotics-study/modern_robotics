@@ -141,8 +141,8 @@ const SpanExplorer = () => {
     const t = useTr();
     return <CanvasFigure
         label={t(
-            "span, positive span, convex span of three draggable vectors: R² needs 2 vectors to span, 3 to positively span",
-            "화살표 세 개로 보는 span · pos · conv: R² 를 span 하는 데는 2개, positively span 하는 데는 3개가 필요하다",
+            "span, positive span, convex span of three draggable vectors. contacts can only push (coefficients ≥ 0), so it is pos, the wedge, that decides what a grasp can and cannot do",
+            "화살표 세 개로 보는 span · pos · conv. 접촉은 밀 수만 있어서 (계수 ≥ 0) grasp 가 할 수 있는 일을 결정하는 것은 부채꼴, 즉 pos 다",
         )}
         tight
         bodyClassName="w-fit"
