@@ -1,8 +1,10 @@
 import {BlockMath, InlineMath} from "../../components/math/Tex";
 import CSpaceObstacle2R from "../../components/pages/chapter10/CSpaceObstacle2R";
 import GridAStar from "../../components/pages/chapter10/GridAStar";
+import PathSmoothing from "../../components/pages/chapter10/PathSmoothing";
 import PotentialField from "../../components/pages/chapter10/PotentialField";
 import SamplingPlanners from "../../components/pages/chapter10/SamplingPlanners";
+import WavefrontPlanner from "../../components/pages/chapter10/WavefrontPlanner";
 import {T} from "../../libs/i18n";
 
 const Chapter10 = () => {
@@ -242,7 +244,7 @@ const Chapter10 = () => {
                     step is added only if it is collision-free. The result is resolution-complete and, subject to the
                     allowed motions, optimal. If many queries share one goal, a <strong>wavefront</strong> pass
                     breadth-first labels every free cell with its distance-to-goal once, after which planning from
-                    anywhere is just rolling downhill.
+                    anywhere is just rolling downhill. Below, wait for the wave to finish, then click any cell:
                 </p>}
                 ko={<p>
                     위 그림이 이미 가장 단순한 이산화를 썼다. 축마다 <InlineMath math='k'/>개 점을 둔{" "}
@@ -251,9 +253,11 @@ const Chapter10 = () => {
                     축 정렬 이동이라면 정직한 heuristic은 Euclidean이 아니라 <strong>Manhattan 거리</strong>(도시
                     블록 수)이며, 한 걸음은 충돌이 없을 때만 추가한다. 결과는 resolution-complete이고 허용된 이동
                     안에서 최적이다. 같은 목표로 질의가 많다면 <strong>wavefront</strong> 한 번으로 모든 자유 셀에
-                    목표까지의 거리를 너비 우선으로 새겨 두고, 이후로는 어디서든 내리막으로 구르면 된다.
+                    목표까지의 거리를 너비 우선으로 새겨 두고, 이후로는 어디서든 내리막으로 구르면 된다. 아래에서 파도가
+                    다 번진 뒤 아무 칸이나 클릭해 보라:
                 </p>}
             />
+            <WavefrontPlanner/>
             <T
                 en={<p>
                     Two extensions stretch the idea. <strong>Multi-resolution grids</strong> (quadtrees in 2D, octrees
@@ -289,7 +293,10 @@ const Chapter10 = () => {
                     tree into unexplored space, which is exactly what makes it rapidly exploring. Each choice hides
                     subtlety: "nearest" needs a distance metric that respects motion constraints (2 m behind a car is
                     closer, in the useful sense, than 1 m beside it), and the local planner can be a straight line,
-                    discretized controls, or car-specific curves.
+                    discretized controls, or car-specific curves. Shake the parameters below: goal bias and step{" "}
+                    <InlineMath math='d'/> reshape the RRT and its success speed, and lowering the PRM's sample count{" "}
+                    <InlineMath math='N'/> or neighbor count <InlineMath math='k'/> can disconnect the roadmap
+                    entirely, so the start-goal query fails:
                 </p>}
                 ko={<p>
                     Sampling 방법은 grid의 해상도 최적성을 내주고 고차원에서의 속도를 얻는다. 공간을 샘플하고, 자유
@@ -300,7 +307,10 @@ const Chapter10 = () => {
                     <strong>steer</strong>하고, 그 걸음이 충돌 없으면 새 노드를 더한다. 균일 샘플이 트리를 미탐색
                     공간으로 "끌어당기는" 것이 바로 rapidly exploring의 이유다. 선택마다 미묘함이 숨어 있다. "가장
                     가까움"은 운동 제약을 존중하는 거리여야 하고 (자동차 2 m 뒤가, 유용한 의미에서, 옆 1 m보다
-                    가깝다), local planner는 직선, 이산 제어, 자동차 전용 곡선 등이 될 수 있다.
+                    가깝다), local planner는 직선, 이산 제어, 자동차 전용 곡선 등이 될 수 있다. 아래에서 파라미터를 직접 흔들어
+                    보라. RRT 는 goal bias 와 걸음 크기 <InlineMath math='d'/> 에 따라 트리 모양과 성공 속도가 확
+                    달라지고, PRM 은 샘플 수 <InlineMath math='N'/> 과 이웃 수 <InlineMath math='k'/> 를 줄이면
+                    roadmap 이 끊겨 시작-목표 연결에 실패하는 것까지 볼 수 있다:
                 </p>}
             />
             <SamplingPlanners/>
@@ -393,6 +403,22 @@ F_{\\mathcal{B}}(q) = -\\frac{\\partial \\mathcal{P}_{\\mathcal{B}}}{\\partial q
                     />
                 </li>
             </ol>
+            <T
+                en={<p>
+                    The figure below draws the resulting landscape as a costmap over an occupancy-grid floorplan. The
+                    three sliders are the whole story: raise the range of influence{" "}
+                    <InlineMath math='d_{\mathrm{range}}'/> and the repulsion gain <InlineMath math='k'/> and the
+                    doorway "closes", growing a brand-new local minimum in front of it; raise{" "}
+                    <InlineMath math='K'/> and the robot punches through, only to be stopped short of the goal by the
+                    pillar's repulsion.
+                </p>}
+                ko={<p>
+                    아래 그림은 그 결과 지형을 occupancy grid 평면도 위 costmap 으로 그린다. 슬라이더 셋이 이야기의
+                    전부다. 영향 범위 <InlineMath math='d_{\mathrm{range}}'/> 와 반발 이득 <InlineMath math='k'/> 를
+                    키우면 문이 "닫히면서" 문 앞에 새 local minimum 이 자라나고, <InlineMath math='K'/> 를 키우면
+                    문은 뚫지만 이번엔 기둥의 반발이 goal 직전에서 로봇을 세운다.
+                </p>}
+            />
             <PotentialField/>
             <T
                 en={<p>
@@ -454,7 +480,8 @@ x(0) = x_{\\mathrm{start}},\\quad x(T) = x_{\\mathrm{goal}}
                     <InlineMath math='J = \tfrac12\int_0^T \dot u^{\mathsf T}\dot u\, dt'/> to soften rapid control
                     changes. The other classic smoother is <strong>subdivide and reconnect</strong>: repeatedly try
                     to replace path segments with shorter collision-free local-planner shortcuts. Both take a plan
-                    that is merely feasible and make it one a physical robot is happy to follow.
+                    that is merely feasible and make it one a physical robot is happy to follow. Watch the two smoothers below work on the
+                    same zigzag path:
                 </p>}
                 ko={<p>
                     유한 문제로 만들려면 이력을 매개변수화하고 (다항식·Fourier 계수, spline, 구간 상수 조각) 제약을
@@ -467,9 +494,11 @@ x(0) = x_{\\mathrm{start}},\\quad x(T) = x_{\\mathrm{goal}}
                     <InlineMath math='J = \tfrac12\int_0^T \dot u^{\mathsf T}\dot u\, dt'/> 같은 비용(급격한 제어
                     변화 벌점)을 최소화한다. 다른 고전적 smoother는 <strong>subdivide and reconnect</strong>다. 경로
                     조각을 더 짧은 충돌 없는 local planner 지름길로 바꿔치기를 반복한다. 둘 다 "그저 실현 가능한"
-                    계획을 실제 로봇이 기꺼이 따를 계획으로 만든다.
+                    계획을 실제 로봇이 기꺼이 따를 계획으로 만든다. 아래에서 두 smoother 가 같은 지그재그 경로를
+                    다듬는 것을 비교해 보라:
                 </p>}
             />
+            <PathSmoothing/>
         </>
     )
 }

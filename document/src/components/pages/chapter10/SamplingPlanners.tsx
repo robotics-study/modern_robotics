@@ -11,10 +11,7 @@ import {useTr} from "../../../libs/i18n";
 const START = {x: 0.08, y: 0.9};
 const GOAL = {x: 0.92, y: 0.1};
 const GOAL_R = 0.05;
-const STEP = 0.045;                // RRT 한 걸음 d
-const MAX_NODES = 700;
-const PRM_N = 130;
-const PRM_K = 4;
+const MAX_NODES = 900;
 
 interface P {
     x: number;
@@ -56,6 +53,9 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
     const t = useTr();
     const [mode, setMode] = useState<Mode>("rrt");
     const [bias, setBias] = useState(0.1);
+    const [step, setStep] = useState(0.045);   // RRT 한 걸음 d
+    const [prmN, setPrmN] = useState(130);     // PRM 샘플 수
+    const [prmK, setPrmK] = useState(4);       // PRM 최근접 이웃 수
     const [runId, setRunId] = useState(0);
     // RRT 상태
     const [nodes, setNodes] = useState<TreeNode[]>([{p: START, parent: -1}]);
@@ -69,7 +69,7 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
     const prmFull = useMemo(() => {
         void runId;
         const pts: P[] = [{...START}, {...GOAL}];
-        while (pts.length < PRM_N) {
+        while (pts.length < prmN) {
             const p = {x: Math.random(), y: Math.random()};
             if (!inObstacle(p)) pts.push(p);
         }
@@ -80,7 +80,7 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
                 .map((q, j) => ({j, d: Math.hypot(q.x - pts[i].x, q.y - pts[i].y)}))
                 .filter((e) => e.j !== i)
                 .sort((a, b) => a.d - b.d)
-                .slice(0, PRM_K);
+                .slice(0, prmK);
             for (const {j} of near) {
                 if (adj[i].includes(j)) continue;
                 if (segFree(pts[i], pts[j])) {
@@ -122,7 +122,7 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
             }
         }
         return {pts, edges, path};
-    }, [runId]);
+    }, [runId, prmN, prmK]);
 
     // 애니메이션 루프: RRT 는 반복을 실행하고, PRM 은 미리 계산한 결과를 단계별로 드러낸다.
     useEffect(() => {
@@ -153,8 +153,8 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
                     const from = localNodes[best].p;
                     const len = Math.max(bd, 1e-9);
                     const to = {
-                        x: from.x + (STEP * (samp.x - from.x)) / len,
-                        y: from.y + (STEP * (samp.y - from.y)) / len,
+                        x: from.x + (step * (samp.x - from.x)) / len,
+                        y: from.y + (step * (samp.y - from.y)) / len,
                     };
                     if (to.x < 0 || to.x > 1 || to.y < 0 || to.y > 1) continue;
                     if (!segFree(from, to)) continue;
@@ -188,7 +188,7 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
             }
         }, 40);
         return () => window.clearInterval(timerRef.current);
-    }, [mode, bias, runId, prmFull]);
+    }, [mode, bias, step, runId, prmFull]);
 
     const X = (p: P) => p.x * panel;
     const Y = (p: P) => p.y * panel;
@@ -213,7 +213,7 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
         : prm.phase === "samples"
             ? t(`sampling Cfree: ${prm.pts.length}`, `Cfree 샘플링: ${prm.pts.length}개`)
             : prm.phase === "edges"
-                ? t(`connecting k = ${PRM_K} neighbors: ${prm.edges.length} edges`, `k = ${PRM_K} 최근접 연결: 간선 ${prm.edges.length}개`)
+                ? t(`connecting k = ${prmK} neighbors: ${prm.edges.length} edges`, `k = ${prmK} 최근접 연결: 간선 ${prm.edges.length}개`)
                 : prm.path.length > 0
                     ? t("roadmap built, A* query answered", "roadmap 완성, A* 질의 응답")
                     : t("roadmap built, but start and goal are disconnected", "roadmap 완성, 그러나 시작-목표가 끊겨 있음");
@@ -270,14 +270,44 @@ const SamplingScene = ({panel = 340}: SceneProps) => {
                 </button>
             </div>
             {mode === "rrt" && (
-                <label className="w-full flex items-center gap-2 text-xs text-muted">
-                    <span className="w-16 shrink-0">goal bias</span>
-                    <input type="range" min={0} max={0.5} step={0.02} value={bias}
-                           onChange={(e) => setBias(parseFloat(e.target.value))}
-                           className="w-full accent-[var(--accent)]"
-                           aria-label={t("goal bias probability", "goal bias 확률")}/>
-                    <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(bias * 100)}%</span>
-                </label>
+                <>
+                    <label className="w-full flex items-center gap-2 text-xs text-muted">
+                        <span className="w-16 shrink-0">goal bias</span>
+                        <input type="range" min={0} max={0.5} step={0.02} value={bias}
+                               onChange={(e) => setBias(parseFloat(e.target.value))}
+                               className="w-full accent-[var(--accent)]"
+                               aria-label={t("goal bias probability", "goal bias 확률")}/>
+                        <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(bias * 100)}%</span>
+                    </label>
+                    <label className="w-full flex items-center gap-2 text-xs text-muted">
+                        <span className="w-16 shrink-0">step d</span>
+                        <input type="range" min={0.02} max={0.12} step={0.005} value={step}
+                               onChange={(e) => setStep(parseFloat(e.target.value))}
+                               className="w-full accent-[var(--accent)]"
+                               aria-label={t("RRT step size d", "RRT 걸음 크기 d")}/>
+                        <span className="w-10 shrink-0 text-right tabular-nums">{step.toFixed(3)}</span>
+                    </label>
+                </>
+            )}
+            {mode === "prm" && (
+                <>
+                    <label className="w-full flex items-center gap-2 text-xs text-muted">
+                        <span className="w-16 shrink-0">N {t("samples", "샘플")}</span>
+                        <input type="range" min={40} max={300} step={10} value={prmN}
+                               onChange={(e) => setPrmN(parseInt(e.target.value, 10))}
+                               className="w-full accent-[var(--accent)]"
+                               aria-label={t("PRM sample count N", "PRM 샘플 수 N")}/>
+                        <span className="w-10 shrink-0 text-right tabular-nums">{prmN}</span>
+                    </label>
+                    <label className="w-full flex items-center gap-2 text-xs text-muted">
+                        <span className="w-16 shrink-0">k {t("neighbors", "이웃")}</span>
+                        <input type="range" min={2} max={8} step={1} value={prmK}
+                               onChange={(e) => setPrmK(parseInt(e.target.value, 10))}
+                               className="w-full accent-[var(--accent)]"
+                               aria-label={t("PRM neighbor count k", "PRM 이웃 수 k")}/>
+                        <span className="w-10 shrink-0 text-right tabular-nums">{prmK}</span>
+                    </label>
+                </>
             )}
             <div className="text-xs text-muted text-center tabular-nums font-semibold">{status}</div>
         </div>

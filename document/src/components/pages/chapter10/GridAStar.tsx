@@ -14,15 +14,17 @@ const GOAL = {x: N - 2, y: 1};
 
 type Heuristic = "dijkstra" | "manhattan" | "greedy";
 
-// 기본 벽: 통로가 두 개 있는 ㄷ자 미로 느낌.
+// 기본 벽: 시작→목표 대각선을 막아서는 ⌐ 모양 pocket (입구가 시작점 쪽으로 열려 있어
+// 과대평가 heuristic 은 안으로 뛰어들었다가 더 긴 경로를 내놓는다) + Dijkstra 를 키우는 보조 벽.
+// 이 지도에서 Dijkstra 369칸/비용 34, Manhattan A* 80칸/34, greedy 83칸/40 이 나온다.
 const defaultWalls = (): boolean[] => {
     const w = new Array(N * N).fill(false);
     const set = (x: number, y: number) => {
         if (x >= 0 && x < N && y >= 0 && y < N) w[y * N + x] = true;
     };
-    for (let y = 3; y < 15; y++) set(6, y);
-    for (let y = 6; y < N - 2; y++) set(12, y);
-    for (let x = 12; x < 18; x++) set(x, 6);
+    for (let x = 5; x <= 14; x++) set(x, 6);
+    for (let y = 6; y <= 14; y++) set(14, y);
+    for (let y = 10; y <= 18; y++) set(7, y);
     return w;
 };
 
