@@ -9,7 +9,7 @@
   "homepage": "https://ladianchad.github.io/",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/gen-sitemap.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
