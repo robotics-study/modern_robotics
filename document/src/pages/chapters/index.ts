@@ -159,6 +159,20 @@ const data: IChapterData[] = [
             {en: "Manipulation", ko: "Manipulation"},
         ],
     },
+    {
+        chapter: 13,
+        title: {en: "Wheeled Mobile Robots", ko: "Wheeled Mobile Robot"},
+        contents: lazy(() => import("./Chapter13")),
+        sections: [
+            {en: "Types of Wheeled Mobile Robots", ko: "Wheeled Mobile Robot 의 종류"},
+            {en: "Omnidirectional Robots", ko: "Omnidirectional 로봇"},
+            {en: "Modeling Nonholonomic Robots", ko: "Nonholonomic 로봇의 모델링"},
+            {en: "Controllability and the Lie Bracket", ko: "Controllability 와 Lie Bracket"},
+            {en: "Shortest Paths: Dubins and Reeds–Shepp", ko: "Dubins 와 Reeds–Shepp 최단 경로"},
+            {en: "Trajectory Tracking Control", ko: "궤적 추종 제어"},
+            {en: "Odometry and Mobile Manipulation", ko: "Odometry 와 Mobile Manipulation"},
+        ],
+    },
 ]
 
 export default data.sort((a, b) => a.chapter - b.chapter)
