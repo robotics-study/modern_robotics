@@ -38,7 +38,7 @@
     "@types/webpack-env": "^1.18.5",
     "autoprefixer": "^10.4.20",
     "clsx": "^2.1.1",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.23",
     "tailwind-merge": "^2.5.5",
     "tailwindcss": "^3.4.16",
     "ts-node": "^10.9.2",
@@ -46,6 +46,6 @@
   },
   "resolutions": {
     "katex": "^0.16.22",
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.23"
   }
 }
